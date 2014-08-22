@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-08-22T08:48:50.006Z</updated>
+  <updated>2014-08-22T08:58:59.022Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.lephones.net/2014/08/22/camera-picture-size/"/>
     <id>http://www.lephones.net/2014/08/22/camera-picture-size/</id>
     <published>2014-08-22T06:01:34.000Z</published>
-    <updated>2014-08-22T08:47:20.000Z</updated>
+    <updated>2014-08-22T08:56:49.000Z</updated>
     <content type="html"><![CDATA[<h2 id="拍照">拍照</h2>
 <p>在安卓上拍照主要有两种方案:</p>
 <ol>
@@ -30,6 +30,8 @@
 <h2 id="问题">问题</h2>
 <p>按照需求我们采用的是第2种方案，基本的流程就是：拍照—压缩—保存—上传</p>
 <p>本来一切挺顺利，但当我遇上小米。。</p>
+<a id="more"></a>
+
 <p>小米手机在用第2种方式拍照后，默认返回一个<code>176x144</code>分辨率的照片。经查资料发现，原来<code>camera</code>有一个参数叫<code>picture-size</code>，于是给<code>Camera</code>对象加了该参数，代码：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 获得相机参数</span></div><div class="line"><span class="constant">Camera.Parameters parameters</span> = camera.getParameters();</div><div class="line">parameters.setPictureSize(<span class="number">960</span>, <span class="number">720</span>);</div></pre></td></tr></table></figure>
 
@@ -43,11 +45,42 @@
 <p><code>getSupportedPictureSizes()</code>返回的集合是排好序的，但升序还是降序，也是根据手机来返回的，所以在处理的时候，不能盲目取第一个元素。</p>
 <p>另外，小米手机返回的分辨率太小，就是因为它把最小的那个分辨率给了默认值。176x144，尼玛这么小的图片拿来干嘛？</p>
 ]]></content>
-    
+    <summary type="html"><![CDATA[<h2 id="拍照">拍照</h2>
+<p>在安卓上拍照主要有两种方案:</p>
+<ol>
+<li>直接调起系统的照相机拍照片，拍完后，图片会在相册中保存一份，对于程序来说，可以拿到保存照片的路径，从而获取图片。</li>
+<li>自己写<code>SurfaceView</code>调用相机来实现拍照，用该方法会触发一个回调，回调的参数中包含一个字节数组，里面就是图片信息。</li>
+</ol>
+<p>这在网上已经有了好多的资料。</p>
+<h2 id="问题">问题</h2>
+<p>按照需求我们采用的是第2种方案，基本的流程就是：拍照—压缩—保存—上传</p>
+<p>本来一切挺顺利，但当我遇上小米。。</p>
+]]></summary>
     
       <category term="android" scheme="http://www.lephones.net/tags/android/"/>
     
       <category term="android" scheme="http://www.lephones.net/categories/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[baidu-interview]]></title>
+    <link href="http://www.lephones.net/2014/08/20/baidu-interview/"/>
+    <id>http://www.lephones.net/2014/08/20/baidu-interview/</id>
+    <published>2014-08-20T08:50:17.000Z</published>
+    <updated>2014-08-22T08:58:26.000Z</updated>
+    <content type="html"><![CDATA[<p>今天去百度面试了</p>
+<p>很意外的收到了百度的面试邀请，哈哈，那个激动啊。</p>
+<p>2点准时到了地点，是鹏寰大厦，百度的另一办公地点，不在百度大厦。交谈的时候不像其它公司一样是面对面坐的，而是两个人并排坐着，感觉更亲切些。</p>
+<p>先是一个技术问了好长时间的技术问题，然后他打了个电话，找了他老大上来交谈，一共花了整整2个小时，最后结束的时候，试探的问了一下怎么样，不告诉我，只是让我等消息，成的话一周内HR会联系。</p>
+<p>所谓的二面，三面呢？这是啥情况。。。</p>
+<p>哎，愿上帝保佑！</p>
+]]></content>
+    
+    
+      <category term="面试" scheme="http://www.lephones.net/tags/%E9%9D%A2%E8%AF%95/"/>
+    
+      <category term="个人随笔" scheme="http://www.lephones.net/categories/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/"/>
     
   </entry>
   

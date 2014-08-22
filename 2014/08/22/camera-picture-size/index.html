@@ -76,6 +76,8 @@
 <h2 id="问题">问题</h2>
 <p>按照需求我们采用的是第2种方案，基本的流程就是：拍照—压缩—保存—上传</p>
 <p>本来一切挺顺利，但当我遇上小米。。</p>
+<a id="more"></a>
+
 <p>小米手机在用第2种方式拍照后，默认返回一个<code>176x144</code>分辨率的照片。经查资料发现，原来<code>camera</code>有一个参数叫<code>picture-size</code>，于是给<code>Camera</code>对象加了该参数，代码：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 获得相机参数</span></div><div class="line"><span class="constant">Camera.Parameters parameters</span> = camera.getParameters();</div><div class="line">parameters.setPictureSize(<span class="number">960</span>, <span class="number">720</span>);</div></pre></td></tr></table></figure>
 
@@ -116,7 +118,7 @@
  <nav id="pagination" >
     
     
-    <a href="/2014/07/21/manage-bitmap-memory/" class="alignright next" >下一页</a>
+    <a href="/2014/08/20/baidu-interview/" class="alignright next" >下一页</a>
     
     <div class="clearfix"></div>
 </nav>
@@ -161,7 +163,7 @@ var duoshuoQuery = {short_name:"lephonesnet"};
   
     <li><a href="/categories/linux/">linux</a><small>1</small></li>
   
-    <li><a href="/categories/个人随笔/">个人随笔</a><small>1</small></li>
+    <li><a href="/categories/个人随笔/">个人随笔</a><small>2</small></li>
   
   </ul>
 </div>
@@ -176,6 +178,8 @@ var duoshuoQuery = {short_name:"lephonesnet"};
   
     <li><a href="/tags/linux/">linux</a><small>1</small></li>
   
+    <li><a href="/tags/面试/">面试</a><small>1</small></li>
+  
   </ul>
 </div>
 
@@ -187,6 +191,10 @@ var duoshuoQuery = {short_name:"lephonesnet"};
     
       <li>
         <a href="/2014/08/22/camera-picture-size/">用camera类拍照指定图片大小</a>
+      </li>
+    
+      <li>
+        <a href="/2014/08/20/baidu-interview/">baidu-interview</a>
       </li>
     
       <li>
@@ -211,10 +219,6 @@ var duoshuoQuery = {short_name:"lephonesnet"};
     
       <li>
         <a href="/2014/02/28/android-lib-res/">将android程序打包成sdk中资源的处理</a>
-      </li>
-    
-      <li>
-        <a href="/2014/02/28/alipay-plugin-mechanism/">支付宝插件机制研究</a>
       </li>
     
   </ul>
