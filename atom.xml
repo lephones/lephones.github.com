@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-08-22T08:02:25.752Z</updated>
+  <updated>2014-08-22T08:47:31.902Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.lephones.net/2014/08/22/camera-picture-size/"/>
     <id>http://www.lephones.net/2014/08/22/camera-picture-size/</id>
     <published>2014-08-22T06:01:34.000Z</published>
-    <updated>2014-08-22T06:44:40.000Z</updated>
+    <updated>2014-08-22T08:47:20.000Z</updated>
     <content type="html"><![CDATA[<h2 id="拍照">拍照</h2>
 <p>在安卓上拍照主要有两种方案:</p>
 <ol>
@@ -45,7 +45,7 @@
 ]]></content>
     
     
-      <category term="android,camera" scheme="http://www.lephones.net/tags/android,camera/"/>
+      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
     
       <category term="android" scheme="http://www.lephones.net/categories/android/"/>
     
