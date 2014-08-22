@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>将android程序打包成sdk中资源的处理 | lephone&#39;s blog</title>
+  <meta name="author" content="lephone.zh">
+  
+  <meta name="description" content="android java 开发 编程">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="将android程序打包成sdk中资源的处理"/>
+  <meta property="og:site_name" content="lephone&#39;s blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="lephone&#39;s blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">lephone&#39;s blog</a></h1>
+  <h2><a href="/">又一个android开发人员</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/about">吐槽我</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+      <li><a href="/sitemap.xml">网站地图</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-02-28T08:22:24.000Z"><a href="/2014/02/28/android-lib-res/">2月 28 2014</a></time>
+      
+      
+  
+    <h1 class="title">将android程序打包成sdk中资源的处理</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="背景">背景</h2>
+<p>通常的android项目，都是以apk的形式对外发布的，但有一部分程序，是做为二次开发包提供给其它开发商的，例如，淘宝SDK，新浪微博SDK。笔者参与公司的一款支付插件的开发与维护，最终打包成<strong>jar</strong>+<strong>res</strong>的格式(与支付宝支付提供的支付不同。支付宝的交易功能，也是一个APK，商户接入后，通过AIDL调用支付)。以这款插件为例，讲解一下资源文件的处理。</p>
+<h2 id="工程设置与打包形式">工程设置与打包形式</h2>
+<p><strong>工程设置：</strong></p>
+<a id="more"></a>
+
+<p>因为插件本身不支持直接运行，必须接入到商户后，才能执行，所以，在维护该插件的时候，还有一个用于调起插件的商户DEMO。怎么样把两个项目整合到一起，可以正常运行呢？</p>
+<pre><code>把插件工程设置成android library <span class="keyword">project</span>
+</code></pre><p>如此一来，只要添加将lib工程添加到商户DEMO中的lib，就可以方便的调用。</p>
+<p><strong>打包：</strong></p>
+<p>将插件的代码打包成一个jar，再将插件工程复制一份出来，删除掉工程中的java源文件，这样，就留下了一个只有资源的lib project。商户接入的时候，将jar添加到libs下，将res library project添加到src lib下，就可以接入。为什么不把jar也放到res lib project里面呢？</p>
+<pre><code>新版本的ADT支持直接把 lib <span class="keyword">project</span> 里的jar添加到build path，没问题，
+但以前的还得手工添加，单独提取出来，更直观
+</code></pre><h2 id="资源文件的处理">资源文件的处理</h2>
+<p>在插件项目中，资源文件的引用不能再以<code>R.XX.XXXX</code>这样的格式来使用，因为这种代码在编译的时候， 会用具体的int值来替换掉代码，当你的项目在别人的环境下重新编译，资源对应的id就被改了。</p>
+<p><strong>解决办法：</strong></p>
+<p>将<code>R.xx.xxx</code>用方法替换。代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">class ResLink{</div><div class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getIdXXXXX</span>(){</div><div class="line">       <span class="keyword">return</span> R.xx.xx;</div><div class="line">   }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ol>
+<li>将ResLink的源码也提供给商户，这样，可以将R的常量的替换放到商户的项目编译时，保证id不紊乱。</li>
+<li>使用资源名称。Resource类提供了一个叫<code>getIdentifier()</code>的方法，该方法可以根据资源的名称和类型来获取具体的值。 </li>
+<li>为自己的资源固定id，查看android的<code>R.java</code>文件，可以发现生成的资源id常量值都是0x7f开头。其实，这个id的组成是 package + type + value ，其中，应用的资源生成的id都是7f开头的。而android提供了一种资源类型叫<code>public</code>，用法：</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">public</span> <span class="attribute">type</span>=<span class="value">"id"</span> <span class="attribute">name</span>=<span class="value">"xxx"</span> <span class="attribute">id</span>=<span class="value">"0x7f040003"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>这样，aapt在编译的时候，会自动将该资源指定固定的id。如此一来，就可以在代码中用R.xx.xxx了。</p>
+<h2 id="总结">总结</h2>
+<p>以上方法中第3种方法最佳。</p>
+<p>方法1中，要将源码提供出去，这样，可以给别人修改return的机会，不安全。</p>
+<p>方法2中，资源全部以<code>string</code>的形式指定，如果资源有改动，每次新加都得手动添加其名字和类型，如果添加的多了，再删除，操作起来相当麻烦，而且都不知道哪些用到哪些没用到，即使没有这个资源也不会在编译时报错。</p>
+<p>方法3中，完全指定了资源，可以用<code>R.XX.XXXX</code>来直接使用，在提供给二次开发商的时候，<code>public.xml</code>资源也会提供出去，这样，编译时候不会造成id冲突，相当完美。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/android/">android</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/android/">android</a>
+  </div>
+
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+ <nav id="pagination" >
+    
+    <a href="/2014/03/04/ant-src-lib-proguard/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2014/02/28/alipay-plugin-mechanism/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+<section id="comment">
+  <h1 class="title"> <!-- 留言</h1> -->
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2014/02/28/android-lib-res/" data-title="将android程序打包成sdk中资源的处理" ></div>  
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lephonesnet"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+  
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.lephones.net">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/android/">android</a><small>5</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/android/">android</a><small>5</small></li>
+  
+    <li><a href="/tags/android,camera/">android,camera</a><small>1</small></li>
+  
+    <li><a href="/tags/linux/">linux</a><small>1</small></li>
+  
+    <li><a href="/tags/个人随笔/">个人随笔</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2014/08/22/camera-picture-size/">用camera类拍照指定图片大小</a>
+      </li>
+    
+      <li>
+        <a href="/2014/07/21/manage-bitmap-memory/">android中图片内存管理-防止OOM</a>
+      </li>
+    
+      <li>
+        <a href="/2014/07/19/three-months/">三个月以来</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/12/linux-windows-disk/">双系统回归虚拟机</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/05/android-app-safety/">android应用程序的一些安全技巧</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/04/ant-src-lib-proguard/">ant打包中依赖工程的处理及混淆</a>
+      </li>
+    
+      <li>
+        <a href="/2014/02/28/android-lib-res/">将android程序打包成sdk中资源的处理</a>
+      </li>
+    
+      <li>
+        <a href="/2014/02/28/alipay-plugin-mechanism/">支付宝插件机制研究</a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新评论</h3>
+	<!-- 多说最新评论 start -->
+		<div class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	<!-- 多说最新评论 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lephonesnet"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
+
+
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2014 lephone.zh
+  
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_3223008'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s9.cnzz.com/stat.php%3Fid%3D3223008%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

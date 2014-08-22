@@ -1,0 +1,519 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>lephone&#39;s blog</title>
+  <meta name="author" content="lephone.zh">
+  
+  <meta name="description" content="android java 开发 编程">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="lephone&#39;s blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="lephone&#39;s blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">lephone&#39;s blog</a></h1>
+  <h2><a href="/">又一个android开发人员</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/about">吐槽我</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+      <li><a href="/sitemap.xml">网站地图</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-08-22T06:01:34.000Z"><a href="/2014/08/22/camera-picture-size/">8月 22 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/08/22/camera-picture-size/">用camera类拍照指定图片大小</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="拍照">拍照</h2>
+<p>在安卓上拍照主要有两种方案:</p>
+<ol>
+<li>直接调起系统的照相机拍照片，拍完后，图片会在相册中保存一份，对于程序来说，可以拿到保存照片的路径，从而获取图片。</li>
+<li>自己写<code>SurfaceView</code>调用相机来实现拍照，用该方法会触发一个回调，回调的参数中包含一个字节数组，里面就是图片信息。</li>
+</ol>
+<p>这在网上已经有了好多的资料。</p>
+<h2 id="问题">问题</h2>
+<p>按照需求我们采用的是第2种方案，基本的流程就是：拍照—压缩—保存—上传</p>
+<p>本来一切挺顺利，但当我遇上小米。。</p>
+<p>小米手机在用第2种方式拍照后，默认返回一个<code>176x144</code>分辨率的照片。经查资料发现，原来<code>camera</code>有一个参数叫<code>picture-size</code>，于是给<code>Camera</code>对象加了该参数，代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 获得相机参数</span></div><div class="line"><span class="constant">Camera.Parameters parameters</span> = camera.getParameters();</div><div class="line">parameters.setPictureSize(<span class="number">960</span>, <span class="number">720</span>);</div></pre></td></tr></table></figure>
+
+<p>当我把这段代码运行到红米上时候，崩了。debug了一下<code>parameters</code>参数，发现是硬件限制了，只支持它支持的尺寸。</p>
+<pre><code><span class="keyword">picture</span>-<span class="keyword">size</span>-values=<span class="number">2560</span>x1920,<span class="number">2048</span>x1536,<span class="number">1600</span>x1200,<span class="number">1280</span>x960,<span class="number">640</span>x480,
+</code></pre><h2 id="解决方法">解决方法</h2>
+<p>又找资料，找到<code>Camera.Parameters</code>类下的方法<code>getSupportedPictureSizes()</code>，该方法返回一个<code>List</code>，包含所有支持的尺寸。<br>由于太大的也用不上，而且经测试太大会影响拍照速度，太小的尺寸也不可以，所以就直接取了<code>size()</code>的一半为索引的值了。浏览我的文章的小伙伴可以根据取到的值,自己算出最适合自己的尺寸，不要使用我的这个糟方法。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">List&lt;Size&gt; list = parameters.getSupportedPictureSizes();</div><div class="line"></div><div class="line"><span class="keyword">if</span>(list.<span class="keyword">size</span>() &gt;<span class="number">2</span>){</div><div class="line">	</div><div class="line">	Camera.Size <span class="keyword">size</span> = list.get(list.<span class="keyword">size</span>()/<span class="number">2</span>);</div><div class="line">	parameters.setPictureSize(<span class="keyword">size</span>.width, <span class="keyword">size</span>.height);</div><div class="line">}<span class="keyword">else</span>{</div><div class="line">	Camera.Size <span class="keyword">size</span> = list.get(<span class="number">0</span>);</div><div class="line">	parameters.setPictureSize(<span class="keyword">size</span>.width, <span class="keyword">size</span>.height);</div><div class="line">}</div><div class="line"><span class="comment">// 设置相机参数</span></div><div class="line"><span class="keyword">camera</span>.setParameters(parameters);</div></pre></td></tr></table></figure>
+
+<h2 id="说明">说明</h2>
+<p><code>getSupportedPictureSizes()</code>返回的集合是排好序的，但升序还是降序，也是根据手机来返回的，所以在处理的时候，不能盲目取第一个元素。</p>
+<p>另外，小米手机返回的分辨率太小，就是因为它把最小的那个分辨率给了默认值。176x144，尼玛这么小的图片拿来干嘛？</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-07-21T14:13:13.000Z"><a href="/2014/07/21/manage-bitmap-memory/">7月 21 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/07/21/manage-bitmap-memory/">android中图片内存管理-防止OOM</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="前言">前言</h2>
+<p>最近，公司有个新需求，需要在地图上的每一个用户头像上，加上该用户当前所行驶的速度。先大概说一下地图上的一些事：</p>
+<p>地图上单独加上的一些点（不属于地图本身的信息），我们通常称它们为<code>marker</code>，比如在地图上表示你当前的位置的小圆点，比如表示你搜索到的附近的一些点，都会通过<code>marker</code>来表示出来。而我们公司的产品，需要在地图上显示用户的头像。其实也是一个<code>marker</code>。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/07/21/manage-bitmap-memory/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-07-18T18:27:36.000Z"><a href="/2014/07/19/three-months/">7月 19 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/07/19/three-months/">三个月以来</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>有三个月没有更新这个东西了。。管它叫东西，是因为我还没有彻底玩转静态BLOG，从写到发表还有些生疏。尤其是在使用了各种主题以后，觉得不管用哪一款都让人心里不舒服，更不舒服的是，我却不知道我用什么样的才舒服。</p>
+<h2 id="4月_入职_加班_累">4月 入职 加班 累</h2>
+<p>三个月发生了好多事，三月底跳槽找工作，新公司刚入职后，先是一个周六、日被叫去加班，结果第二周刚到周五，就被拉去封闭开发，主要是切换引擎+代码结构重构。整整一个月，每天从早上10点到晚上10点，无周末。好歹最后也不是白劳累，没有规定所说发双薪，或者安排调休，但发了一个红包奖励。中间的法定节假日—清明节，对公司还意外的当天发了三薪，十分欣慰。不过对于其它工作时间给的补偿，算下来甚至都不到普通上班的时薪，我只能说：呵呵！结合初中学习的政治，立刻感觉资本家总是在无尽的剥削。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/07/19/three-months/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-12T15:45:27.000Z"><a href="/2014/03/12/linux-windows-disk/">3月 12 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/12/linux-windows-disk/">双系统回归虚拟机</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="虚拟机还是双系统">虚拟机还是双系统</h2>
+<p>我的电脑是DELL 3420，最早买回来的时候，内带的是linux系统。于是折腾成windows 7。后来发现开发中有时候用linux，而且可以学学linux知识，于是就又装了个ubuntu（最早自带的也是ubuntu）。一直用的挺好，但是，渐渐发现，linux装上去就是鸡肋，这个系统从来不进去，进去后，上个QQ都没有官方版本的，慢慢就觉得麻烦了，还不如虚拟机好用。</p>
+<p>其实在装双系统之前，我也考虑过装虚拟机，但当时想的是，虚拟机肯定没有直接装在电脑上性能上好。不过，现在我觉得，虚拟机其实足够了，而且同时运行着两个系统是相当的方便。</p>
+<p>所以，如果不是一直用linux做开发而很少用windows的话，都用虚拟机吧。毕竟QQ，游戏，都得在windows平台。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/03/12/linux-windows-disk/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-05T11:29:29.000Z"><a href="/2014/03/05/android-app-safety/">3月 5 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/05/android-app-safety/">android应用程序的一些安全技巧</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="介绍">介绍</h2>
+<p>做android支付，少不了android的一些安全，如果不说系统，单纯对于APP本身而言，安全性可做手脚的地方很小。简单介绍一下</p>
+<h2 id="内容的安全">内容的安全</h2>
+<p>加解密是对内容安全处理最常用的方法了，有<code>对称加密</code>和<code>非对称加密</code>。关于<code>对称加密</code>和<code>非对称加密</code>，大家去google查找资料。在开发中，我们常常把加密算法写在JNI层，更保密。</p>
+<p>联网时内容的安全，大家一定都知道https，如果不用Https，我们就可以使用非对称加密，做一个伪https。</p>
+<p>为了保证数据的完整，可加入签名机制。</p>
+<p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/03/05/android-app-safety/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-04T02:42:07.000Z"><a href="/2014/03/04/ant-src-lib-proguard/">3月 4 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/04/ant-src-lib-proguard/">ant打包中依赖工程的处理及混淆</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="概述">概述</h2>
+<p>在android开发中，ant是用的最多的打包工具。有时候，我们会经常用到一些工程来做为依赖库，也就是src library。那么加入src library project的工程，怎么使用ant的脚本打包成一个apk呢。</p>
+<h2 id="原理">原理</h2>
+<p>我们都知道，src lib无非就是源码和资源。将src打包成jar，这绝对没问题，但是资源文件怎么打包呢？资源文件打包，其实主要就是R文件的运用，因为R文件中保存着资源的ID。</p>
+<p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/03/04/ant-src-lib-proguard/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-02-28T08:22:24.000Z"><a href="/2014/02/28/android-lib-res/">2月 28 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/02/28/android-lib-res/">将android程序打包成sdk中资源的处理</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="背景">背景</h2>
+<p>通常的android项目，都是以apk的形式对外发布的，但有一部分程序，是做为二次开发包提供给其它开发商的，例如，淘宝SDK，新浪微博SDK。笔者参与公司的一款支付插件的开发与维护，最终打包成<strong>jar</strong>+<strong>res</strong>的格式(与支付宝支付提供的支付不同。支付宝的交易功能，也是一个APK，商户接入后，通过AIDL调用支付)。以这款插件为例，讲解一下资源文件的处理。</p>
+<h2 id="工程设置与打包形式">工程设置与打包形式</h2>
+<p><strong>工程设置：</strong></p>
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/02/28/android-lib-res/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-02-27T16:02:33.000Z"><a href="/2014/02/28/alipay-plugin-mechanism/">2月 28 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/02/28/alipay-plugin-mechanism/">支付宝插件机制研究</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="前言">前言</h2>
+<p>使用过支付宝android客户端的小伙伴们都知道，支付宝android客户端可以增量更新，不仅能够随时改变内部APP的个数，还可以改变它的布局，结构等。为本人也在做移动支付，对支付宝客户端颇感兴趣，于是找时间来简单破解研究一下。</p>
+<p>支付宝的插件化，一共有两种方式，一种是通过html网页来实现布局。html技术相信coder们都清楚，不再介绍。这里只介绍native的插件化。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/02/28/alipay-plugin-mechanism/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+<nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav></div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.lephones.net">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/android/">android</a><small>5</small></li>
+  
+    <li><a href="/categories/linux/">linux</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/android/">android</a><small>5</small></li>
+  
+    <li><a href="/tags/android,camera/">android,camera</a><small>1</small></li>
+  
+    <li><a href="/tags/linux/">linux</a><small>1</small></li>
+  
+    <li><a href="/tags/个人随笔/">个人随笔</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2014/08/22/camera-picture-size/">用camera类拍照指定图片大小</a>
+      </li>
+    
+      <li>
+        <a href="/2014/07/21/manage-bitmap-memory/">android中图片内存管理-防止OOM</a>
+      </li>
+    
+      <li>
+        <a href="/2014/07/19/three-months/">三个月以来</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/12/linux-windows-disk/">双系统回归虚拟机</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/05/android-app-safety/">android应用程序的一些安全技巧</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/04/ant-src-lib-proguard/">ant打包中依赖工程的处理及混淆</a>
+      </li>
+    
+      <li>
+        <a href="/2014/02/28/android-lib-res/">将android程序打包成sdk中资源的处理</a>
+      </li>
+    
+      <li>
+        <a href="/2014/02/28/alipay-plugin-mechanism/">支付宝插件机制研究</a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新评论</h3>
+	<!-- 多说最新评论 start -->
+		<div class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	<!-- 多说最新评论 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lephonesnet"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
+
+
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2014 lephone.zh
+  
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_3223008'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s9.cnzz.com/stat.php%3Fid%3D3223008%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

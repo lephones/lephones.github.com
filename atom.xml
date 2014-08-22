@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[lephone's blog]]></title>
+  <subtitle><![CDATA[又一个android开发人员]]></subtitle>
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://www.lephones.net/"/>
+  <updated>2014-08-22T08:02:25.752Z</updated>
+  <id>http://www.lephones.net/</id>
+  
+  <author>
+    <name><![CDATA[lephone.zh]]></name>
+    <email><![CDATA[lephones#lephones.net(#换成@你懂得)]]></email>
+  </author>
+  
+  <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[用camera类拍照指定图片大小]]></title>
+    <link href="http://www.lephones.net/2014/08/22/camera-picture-size/"/>
+    <id>http://www.lephones.net/2014/08/22/camera-picture-size/</id>
+    <published>2014-08-22T06:01:34.000Z</published>
+    <updated>2014-08-22T06:44:40.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="拍照">拍照</h2>
+<p>在安卓上拍照主要有两种方案:</p>
+<ol>
+<li>直接调起系统的照相机拍照片，拍完后，图片会在相册中保存一份，对于程序来说，可以拿到保存照片的路径，从而获取图片。</li>
+<li>自己写<code>SurfaceView</code>调用相机来实现拍照，用该方法会触发一个回调，回调的参数中包含一个字节数组，里面就是图片信息。</li>
+</ol>
+<p>这在网上已经有了好多的资料。</p>
+<h2 id="问题">问题</h2>
+<p>按照需求我们采用的是第2种方案，基本的流程就是：拍照—压缩—保存—上传</p>
+<p>本来一切挺顺利，但当我遇上小米。。</p>
+<p>小米手机在用第2种方式拍照后，默认返回一个<code>176x144</code>分辨率的照片。经查资料发现，原来<code>camera</code>有一个参数叫<code>picture-size</code>，于是给<code>Camera</code>对象加了该参数，代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 获得相机参数</span></div><div class="line"><span class="constant">Camera.Parameters parameters</span> = camera.getParameters();</div><div class="line">parameters.setPictureSize(<span class="number">960</span>, <span class="number">720</span>);</div></pre></td></tr></table></figure>
+
+<p>当我把这段代码运行到红米上时候，崩了。debug了一下<code>parameters</code>参数，发现是硬件限制了，只支持它支持的尺寸。</p>
+<pre><code><span class="keyword">picture</span>-<span class="keyword">size</span>-values=<span class="number">2560</span>x1920,<span class="number">2048</span>x1536,<span class="number">1600</span>x1200,<span class="number">1280</span>x960,<span class="number">640</span>x480,
+</code></pre><h2 id="解决方法">解决方法</h2>
+<p>又找资料，找到<code>Camera.Parameters</code>类下的方法<code>getSupportedPictureSizes()</code>，该方法返回一个<code>List</code>，包含所有支持的尺寸。<br>由于太大的也用不上，而且经测试太大会影响拍照速度，太小的尺寸也不可以，所以就直接取了<code>size()</code>的一半为索引的值了。浏览我的文章的小伙伴可以根据取到的值,自己算出最适合自己的尺寸，不要使用我的这个糟方法。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">List&lt;Size&gt; list = parameters.getSupportedPictureSizes();</div><div class="line"></div><div class="line"><span class="keyword">if</span>(list.<span class="keyword">size</span>() &gt;<span class="number">2</span>){</div><div class="line">	</div><div class="line">	Camera.Size <span class="keyword">size</span> = list.get(list.<span class="keyword">size</span>()/<span class="number">2</span>);</div><div class="line">	parameters.setPictureSize(<span class="keyword">size</span>.width, <span class="keyword">size</span>.height);</div><div class="line">}<span class="keyword">else</span>{</div><div class="line">	Camera.Size <span class="keyword">size</span> = list.get(<span class="number">0</span>);</div><div class="line">	parameters.setPictureSize(<span class="keyword">size</span>.width, <span class="keyword">size</span>.height);</div><div class="line">}</div><div class="line"><span class="comment">// 设置相机参数</span></div><div class="line"><span class="keyword">camera</span>.setParameters(parameters);</div></pre></td></tr></table></figure>
+
+<h2 id="说明">说明</h2>
+<p><code>getSupportedPictureSizes()</code>返回的集合是排好序的，但升序还是降序，也是根据手机来返回的，所以在处理的时候，不能盲目取第一个元素。</p>
+<p>另外，小米手机返回的分辨率太小，就是因为它把最小的那个分辨率给了默认值。176x144，尼玛这么小的图片拿来干嘛？</p>
+]]></content>
+    
+    
+      <category term="android,camera" scheme="http://www.lephones.net/tags/android,camera/"/>
+    
+      <category term="android" scheme="http://www.lephones.net/categories/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[android中图片内存管理-防止OOM]]></title>
+    <link href="http://www.lephones.net/2014/07/21/manage-bitmap-memory/"/>
+    <id>http://www.lephones.net/2014/07/21/manage-bitmap-memory/</id>
+    <published>2014-07-21T14:13:13.000Z</published>
+    <updated>2014-07-23T16:26:44.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p>最近，公司有个新需求，需要在地图上的每一个用户头像上，加上该用户当前所行驶的速度。先大概说一下地图上的一些事：</p>
+<p>地图上单独加上的一些点（不属于地图本身的信息），我们通常称它们为<code>marker</code>，比如在地图上表示你当前的位置的小圆点，比如表示你搜索到的附近的一些点，都会通过<code>marker</code>来表示出来。而我们公司的产品，需要在地图上显示用户的头像。其实也是一个<code>marker</code>。<br><a id="more"></a><br>本来用户的头像形式只有固定的50来个，就像早期的QQ产品，头像也是不能自定义的。开发人员将这50个头像在程序启动时加载到内存中，等需要用的时候，根据图像类型，取到头像，再将头像创建成<code>marker</code>添加到地图上。</p>
+<p>初期，所有的用户只有50个小图，不管怎么加，缓存也只有那么一丢丢。但是，新需求来了，现在需要我们在用户头像上面加一行字，表示当前用户正在地图上行驶的速度。创建地图所需要的<code>marker</code>,必须是一张图片，也就是一个<code>bitmap</code>对象，现在要在地图上加字,肯定得我们自己通过<code>cavans</code>来添加了，等于一个用户有一个<code>bitmap</code>对象，一但刷用户的速度太快，同一时间内创建的头像<code>bitmap</code>对象太多，就容易引发<code>OutOfMemory</code>。通过测试，事实也确实如此。</p>
+<h2 id="软引用_弱引用">软引用 弱引用</h2>
+<p>在JAVA上，有一种很流行的内存缓存技术，就是用弱引用（<code>WeakReference</code>）或者软引用（<code>SoftReference</code>），而android早期，也是用这种方式实现缓存。但是，官方介绍，从<code>android 2.3</code>，也就是<code>API 9</code>开始，垃圾回收器更倾向于回收持有软引用或弱引用的对象，这让软引用和弱引用变得不再可靠。另外<code>android 3.0</code> <code>API 11</code>中，图片的数据会保存在本地的内存中，所有软引用、弱引用不再适合。</p>
+<h2 id="LruCache">LruCache</h2>
+<p><code>LruCache</code>是android新的API，需要导入<code>android-support-v4.jar</code>，相信大家都知道这个jar包。此类适合用来缓存图片，它的主要算法原理是把最近使用的对象用强引用存储在 LinkedHashMap 中，并且把最近最少使用的对象在缓存值达到预设定值之前从内存中移除。</p>
+<p>示例代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> LruCache&lt;String, Bitmap&gt; mMemoryCache;</div><div class="line"></div><div class="line"><span class="annotation">@Override</span></div><div class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span>(Bundle savedInstanceState) {</div><div class="line">	<span class="comment">// 获取到可用内存的最大值，使用内存超出这个值会引起OutOfMemory异常。</span></div><div class="line">	<span class="comment">// LruCache通过构造函数传入缓存值，以KB为单位。</span></div><div class="line">	<span class="keyword">int</span> maxMemory = (<span class="keyword">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">1024</span>);</div><div class="line">	<span class="comment">// 使用最大可用内存值的1/8作为缓存的大小。</span></div><div class="line">	<span class="keyword">int</span> cacheSize = maxMemory / <span class="number">8</span>;</div><div class="line">	mMemoryCache = <span class="keyword">new</span> LruCache&lt;String, Bitmap&gt;(cacheSize) {</div><div class="line">		<span class="annotation">@Override</span></div><div class="line">		<span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">sizeOf</span>(String key, Bitmap bitmap) {</div><div class="line">			<span class="comment">// 重写此方法来衡量每张图片的大小，默认返回图片数量。</span></div><div class="line">			<span class="keyword">return</span> bitmap.getByteCount() / <span class="number">1024</span>;</div><div class="line">		}</div><div class="line">	};</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addBitmapToMemoryCache</span>(String key, Bitmap bitmap) {</div><div class="line">	<span class="keyword">if</span> (getBitmapFromMemCache(key) == <span class="keyword">null</span>) {</div><div class="line">		mMemoryCache.put(key, bitmap);</div><div class="line">	}</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">public</span> Bitmap <span class="title">getBitmapFromMemCache</span>(String key) {</div><div class="line">	<span class="keyword">return</span> mMemoryCache.get(key);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>使用<code>LruCache</code>，需要分配一个缓存大小，这个值不能大，大了占用太多，不能小，小了增加删除操作太多。另外，<code>LruCache</code>的API大家去查文档吧，除了<code>sizeOf</code>，回调的方法还有<code>create</code>，<code>entryRemoved</code>。另外，还有一些移除，获取数量的常用方法，一看就懂，不解释。</p>
+<h2 id="优化小提示：">优化小提示：</h2>
+<ul>
+<li>SparseArray：如果你用的<code>HashMap</code>，并且，你的<code>key</code>是<code>Integer</code>，那么用它吧。</li>
+<li>关于弱引用和软引用：其中，软引用的对象，内存不足时，会优先回收它。弱引用的对象，当垃圾回收器扫描到该对象，就立即回收。当然，如上所说，在<code>android 2.3</code>以上的系统除外。</li>
+</ul>
+]]></content>
+    <summary type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p>最近，公司有个新需求，需要在地图上的每一个用户头像上，加上该用户当前所行驶的速度。先大概说一下地图上的一些事：</p>
+<p>地图上单独加上的一些点（不属于地图本身的信息），我们通常称它们为<code>marker</code>，比如在地图上表示你当前的位置的小圆点，比如表示你搜索到的附近的一些点，都会通过<code>marker</code>来表示出来。而我们公司的产品，需要在地图上显示用户的头像。其实也是一个<code>marker</code>。<br>]]></summary>
+    
+      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[三个月以来]]></title>
+    <link href="http://www.lephones.net/2014/07/19/three-months/"/>
+    <id>http://www.lephones.net/2014/07/19/three-months/</id>
+    <published>2014-07-18T18:27:36.000Z</published>
+    <updated>2014-07-19T07:05:43.000Z</updated>
+    <content type="html"><![CDATA[<p>有三个月没有更新这个东西了。。管它叫东西，是因为我还没有彻底玩转静态BLOG，从写到发表还有些生疏。尤其是在使用了各种主题以后，觉得不管用哪一款都让人心里不舒服，更不舒服的是，我却不知道我用什么样的才舒服。</p>
+<h2 id="4月_入职_加班_累">4月 入职 加班 累</h2>
+<p>三个月发生了好多事，三月底跳槽找工作，新公司刚入职后，先是一个周六、日被叫去加班，结果第二周刚到周五，就被拉去封闭开发，主要是切换引擎+代码结构重构。整整一个月，每天从早上10点到晚上10点，无周末。好歹最后也不是白劳累，没有规定所说发双薪，或者安排调休，但发了一个红包奖励。中间的法定节假日—清明节，对公司还意外的当天发了三薪，十分欣慰。不过对于其它工作时间给的补偿，算下来甚至都不到普通上班的时薪，我只能说：呵呵！结合初中学习的政治，立刻感觉资本家总是在无尽的剥削。<br><a id="more"></a><br>封闭一个月以后，北京的夏天就来了，气温直奔30度，一起封闭开发的小伙伴们趁着五一劳动节，请了三天假期，在家休息了一周。一到公司，事又接踵而来，产品不满意，改！老板不满意，改！因为参与封闭开发五个人，包括我有三个是新来的，对于程序中没有需求变更的东西，我们都是按照原来的实现直接迁移的。结果后来发现，某些需求一开始之前的android开发人员就没实现（真想问问当初是怎么验收过去的），测试一对照IOS客户端，不对，BUG一提，改！五月又在忙碌中过去了。</p>
+<h2 id="6月_google_呵呵">6月 google 呵呵</h2>
+<p>出大事了！！！</p>
+<p>从5月底开始，我发现我的<a href="http://www.lephones.info" target="_blank" rel="external">http://www.lephones.info</a>不知道什么原因，PV在某一天会掉很多。结果6月一到，立马不能访问了。GFW在封锁google.com的时候，同时封锁了GAE，断了利用goagent来上网的朋友们后路。而我的<a href="http://www.lephones.info" target="_blank" rel="external">http://www.lephones.info</a>,就是挂在gae上面的。最早的代码是JAVA写的，因项目不需要维护，代码已经丢了，先翻墙从gae上面把class文件下载下来，再用jd-gui反编译出代码，又花了两天时间改编成php+ajax请求的网页，在网上找了个非常便宜的空间挂上去了。之间出现了32位64位的问题，成功用各种位运算符号解决。</p>
+<p><a href="http://www.lephones.info" target="_blank" rel="external">http://www.lephones.info</a>虽然流量很小很小，每天的IP也就几十个，就一个网页，PV数几乎等同于IP，但是有广告，维护也小，几乎只需要一个域名的费用。我很庆幸GFW在封锁google的时候没有把google adsense也封锁掉，用国内的广告！LZ没备案呀！</p>
+<p>TNND，封google就封吧，封gae就封吧，你妹的把android.com也封了。</p>
+<p>另外，googleapi里面的ajax也引用不到了，google字体也完蛋了，开一个有上述引用的网页，一下子要10几秒。比如，stackoverflow，比如我的hexo的blog。这让我一度怀疑是不是把stackoverflow,github pages也封了。后来我发现，只要在网页加载时候按Esc，就能取消掉请求，而且网页还能正常显示！我换掉blog里面js后，速度立马飙了！</p>
+<h2 id="7月_世界杯_没中">7月 世界杯 没中</h2>
+<p>世界杯开始了，我不关注足球，我关注的是，我投了50块钱的足彩，一分也没捞回来。6月初和前同事聊天，发现同事在我一直心仪的一家公司上班，遂把简历走内推递过去，心想，如此该有一回面试吧，结果又被彻彻底底的拒了，哎！看来我还没有修炼到家，革命尚未成功，还需加倍努力呀！</p>
+<h2 id="三个月的小收获：">三个月的小收获：</h2>
+<ul>
+<li>在一直上班的牵引下，对公司项目做到了快速了解熟悉</li>
+<li>对dex文件结构进行了学习，了解了其组成。</li>
+<li>学习了Jenkins构建工具的使用，搭建了公司的批量渠道包构建环境。</li>
+<li>某安全APK的防盗模块说，只要配置后，恢复出厂设置，也不会擦除防盗功能及配置。反编译学习了一下，发现其实现原理是将防盗配置重新打包成一个新APK，程序替换掉系统内旧的APK文件，重启手机，包含新配置信息的APK文件随即自动安装并生效。当然，防盗的前提是需要root的。把打包的操作放到APK中来达到为APK写入配置信息，技术不新奇，但此想法的运用让我相当的佩服。</li>
+<li>发现某宝的的动态运行APK功能，APK文件是重命名成.so文件存放在/libs/armeabi/下面，该办法也相当巧妙，因为/libs/armeabi/目录下的文件，在apk安装后会自动copy一份到/data/data/packagename/lib/目录下，省去了我们自己的copy过程，毕竟在/data/data/packagename下，才可以进行文件替换更新的操作。</li>
+</ul>
+]]></content>
+    <summary type="html"><![CDATA[<p>有三个月没有更新这个东西了。。管它叫东西，是因为我还没有彻底玩转静态BLOG，从写到发表还有些生疏。尤其是在使用了各种主题以后，觉得不管用哪一款都让人心里不舒服，更不舒服的是，我却不知道我用什么样的才舒服。</p>
+<h2 id="4月_入职_加班_累">4月 入职 加班 累</h2>
+<p>三个月发生了好多事，三月底跳槽找工作，新公司刚入职后，先是一个周六、日被叫去加班，结果第二周刚到周五，就被拉去封闭开发，主要是切换引擎+代码结构重构。整整一个月，每天从早上10点到晚上10点，无周末。好歹最后也不是白劳累，没有规定所说发双薪，或者安排调休，但发了一个红包奖励。中间的法定节假日—清明节，对公司还意外的当天发了三薪，十分欣慰。不过对于其它工作时间给的补偿，算下来甚至都不到普通上班的时薪，我只能说：呵呵！结合初中学习的政治，立刻感觉资本家总是在无尽的剥削。<br>]]></summary>
+    
+      <category term="个人随笔" scheme="http://www.lephones.net/tags/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[双系统回归虚拟机]]></title>
+    <link href="http://www.lephones.net/2014/03/12/linux-windows-disk/"/>
+    <id>http://www.lephones.net/2014/03/12/linux-windows-disk/</id>
+    <published>2014-03-12T15:45:27.000Z</published>
+    <updated>2014-03-12T16:35:01.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="虚拟机还是双系统">虚拟机还是双系统</h2>
+<p>我的电脑是DELL 3420，最早买回来的时候，内带的是linux系统。于是折腾成windows 7。后来发现开发中有时候用linux，而且可以学学linux知识，于是就又装了个ubuntu（最早自带的也是ubuntu）。一直用的挺好，但是，渐渐发现，linux装上去就是鸡肋，这个系统从来不进去，进去后，上个QQ都没有官方版本的，慢慢就觉得麻烦了，还不如虚拟机好用。</p>
+<p>其实在装双系统之前，我也考虑过装虚拟机，但当时想的是，虚拟机肯定没有直接装在电脑上性能上好。不过，现在我觉得，虚拟机其实足够了，而且同时运行着两个系统是相当的方便。</p>
+<p>所以，如果不是一直用linux做开发而很少用windows的话，都用虚拟机吧。毕竟QQ，游戏，都得在windows平台。</p>
+<a id="more"></a>
+
+<h2 id="删除双系统_回归虚拟机">删除双系统 回归虚拟机</h2>
+<p>因为电脑装过双系统了，所以，得删除啊，要不就造成资源浪费了。因为linux在mbr里写入了grub引导菜单，首先得还原mbr。</p>
+<p>下载<code>mbrfix.exe</code>，执行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">MbrFix</span> /drive <span class="number">0</span> fixmbr</div></pre></td></tr></table></figure>
+
+<p>这样mbr就改回来了，剩下的就是之前linux下的分区了。要注意的是，linux下的分区，是千万不能在windows的磁盘管理里删除的。我就是受害者，至于怎么删除，大家百度一下，有各种工具，就不说了。</p>
+<p>如果你在windows下删除了，你会发现你的windows的分区也会少掉，我的E和F盘就一下子不见了。不过，删除了也不要紧，还有一款神器：<code>diskgenius</code>，分区丢了，也能给你找回来，而且还能恢复里面的文件。</p>
+<h2 id="附：">附：</h2>
+<p>我顺便还装了一个MAC的虚拟机，因为内存不够，在某东上面淘了一块内存。金士顿的贴牌产品，颗粒是南亚易胜的。哎！！条子贵死了 4G 250RMB ，我TMD的现在买条子，我简直就是二百五。</p>
+]]></content>
+    <summary type="html"><![CDATA[<h2 id="虚拟机还是双系统">虚拟机还是双系统</h2>
+<p>我的电脑是DELL 3420，最早买回来的时候，内带的是linux系统。于是折腾成windows 7。后来发现开发中有时候用linux，而且可以学学linux知识，于是就又装了个ubuntu（最早自带的也是ubuntu）。一直用的挺好，但是，渐渐发现，linux装上去就是鸡肋，这个系统从来不进去，进去后，上个QQ都没有官方版本的，慢慢就觉得麻烦了，还不如虚拟机好用。</p>
+<p>其实在装双系统之前，我也考虑过装虚拟机，但当时想的是，虚拟机肯定没有直接装在电脑上性能上好。不过，现在我觉得，虚拟机其实足够了，而且同时运行着两个系统是相当的方便。</p>
+<p>所以，如果不是一直用linux做开发而很少用windows的话，都用虚拟机吧。毕竟QQ，游戏，都得在windows平台。</p>
+]]></summary>
+    
+      <category term="linux" scheme="http://www.lephones.net/tags/linux/"/>
+    
+      <category term="linux" scheme="http://www.lephones.net/categories/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[android应用程序的一些安全技巧]]></title>
+    <link href="http://www.lephones.net/2014/03/05/android-app-safety/"/>
+    <id>http://www.lephones.net/2014/03/05/android-app-safety/</id>
+    <published>2014-03-05T11:29:29.000Z</published>
+    <updated>2014-03-06T15:28:22.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="介绍">介绍</h2>
+<p>做android支付，少不了android的一些安全，如果不说系统，单纯对于APP本身而言，安全性可做手脚的地方很小。简单介绍一下</p>
+<h2 id="内容的安全">内容的安全</h2>
+<p>加解密是对内容安全处理最常用的方法了，有<code>对称加密</code>和<code>非对称加密</code>。关于<code>对称加密</code>和<code>非对称加密</code>，大家去google查找资料。在开发中，我们常常把加密算法写在JNI层，更保密。</p>
+<p>联网时内容的安全，大家一定都知道https，如果不用Https，我们就可以使用非对称加密，做一个伪https。</p>
+<p>为了保证数据的完整，可加入签名机制。</p>
+<p><a id="more"></a></p>
+<h2 id="内存的安全">内存的安全</h2>
+<p>JAVA的对象的内存是不能主动释放的，而且，字符串对象一旦实例化出来就成为final驻留在内存中，可以通过内存扫描窥探这些信息。所以，我们的一些敏感信息（比如银行卡密码）是不能用<code>String</code>的。我们需要使用<code>char[]</code>，在不用的时候及时清除这里面的值，<code>char[]</code>需要将所有元素改成<code>\0</code>。</p>
+<p>不能使用 <code>StringBuilder</code>， 如果查看 <code>StringBuilder</code> 的源码，会发现在对其内部的<code>char[]</code>进行扩容的时候，没有把旧的数组清空，做的是<code>Arrays.copyOf(value,  newCapacity)</code>，如此还有安全隐患。但，值得注意的是，<code>delete</code>方法，是对源数组进行的删除操作。</p>
+<p><strong>即使我们可以通过在<code>new StringBuilder(capacity)</code>在创建StringBuilder对象时，指定<code>StringBuilder</code>的容量来保证不会使用扩容，<code>StringBuilder</code>在<code>append</code>的时候，为了安全，参数仍然不能为String，只能是<code>char[]</code></strong>，因此，如果不是要频繁改变，还不如直接使用<code>char[]</code>。</p>
+<h2 id="四大组件安全">四大组件安全</h2>
+<h3 id="activity">activity</h3>
+<p>activity是最常用的组件，这个组件在用intent指定后，默认是可以被外界来访问的，那么，如何来阻挡外界的访问呢？</p>
+<p>在activity注册的时候，加上 <code>android:exported＝false</code>属性，就能限制不能被外部程序访问，这里的外部程序指签名不同，用户ID不同的程序，签名相同，用户ID相同的程序执行时共享一个进程空间，相互是没有组件访问限制的。</p>
+<p>如果希望activity能够被特定的程序访问，那可以使用自定义<code>android:permission</code>，自己在当前activity的该属性指定一个权限字符串，<strong>只有在AndroidMenifest.xml里申明了这个权限的app，才能访问这个activity</strong>。</p>
+<h3 id="Broadcast_Receiver">Broadcast Receiver</h3>
+<p>广播分为无序广播和有序广播，sendBroadcast()是发送的无序的，sendOrderedBroadcast()是发送的有序的。</p>
+<p>有序广播接收有优先级的说法，在android API中，说注册时候写的<code>android:priority</code>的值是<strong>1000</strong>的时候，是最高的优先级。其实不是，最高是int的最大值，<code>2147483647</code>，也就是2的32次方-1，飞信等程序在拦截短信是用的这个值而非1000，可以反编译查看。</p>
+<pre><code>注意：广播在短信拦截的运用，在android 4.4的不适合。
+</code></pre><p>另外，动态注册的广播优先级要比静态注册的高。如果要限定广播发送，可以在广播的intent中指定Class，<code>intent.setClass(MainActivity.this,DataReceiver.class)</code>;这样，广播将永远只能被此Receiver接收。</p>
+<p>同时，如果跨进程的程序，广播也可以限定权限，方式跟activity一样，在receiver处指定权限，在发送的程序中，要指定该权限，否则不能调用该Receiver组件。</p>
+<h3 id="Service">Service</h3>
+<p>service的方式等同于activity，只是一个是界面，一个是后台，所以，service的防护方法也是通过权限来限制程序的访问。</p>
+<p>另外，程序间访问，可以采用AIDL来调用，这样的方式相对安全，目前，支付宝的支付插件正是采用该方式从商户端到支付程序来传递订单数据的，具体可以参考支付宝无线上面提供的接入DEMO，公开的～。如果有做类似这种APK插件的朋友，也可以参考该方法。</p>
+<h3 id="ContentProvider">ContentProvider</h3>
+<p>这个组件，可以申明读写权限，会在具体的操作时候，去检查相应的权限，例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">android:<span class="variable">name=</span><span class="string">"com.android.myapp.FileProvider"</span></div><div class="line">android:<span class="variable">authorities=</span><span class="string">"com.android.myapp.fileprovider"</span></div><div class="line">android:<span class="variable">readPermission=</span><span class="string">"myapp.permission.FILE_READ"</span></div><div class="line">android:<span class="variable">writePermission=</span><span class="string">"myapp.permissionFILE_WRITE"</span> &gt;</div></pre></td></tr></table></figure>
+
+<p>ContentProvider我还没在实际中用过，大家应该也用的不多吧，我觉得很少要对外提供大量数据。</p>
+<h2 id="总结：">总结：</h2>
+<p>文章没啥技术含量，只是介绍了在android编码方面的一些小的安全运用技巧。</p>
+<p>另外，目前市面上有一种对dex文件进行加壳，然后动态运行dex的方法，它通过反射android framework的一些私有API，将一个加密过的dex文件在运行时解密并动态载入。这种方法对防止APK的反编译，二次打包有一定的效果。但是，缺点就是使用了私有api。这套方案梆梆和爱加密已经作为服务免费对外提供，可了解一下下。</p>
+]]></content>
+    <summary type="html"><![CDATA[<h2 id="介绍">介绍</h2>
+<p>做android支付，少不了android的一些安全，如果不说系统，单纯对于APP本身而言，安全性可做手脚的地方很小。简单介绍一下</p>
+<h2 id="内容的安全">内容的安全</h2>
+<p>加解密是对内容安全处理最常用的方法了，有<code>对称加密</code>和<code>非对称加密</code>。关于<code>对称加密</code>和<code>非对称加密</code>，大家去google查找资料。在开发中，我们常常把加密算法写在JNI层，更保密。</p>
+<p>联网时内容的安全，大家一定都知道https，如果不用Https，我们就可以使用非对称加密，做一个伪https。</p>
+<p>为了保证数据的完整，可加入签名机制。</p>
+<p>]]></summary>
+    
+      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
+    
+      <category term="android" scheme="http://www.lephones.net/categories/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[ant打包中依赖工程的处理及混淆]]></title>
+    <link href="http://www.lephones.net/2014/03/04/ant-src-lib-proguard/"/>
+    <id>http://www.lephones.net/2014/03/04/ant-src-lib-proguard/</id>
+    <published>2014-03-04T02:42:07.000Z</published>
+    <updated>2014-03-06T15:28:06.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="概述">概述</h2>
+<p>在android开发中，ant是用的最多的打包工具。有时候，我们会经常用到一些工程来做为依赖库，也就是src library。那么加入src library project的工程，怎么使用ant的脚本打包成一个apk呢。</p>
+<h2 id="原理">原理</h2>
+<p>我们都知道，src lib无非就是源码和资源。将src打包成jar，这绝对没问题，但是资源文件怎么打包呢？资源文件打包，其实主要就是R文件的运用，因为R文件中保存着资源的ID。</p>
+<p><a id="more"></a><br>先来看ADT是怎么打包的，打开主工程的    <code>gen</code> 目录，我们会发现，有两个R文件，一个是在主工程的package下面，一个是在lib工程的package下面。打开两个R文件，细心的网友会发现，主工程的R文件中，会把lib工程的R文件copy一份过来，也就是，在主工程的R文件中，同时包括了主工程的资源和lib工程的资源。</p>
+<p>我们依照这个原理来编写脚本。</p>
+<h2 id="脚本">脚本</h2>
+<p>首先，在主工程的<code>build.xml</code>中，加入:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">property</span> <span class="keyword">file</span>=<span class="string">"project.properties"</span>/&gt;</div></pre></td></tr></table></figure>
+
+<p>原理是将lib工程的配置引进入，我们打开<code>project.properties</code>会发现有一条配置就是<code>android.library.reference.1=../xxxx</code></p>
+<p>其次：在生成R文件的部分编写如下代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- Generate the R.java file for this project's resources. --&gt;</span>  </div><div class="line"><span class="tag">&lt;<span class="title">target</span> <span class="attribute">name</span>=<span class="value">"resource-src"</span> <span class="attribute">depends</span>=<span class="value">"dirs"</span>&gt;</span>  </div><div class="line">  <span class="tag">&lt;<span class="title">echo</span>&gt;</span>Generating R.java / Manifest.java from the resources...<span class="tag">&lt;/<span class="title">echo</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="title">exec</span> <span class="attribute">executable</span>=<span class="value">"${aapt}"</span> <span class="attribute">failonerror</span>=<span class="value">"true"</span>&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"package"</span> /&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"-m"</span> /&gt;</span>  </div><div class="line">    	<span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"--auto-add-overlay"</span> /&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"-J"</span> /&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"${outdir-r}"</span> /&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"-M"</span> /&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"AndroidManifest.xml"</span> /&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"-S"</span> /&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"${resource-dir}"</span> /&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"-S"</span> /&gt;</span>  </div><div class="line">		<span class="comment">&lt;!-- 这里一定要加上，相当于将资源工程的R在主工程复制一份 --&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"${android.library.reference.1}/res"</span> /&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"-I"</span> /&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"${android-jar}"</span> /&gt;</span>  </div><div class="line">    <span class="tag">&lt;/<span class="title">exec</span>&gt;</span></div><div class="line">		<span class="comment">&lt;!-- 单独生成一次lib工程的R文件 --&gt;</span></div><div class="line">	   <span class="comment">&lt;!-- 生成资源工程的R --&gt;</span></div><div class="line">     <span class="tag">&lt;<span class="title">exec</span> <span class="attribute">executable</span>=<span class="value">"${aapt}"</span> <span class="attribute">failonerror</span>=<span class="value">"true"</span>&gt;</span>  </div><div class="line">         <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"package"</span> /&gt;</span>  </div><div class="line">         <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"-m"</span> /&gt;</span> </div><div class="line">     	<span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"--auto-add-overlay"</span> /&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"-J"</span> /&gt;</span>  </div><div class="line">         <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"${outdir-r}"</span> /&gt;</span>  </div><div class="line">         <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"-M"</span> /&gt;</span>  </div><div class="line">         <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"${android.library.reference.1}/AndroidManifest.xml"</span> /&gt;</span>  </div><div class="line">         <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"-S"</span> /&gt;</span>  </div><div class="line">         <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"${android.library.reference.1}/res"</span> /&gt;</span>  </div><div class="line">         <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"-I"</span> /&gt;</span>  </div><div class="line">         <span class="tag">&lt;<span class="title">arg</span> <span class="attribute">value</span>=<span class="value">"${android-jar}"</span> /&gt;</span>  </div><div class="line">     <span class="tag">&lt;/<span class="title">exec</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="title">target</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>上述代码中，先将lib工程的资源生成R映射关系到主工程pachakge的R文件中，再将lib工程的资源生成R文件到lib工程package下面</p>
+<p><strong>注意</strong></p>
+<pre><code>必须在主工程<span class="keyword">package</span>的R文件中生成lib工程的资源ID，这样ID才不会有所重复
+AAPT在打包的时候，会保证lib工程<span class="keyword">package</span>下的R文件的id
+与主工程<span class="keyword">package</span>下的R文件中的对应id一致
+</code></pre><h2 id="混淆">混淆</h2>
+<p>只是一个知识点，通常混淆时候，我们都是在工程目录下的proguard.cfg中编写混淆配置，那么在ant中怎么直接引入这个文件呢？</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;arg <span class="variable">value=</span><span class="string">"@<span class="subst">${proguard-cfg-path}</span>"</span> /&gt;</div></pre></td></tr></table></figure>
+
+<p>这样，就不用在ant脚本里编写混淆参数了。</p>
+]]></content>
+    <summary type="html"><![CDATA[<h2 id="概述">概述</h2>
+<p>在android开发中，ant是用的最多的打包工具。有时候，我们会经常用到一些工程来做为依赖库，也就是src library。那么加入src library project的工程，怎么使用ant的脚本打包成一个apk呢。</p>
+<h2 id="原理">原理</h2>
+<p>我们都知道，src lib无非就是源码和资源。将src打包成jar，这绝对没问题，但是资源文件怎么打包呢？资源文件打包，其实主要就是R文件的运用，因为R文件中保存着资源的ID。</p>
+<p>]]></summary>
+    
+      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
+    
+      <category term="android" scheme="http://www.lephones.net/categories/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[将android程序打包成sdk中资源的处理]]></title>
+    <link href="http://www.lephones.net/2014/02/28/android-lib-res/"/>
+    <id>http://www.lephones.net/2014/02/28/android-lib-res/</id>
+    <published>2014-02-28T08:22:24.000Z</published>
+    <updated>2014-03-09T11:31:29.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="背景">背景</h2>
+<p>通常的android项目，都是以apk的形式对外发布的，但有一部分程序，是做为二次开发包提供给其它开发商的，例如，淘宝SDK，新浪微博SDK。笔者参与公司的一款支付插件的开发与维护，最终打包成<strong>jar</strong>+<strong>res</strong>的格式(与支付宝支付提供的支付不同。支付宝的交易功能，也是一个APK，商户接入后，通过AIDL调用支付)。以这款插件为例，讲解一下资源文件的处理。</p>
+<h2 id="工程设置与打包形式">工程设置与打包形式</h2>
+<p><strong>工程设置：</strong></p>
+<a id="more"></a>
+
+<p>因为插件本身不支持直接运行，必须接入到商户后，才能执行，所以，在维护该插件的时候，还有一个用于调起插件的商户DEMO。怎么样把两个项目整合到一起，可以正常运行呢？</p>
+<pre><code>把插件工程设置成android library <span class="keyword">project</span>
+</code></pre><p>如此一来，只要添加将lib工程添加到商户DEMO中的lib，就可以方便的调用。</p>
+<p><strong>打包：</strong></p>
+<p>将插件的代码打包成一个jar，再将插件工程复制一份出来，删除掉工程中的java源文件，这样，就留下了一个只有资源的lib project。商户接入的时候，将jar添加到libs下，将res library project添加到src lib下，就可以接入。为什么不把jar也放到res lib project里面呢？</p>
+<pre><code>新版本的ADT支持直接把 lib <span class="keyword">project</span> 里的jar添加到build path，没问题，
+但以前的还得手工添加，单独提取出来，更直观
+</code></pre><h2 id="资源文件的处理">资源文件的处理</h2>
+<p>在插件项目中，资源文件的引用不能再以<code>R.XX.XXXX</code>这样的格式来使用，因为这种代码在编译的时候， 会用具体的int值来替换掉代码，当你的项目在别人的环境下重新编译，资源对应的id就被改了。</p>
+<p><strong>解决办法：</strong></p>
+<p>将<code>R.xx.xxx</code>用方法替换。代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">class ResLink{</div><div class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getIdXXXXX</span>(){</div><div class="line">       <span class="keyword">return</span> R.xx.xx;</div><div class="line">   }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ol>
+<li>将ResLink的源码也提供给商户，这样，可以将R的常量的替换放到商户的项目编译时，保证id不紊乱。</li>
+<li>使用资源名称。Resource类提供了一个叫<code>getIdentifier()</code>的方法，该方法可以根据资源的名称和类型来获取具体的值。 </li>
+<li>为自己的资源固定id，查看android的<code>R.java</code>文件，可以发现生成的资源id常量值都是0x7f开头。其实，这个id的组成是 package + type + value ，其中，应用的资源生成的id都是7f开头的。而android提供了一种资源类型叫<code>public</code>，用法：</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">public</span> <span class="attribute">type</span>=<span class="value">"id"</span> <span class="attribute">name</span>=<span class="value">"xxx"</span> <span class="attribute">id</span>=<span class="value">"0x7f040003"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>这样，aapt在编译的时候，会自动将该资源指定固定的id。如此一来，就可以在代码中用R.xx.xxx了。</p>
+<h2 id="总结">总结</h2>
+<p>以上方法中第3种方法最佳。</p>
+<p>方法1中，要将源码提供出去，这样，可以给别人修改return的机会，不安全。</p>
+<p>方法2中，资源全部以<code>string</code>的形式指定，如果资源有改动，每次新加都得手动添加其名字和类型，如果添加的多了，再删除，操作起来相当麻烦，而且都不知道哪些用到哪些没用到，即使没有这个资源也不会在编译时报错。</p>
+<p>方法3中，完全指定了资源，可以用<code>R.XX.XXXX</code>来直接使用，在提供给二次开发商的时候，<code>public.xml</code>资源也会提供出去，这样，编译时候不会造成id冲突，相当完美。</p>
+]]></content>
+    <summary type="html"><![CDATA[<h2 id="背景">背景</h2>
+<p>通常的android项目，都是以apk的形式对外发布的，但有一部分程序，是做为二次开发包提供给其它开发商的，例如，淘宝SDK，新浪微博SDK。笔者参与公司的一款支付插件的开发与维护，最终打包成<strong>jar</strong>+<strong>res</strong>的格式(与支付宝支付提供的支付不同。支付宝的交易功能，也是一个APK，商户接入后，通过AIDL调用支付)。以这款插件为例，讲解一下资源文件的处理。</p>
+<h2 id="工程设置与打包形式">工程设置与打包形式</h2>
+<p><strong>工程设置：</strong></p>
+]]></summary>
+    
+      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
+    
+      <category term="android" scheme="http://www.lephones.net/categories/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[支付宝插件机制研究]]></title>
+    <link href="http://www.lephones.net/2014/02/28/alipay-plugin-mechanism/"/>
+    <id>http://www.lephones.net/2014/02/28/alipay-plugin-mechanism/</id>
+    <published>2014-02-27T16:02:33.000Z</published>
+    <updated>2014-03-06T15:28:20.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p>使用过支付宝android客户端的小伙伴们都知道，支付宝android客户端可以增量更新，不仅能够随时改变内部APP的个数，还可以改变它的布局，结构等。为本人也在做移动支付，对支付宝客户端颇感兴趣，于是找时间来简单破解研究一下。</p>
+<p>支付宝的插件化，一共有两种方式，一种是通过html网页来实现布局。html技术相信coder们都清楚，不再介绍。这里只介绍native的插件化。</p>
+<a id="more"></a>
+
+<h2 id="插件的下载">插件的下载</h2>
+<p>通过对文件监控对比发现，支付宝的插件更新，是下载一个后缀名为.amr的文件，此文件实质是一个压缩包，修改后缀为zip可直接解压。</p>
+<h2 id="提取插件内容">提取插件内容</h2>
+<p>支付宝所有插件用到的文件都解压到了<code>/data/data/com.eg.android.AlipayGphone/files/apps/</code>目录下面，可直接提取。</p>
+<p>提取出来后发现是一些数字文件夹和一个<code>config.json</code>文件，其中，一个数字的文件夹代表的是一个APP，而<code>config.json</code>文件包含所有app的一些配置信息，比如图标，名称等。</p>
+<p>通过阅读<code>config.json</code>发现，<strong>10000002</strong>文件夹代表的是<strong>我要收款</strong>，好，就看你吧。</p>
+<p>打开<strong>10000002</strong>文件夹，发现下列列表</p>
+<ul>
+<li>layout （文件夹）</li>
+<li>res    （文件夹）</li>
+<li>CERT    （文件）</li>
+<li>Manifest.xml    （文件）</li>
+</ul>
+<h2 id="文件说明及插件可配置化布局原理：">文件说明及插件可配置化布局原理：</h2>
+<p><strong>layout</strong></p>
+<p>一堆xml文件，看起来是包含有APP用到的布局文件，格式类似于android原生的layout的xml文件，但控件是支付宝的coder们自定义的。既然它用xml，肯定有解析xml的地方，用dex2jar转换apk，再用jd-gui逆向生成src，通过在反编译的源码中搜索xml的标签，找到了自定义控件的代码，在<code>com.alipay.android.appHall.component</code>包下面。该包下包含了很多自定义控件的类，均以UI开头。</p>
+<p>定位到<code>com.alipay.android.appHall.component</code>下的<strong>UIButton</strong>的代码，找到了真正构成它的layout资源文件id（2130903115）。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Button localButton;</div><div class="line"><span class="keyword">if</span> (paramString.equals(<span class="string">"main"</span>))</div><div class="line">localButton = (Button)LayoutInflater.<span class="keyword">from</span>(<span class="keyword">this</span>.a).inflate(<span class="number">2130903115</span>, paramViewGroup, <span class="keyword">false</span>);</div></pre></td></tr></table></figure>
+
+<p>用计算器将id <strong>2130903115</strong> 转换成16进制，可得到<strong>0x7F03004B</strong>。</p>
+<p>用apktool工具反编译apk，生成资源文件，打开<code>/res/values/public.xml</code>找到 <strong>0x7F03004B</strong> 所对应的布局文件为button_main。在<code>/res/layout/</code>文件夹下面找到布局文件<strong>button_main.xml</strong>。</p>
+<p>可通过该方法，找到其他控件的view类以及所对应的layout静态xml资源。</p>
+<p><strong>res</strong></p>
+<p>此文件夹中包含有三种类型的资源，<code>图片资源</code>，<code>interface.xml</code>，<code>res.xml</code>，打开res.xml，发现其中有三种类型的标签</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">String</span> <span class="attribute">id</span>=<span class="value">"10000"</span>&gt;</span>我要收款<span class="tag">&lt;/<span class="title">String</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">Expression</span> <span class="attribute">id</span>=<span class="value">"20000"</span>&gt;</span>(类似方法的表达式)</div><div class="line"><span class="tag">&lt;<span class="title">Rule</span> <span class="attribute">id</span>=<span class="value">"30000"</span>&gt;</span>(类似于json的一种配置关系)</div></pre></td></tr></table></figure>
+
+<ul>
+<li>String       字符串资源与id对应关系 id以1开头</li>
+<li>Expression    表达式，用于指定事件，在layout的控件中绑定id来指定触发的事件 id以2开头</li>
+<li>Rule        表达式，可根据不同的状态进行不同的操作 id以3开头</li>
+</ul>
+<p>其中，String和Expression的id是在layout中使用的，配置到view的属性中。而Rule的id是在Expression的表达式中使用的，如：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="constant">Expression</span> id=<span class="string">"20005"</span>&gt;<span class="variable">$exec</span>(<span class="variable">$ternary</span>(<span class="variable">@30003</span>,<span class="variable">$ctrl_value_get</span>(numbers)))&lt;<span class="regexp">/Expression&gt;</span></div></pre></td></tr></table></figure>
+
+<p><strong>CERT</strong></p>
+<p>签名文件，保存了该app下的所有的文件的签名，用于校验文件的完整性，防止篡改。</p>
+<p><strong>Manifest.xml</strong></p>
+<p>清单文件，算做是一个总的配置文件，说明性文档。具体功能未做细致研究。</p>
+<h2 id="总结">总结</h2>
+<p>在支付宝插件化中，布局文件采用了自定义常用控件的方案，重新编写了一组控件，通过配置文件来可配置性搭建界面。</p>
+<p>对于控件的事件，比如按钮的点击事件，支付宝定义了一系列的表达式，通过在控件配置文件中配置表达式的id，来指定具体要执行的事件。我的一个猜想是：支付宝预先定义好了一些用到的算法，然后在具体事件中，通过表达式来组合这些算法的调用。因源码混淆，研究起来有难度，放弃验证。</p>
+<p>另外，对于支付宝表达式的解析，朋友们可以将表达式字符串在反编译后的源码中搜索一下，就能找到痕迹。</p>
+<p>关于表达式解析，大家可以自行在google寻找资料。如：JAVACC</p>
+<p>附：如果不知道windows环境中，怎么在反编译后的代码中全局搜索资源，推荐一款神兵利器：<strong>Replace Studio</strong>，小伙伴们可google一下。</p>
+]]></content>
+    <summary type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p>使用过支付宝android客户端的小伙伴们都知道，支付宝android客户端可以增量更新，不仅能够随时改变内部APP的个数，还可以改变它的布局，结构等。为本人也在做移动支付，对支付宝客户端颇感兴趣，于是找时间来简单破解研究一下。</p>
+<p>支付宝的插件化，一共有两种方式，一种是通过html网页来实现布局。html技术相信coder们都清楚，不再介绍。这里只介绍native的插件化。</p>
+]]></summary>
+    
+      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
+    
+      <category term="android" scheme="http://www.lephones.net/categories/android/"/>
+    
+  </entry>
+  
+</feed>
