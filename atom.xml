@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-09-29T10:55:27.578Z</updated>
+  <updated>2014-09-29T11:01:40.834Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.lephones.net/2014/09/29/alipay-dynamic_load/"/>
     <id>http://www.lephones.net/2014/09/29/alipay-dynamic_load/</id>
     <published>2014-09-29T08:15:14.000Z</published>
-    <updated>2014-09-29T10:55:12.000Z</updated>
+    <updated>2014-09-29T11:00:23.000Z</updated>
     <content type="html"><![CDATA[<p>在早期的支付宝客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
 <p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，把编译了一下支付宝的插件化。</p>
 <p>在下资历不高，简单分享一下，大牛看到也不要喷我，在下也是在探索学习中，欢迎交流！</p>
@@ -43,20 +43,18 @@
 <p>代码中反射的<code>mPackageInfo</code>其实就是有名的<code>LoadedApk</code>类。</p>
 <p>通过对代码的加log的跟踪，JAVA文件和smali文件相互对照（因为不是所有的class都能反编译回来），大概整理了一些逻辑与类的结构。</p>
 <h2 id="动态加载原理">动态加载原理</h2>
-<p>支付宝把一个一个插件称为bundle，在<code>application</code>的onCreate方法中，反射<code>mPackageInfo</code>中的<code>mClassloader</code>字段，该属性是一个pathClassloade，将其替换成自己的PathClassloader（这段代码在dex2jar后的代码中看不到，我是直接读的smali代码）。在自定义的PathClassloader中处理，如果是自身dex中的类，则用原pathClassloader加载，如果是bundle，则用bundle的dexfile.loadClass来加载</p>
+<p>支付宝把一个一个插件称为bundle，在<code>application</code>的onCreate方法中，反射<code>mPackageInfo</code>中的<code>mClassloader</code>字段，该属性是一个pathClassloade，将其替换成自己的PathClassloader（这段代码在dex2jar后的代码中看不到，我是直接读的smali代码）。</p>
+<p>在自定义的PathClassloader中处理，如果是自身dex中的类，则用原pathClassloader加载，如果是bundle，则用bundle的<code>dexfile.loadClass</code>来加载</p>
 <ul>
-<li><p><code>BundleClassloader</code>：继承自classloader，用于加载具体的某个插件，包含一个DexFile文件引用，重写了loadClass方法，通过调用dexFile.loadClass(“className” , classLoader);</p>
-</li>
-<li><p><code>HostClasloader</code>：继承自PathClassloader，包含一个系统的pathClassloader，也就是加载apk本身的pathClassloader</p>
-</li>
-<li><p><code>BootstrapClassloader</code>：继承自<code>PathClassloader</code>，该类中包含一个map集合，保存着一个一个的<code>BundleClassloader</code>，同时包含一个HostClasloader，该类就是自定义的pathClassloader，通过反射将原来的mClassloader替换成该类。</p>
-</li>
-<li><p><code>OriginClassLoader</code>：继承自classloader，也就是上图中new的c，ClassLoader.class的<code>parent</code>成了该对象。重写了findClass方法，调用了对android原生的类和APK中的类加载做了分发处理，APK中的类调用<code>BootstrapClassloader</code>的<code>loadClass</code>方法返回。</p>
-</li>
+<li><code>BundleClassloader</code>：继承自classloader，用于加载具体的某个插件，包含一个DexFile文件引用，重写了loadClass方法，通过调用dexFile.loadClass(“className” , classLoader);</li>
+<li><code>HostClasloader</code>：继承自PathClassloader，包含一个系统的pathClassloader，也就是加载apk本身的pathClassloader</li>
+<li><code>BootstrapClassloader</code>：继承自<code>PathClassloader</code>，该类中包含一个map集合，保存着一个一个的<code>BundleClassloader</code>，同时包含一个HostClasloader，该类就是自定义的pathClassloader，通过反射将原来的mClassloader替换成该类。</li>
+<li><code>OriginClassLoader</code>：继承自classloader，也就是上图中new的c，ClassLoader.class的<code>parent</code>成了该对象。重写了findClass方法，调用了对android原生的类和APK中的类加载做了分发处理，APK中的类调用<code>BootstrapClassloader</code>的<code>loadClass</code>方法返回。</li>
 </ul>
 <h2 id="关于资源">关于资源</h2>
-<p>使用反射创建一个AssetManager对象， 使用<code>getDeclaredMethod</code>后调用<code>addAssetPath</code>方法，先将<code>getApplicationInfo().sourceDir</code>调用该方法，再用bundle的路径调用该方法。</p>
-<p>Resources rs = getResources();<br>new Resources(assetManager , rs.getDisplayMetrics(), rs.getConfiguration())</p>
+<p>使用反射创建一个AssetManager对象， 使用<code>getDeclaredMethod</code>后调用<code>addAssetPath</code>方法，先用<code>getApplicationInfo().sourceDir</code>做参数调用该方法，再用bundle的路径调用该方法，这样就能整合到一起。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="title">Resources</span> rs = getResources();</div><div class="line"><span class="title">new</span> Resources(assetManager , rs.getDisplayMetrics(), rs.getConfiguration())</div></pre></td></tr></table></figure>
+
 <p>使用反射替换掉 <code>mPackageInfo</code> 的<code>mResources</code>字段</p>
 <h2 id="代码">代码</h2>
 <p>我只写了一下动态加载activity的代码，具体的资源我没有加载，小伙伴们可以自己试试。activity我没有添加，大家可以添加到主工程下，也可以添加的被加载的工程下，不过一定要记得在<code>AndroidManifest.xml</code>里注册</p>
@@ -75,7 +73,7 @@
 </ol>
 <p>另外，该方法的缺点：</p>
 <ol>
-<li>用到的组件必须在manifest.xml中声明，我们并没有突破manifest的验证</li>
+<li>用到的组件<strong>必须在manifest.xml中声明</strong>，我们并没有突破manifest的验证</li>
 <li>使用了反射私有API，尽管反射使用的不多。</li>
 <li>资源文件处理，如果bundle中的id和主工程下的id冲突了就悲剧了。支付宝自己修改了aapt的源码，把资源<code>0x7f010001</code>前面的7f改了。所有应用的生成id都是7f打头的，该方法不修改aapt办不到，会给你自动改回来。一般我们也可以通过public.xml下指定id</li>
 </ol>
