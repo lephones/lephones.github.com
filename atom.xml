@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-09-29T10:53:42.544Z</updated>
+  <updated>2014-09-29T10:55:27.578Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -19,19 +19,19 @@
     <link href="http://www.lephones.net/2014/09/29/alipay-dynamic_load/"/>
     <id>http://www.lephones.net/2014/09/29/alipay-dynamic_load/</id>
     <published>2014-09-29T08:15:14.000Z</published>
-    <updated>2014-09-29T10:53:31.000Z</updated>
+    <updated>2014-09-29T10:55:12.000Z</updated>
     <content type="html"><![CDATA[<p>在早期的支付宝客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
 <p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，把编译了一下支付宝的插件化。</p>
 <p>在下资历不高，简单分享一下，大牛看到也不要喷我，在下也是在探索学习中，欢迎交流！</p>
 <h2 id="工具：">工具：</h2>
 <p>工欲善其事，必先利其器。因为平时拆包少，对某些好工具也了解不多，基本用了手工的方法来处理的。大家可以用什么APK改之理之类的工具。<br><a id="more"></a></p>
 <ol>
-<li>apktool：这个大家都知道，反编译利器，我下的是apktool_2.0.0b9版本</li>
-<li>dex2jar：不是必须，但看smali代码太累，用这个工具好受一些</li>
-<li>jd-gui：不解释</li>
-<li>Replace Studio：文本搜索工具，可以搜索某文件夹下的文件是否有某文本，我一直用这个，不知道大家有没有其它好工具推荐。</li>
-<li>notepad++：如果你用记事本也可以</li>
-<li>android环境：这个必须，你看完它的代码了，你起码得自己写的试试吧</li>
+<li><code>apktool</code>：这个大家都知道，反编译利器，我下的是apktool_2.0.0b9版本</li>
+<li><code>dex2jar</code>：不是必须，但看smali代码太累，用这个工具好受一些</li>
+<li><code>jd-gui</code>：不解释</li>
+<li><code>Replace Studio</code>：文本搜索工具，可以搜索某文件夹下的文件是否有某文本，我一直用这个，不知道大家有没有其它好工具推荐。</li>
+<li><code>notepad++</code>：如果你用记事本也可以</li>
+<li><code>android环境</code>：这个必须，你看完它的代码了，你起码得自己写的试试吧</li>
 </ol>
 <h2 id="简单拆包分析">简单拆包分析</h2>
 <p>先copy一份apk出来，改后缀名为zip，直接解压，先瞧瞧里面的内容，发现在/lib/armeabi/下的so文件相当的多，有蹊跷！</p>
@@ -44,10 +44,16 @@
 <p>通过对代码的加log的跟踪，JAVA文件和smali文件相互对照（因为不是所有的class都能反编译回来），大概整理了一些逻辑与类的结构。</p>
 <h2 id="动态加载原理">动态加载原理</h2>
 <p>支付宝把一个一个插件称为bundle，在<code>application</code>的onCreate方法中，反射<code>mPackageInfo</code>中的<code>mClassloader</code>字段，该属性是一个pathClassloade，将其替换成自己的PathClassloader（这段代码在dex2jar后的代码中看不到，我是直接读的smali代码）。在自定义的PathClassloader中处理，如果是自身dex中的类，则用原pathClassloader加载，如果是bundle，则用bundle的dexfile.loadClass来加载</p>
-<p><code>BundleClassloader</code>：继承自classloader，用于加载具体的某个插件，包含一个DexFile文件引用，重写了loadClass方法，通过调用dexFile.loadClass(“className” , classLoader);</p>
-<p><code>HostClasloader</code>：继承自PathClassloader，包含一个系统的pathClassloader，也就是加载apk本身的pathClassloader</p>
-<p><code>BootstrapClassloader</code>：继承自<code>PathClassloader</code>，该类中包含一个map集合，保存着一个一个的<code>BundleClassloader</code>，同时包含一个HostClasloader，该类就是自定义的pathClassloader，通过反射将原来的mClassloader替换成该类。</p>
-<p><code>OriginClassLoader</code>：继承自classloader，也就是上图中new的c，ClassLoader.class的<code>parent</code>成了该对象。重写了findClass方法，调用了对android原生的类和APK中的类加载做了分发处理，APK中的类调用<code>BootstrapClassloader</code>的<code>loadClass</code>方法返回。</p>
+<ul>
+<li><p><code>BundleClassloader</code>：继承自classloader，用于加载具体的某个插件，包含一个DexFile文件引用，重写了loadClass方法，通过调用dexFile.loadClass(“className” , classLoader);</p>
+</li>
+<li><p><code>HostClasloader</code>：继承自PathClassloader，包含一个系统的pathClassloader，也就是加载apk本身的pathClassloader</p>
+</li>
+<li><p><code>BootstrapClassloader</code>：继承自<code>PathClassloader</code>，该类中包含一个map集合，保存着一个一个的<code>BundleClassloader</code>，同时包含一个HostClasloader，该类就是自定义的pathClassloader，通过反射将原来的mClassloader替换成该类。</p>
+</li>
+<li><p><code>OriginClassLoader</code>：继承自classloader，也就是上图中new的c，ClassLoader.class的<code>parent</code>成了该对象。重写了findClass方法，调用了对android原生的类和APK中的类加载做了分发处理，APK中的类调用<code>BootstrapClassloader</code>的<code>loadClass</code>方法返回。</p>
+</li>
+</ul>
 <h2 id="关于资源">关于资源</h2>
 <p>使用反射创建一个AssetManager对象， 使用<code>getDeclaredMethod</code>后调用<code>addAssetPath</code>方法，先将<code>getApplicationInfo().sourceDir</code>调用该方法，再用bundle的路径调用该方法。</p>
 <p>Resources rs = getResources();<br>new Resources(assetManager , rs.getDisplayMetrics(), rs.getConfiguration())</p>
