@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-09-29T10:44:30.210Z</updated>
+  <updated>2014-09-29T10:47:20.863Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.lephones.net/2014/09/29/alipay-dynamic_load/"/>
     <id>http://www.lephones.net/2014/09/29/alipay-dynamic_load/</id>
     <published>2014-09-29T08:15:14.000Z</published>
-    <updated>2014-09-29T10:43:59.000Z</updated>
+    <updated>2014-09-29T10:47:03.000Z</updated>
     <content type="html"><![CDATA[<p>在早期的支付宝客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
 <p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，把编译了一下支付宝的插件化。</p>
 <p>在下资历不高，简单分享一下，大牛看到也不要喷我，在下也是在探索学习中，欢迎交流！</p>
@@ -54,7 +54,7 @@
 <p>Resources rs = getResources();<br>new Resources(assetManager , rs.getDisplayMetrics(), rs.getConfiguration())</p>
 <p>使用反射替换掉 <code>mPackageInfo</code> 的<code>mResources</code>字段</p>
 <h2 id="代码">代码</h2>
-<p>我只写了一下动态加载activity的代码，具体的资源我没有加载，小伙伴们可以自己试试。</p>
+<p>我只写了一下动态加载activity的代码，具体的资源我没有加载，小伙伴们可以自己试试。activity我没有添加，大家可以添加到主工程下，也可以添加的被加载的工程下，不过一定要记得在<code>AndroidManifest.xml</code>里注册</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyApplication</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>{</div><div class="line"></div><div class="line">	<span class="keyword">private</span> Field field;</div><div class="line"></div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span>() {</div><div class="line">		<span class="keyword">super</span>.onCreate();</div><div class="line"></div><div class="line">		Context context = getBaseContext();</div><div class="line"></div><div class="line">		Field localField1;</div><div class="line">		<span class="keyword">try</span> {</div><div class="line">			localField1 = context.getClass().getDeclaredField(<span class="string">"mPackageInfo"</span>);</div><div class="line">			localField1.setAccessible(<span class="keyword">true</span>);</div><div class="line">			Object mPackageInfo = localField1.get(context);</div><div class="line">			field = mPackageInfo.getClass().getDeclaredField(<span class="string">"mClassLoader"</span>);</div><div class="line">			field.setAccessible(<span class="keyword">true</span>);</div><div class="line">			Object mClassLoader = field.get(mPackageInfo);</div><div class="line">			ClassLoader loader = <span class="keyword">new</span> MyPathClassLoader(<span class="keyword">this</span>,</div><div class="line">					<span class="keyword">this</span>.getApplicationInfo().sourceDir,</div><div class="line">					(PathClassLoader) mClassLoader);</div><div class="line"></div><div class="line">			field.set(mPackageInfo, loader);</div><div class="line"></div><div class="line">		} <span class="keyword">catch</span> (Exception e) {</div><div class="line">		}</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
 
 <p>下面是我的Classloader 比较粗糙</p>
