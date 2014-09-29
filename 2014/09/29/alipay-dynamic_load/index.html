@@ -80,7 +80,7 @@
 <li>notepad++：如果你用记事本也可以</li>
 <li>android环境：这个必须，你看完它的代码了，你起码得自己写的试试吧</li>
 </ol>
-<h3 id="1-简单拆包分析">1.简单拆包分析</h3>
+<h2 id="简单拆包分析">简单拆包分析</h2>
 <p>先copy一份apk出来，改后缀名为zip，直接解压，先瞧瞧里面的内容，发现在/lib/armeabi/下的so文件相当的多，有蹊跷！</p>
 <p><img src="/image/alipay/so_list.jpg" alt=""></p>
 <p>出于习惯，立马就拿notepad++打开了，结果发现，在文本的最前边是<code>PK</code>开头的两个字符，哈哈，这绝对的是一个zip文件，我们都知道apk其实就是一个zip，而且，真正的so文件应该是以<code>ELF</code>开头的。随便找一个打开，发现了APK的结构：</p>
@@ -88,7 +88,7 @@
 <p>该上工具了，一步到位。使用<code>apktool d xxx.apk</code>命令，直接拆成smali，再使用<code>dex2jar</code>命令拆成jar包。<br>打开<code>AndroidManifest.xml</code>文件，找到<code>application</code><br>    com.alipay.mobile.quinox.LauncherApplication</p>
 <p>用jd-gui打开jar包，找到该类，查看onCreate方法，找到这段代码<br><img src="/image/alipay/application_create.jpg" alt=""></p>
 <p>代码中反射的<code>mPackageInfo</code>其实就是有名的<code>LoadedApk</code>类。</p>
-<p>通过对代码的log跟踪，JAVA文件和smali文件相互对照（因为不是所有的class都能反编译回来），大概整理了一些逻辑与类的结构。</p>
+<p>通过对代码的加log的跟踪，JAVA文件和smali文件相互对照（因为不是所有的class都能反编译回来），大概整理了一些逻辑与类的结构。</p>
 <h2 id="动态加载原理">动态加载原理</h2>
 <p>支付宝把一个一个插件称为bundle，在<code>application</code>的onCreate方法中，反射<code>mPackageInfo</code>中的<code>mClassloader</code>字段，该属性是一个pathClassloade，将其替换成自己的PathClassloader（这段代码在dex2jar后的代码中看不到，我是直接读的smali代码）。在自定义的PathClassloader中处理，如果是自身dex中的类，则用原pathClassloader加载，如果是bundle，则用bundle的dexfile.loadClass来加载</p>
 <p><code>BundleClassloader</code>：继承自classloader，用于加载具体的某个插件，包含一个DexFile文件引用，重写了loadClass方法，通过调用dexFile.loadClass(“className” , classLoader);</p>
