@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-09-29T10:51:37.739Z</updated>
+  <updated>2014-09-29T10:53:42.544Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -19,13 +19,12 @@
     <link href="http://www.lephones.net/2014/09/29/alipay-dynamic_load/"/>
     <id>http://www.lephones.net/2014/09/29/alipay-dynamic_load/</id>
     <published>2014-09-29T08:15:14.000Z</published>
-    <updated>2014-09-29T10:48:54.000Z</updated>
+    <updated>2014-09-29T10:53:31.000Z</updated>
     <content type="html"><![CDATA[<p>在早期的支付宝客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
 <p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，把编译了一下支付宝的插件化。</p>
 <p>在下资历不高，简单分享一下，大牛看到也不要喷我，在下也是在探索学习中，欢迎交流！</p>
-<p><a id="more"></a></p>
 <h2 id="工具：">工具：</h2>
-<p>工欲善其事，必先利其器。因为平时拆包少，对某些好工具也了解不多，基本用了手工的方法来处理的。大家可以用什么APK改之理之类的工具。</p>
+<p>工欲善其事，必先利其器。因为平时拆包少，对某些好工具也了解不多，基本用了手工的方法来处理的。大家可以用什么APK改之理之类的工具。<br><a id="more"></a></p>
 <ol>
 <li>apktool：这个大家都知道，反编译利器，我下的是apktool_2.0.0b9版本</li>
 <li>dex2jar：不是必须，但看smali代码太累，用这个工具好受一些</li>
@@ -80,7 +79,8 @@
     <summary type="html"><![CDATA[<p>在早期的支付宝客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
 <p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，把编译了一下支付宝的插件化。</p>
 <p>在下资历不高，简单分享一下，大牛看到也不要喷我，在下也是在探索学习中，欢迎交流！</p>
-<p>]]></summary>
+<h2 id="工具：">工具：</h2>
+<p>工欲善其事，必先利其器。因为平时拆包少，对某些好工具也了解不多，基本用了手工的方法来处理的。大家可以用什么APK改之理之类的工具。<br>]]></summary>
     
       <category term="android" scheme="http://www.lephones.net/tags/android/"/>
     
