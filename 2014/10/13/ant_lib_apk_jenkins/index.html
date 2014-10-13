@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>双系统回归虚拟机 | lephone&#39;s blog</title>
+  <title>使用ant打包APK及依赖包最佳解决办法 | lephone&#39;s blog</title>
   <meta name="author" content="lephone.zh">
   
   <meta name="description" content="android java 开发 编程">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="双系统回归虚拟机"/>
+  <meta property="og:title" content="使用ant打包APK及依赖包最佳解决办法"/>
   <meta property="og:site_name" content="lephone&#39;s blog"/>
 
   
@@ -56,31 +56,37 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-03-12T15:45:27.000Z"><a href="/2014/03/12/linux-windows-disk/">3月 12 2014</a></time>
+        <time datetime="2014-10-13T09:17:06.000Z"><a href="/2014/10/13/ant_lib_apk_jenkins/">10月 13 2014</a></time>
       
       
   
-    <h1 class="title">双系统回归虚拟机</h1>
+    <h1 class="title">使用ant打包APK及依赖包最佳解决办法</h1>
   
 
     </header>
     <div class="entry">
       
-        <h2 id="虚拟机还是双系统">虚拟机还是双系统</h2>
-<p>我的电脑是DELL 3420，最早买回来的时候，内带的是linux系统。于是折腾成windows 7。后来发现开发中有时候用linux，而且可以学学linux知识，于是就又装了个ubuntu（最早自带的也是ubuntu）。一直用的挺好，但是，渐渐发现，linux装上去就是鸡肋，这个系统从来不进去，进去后，上个QQ都没有官方版本的，慢慢就觉得麻烦了，还不如虚拟机好用。</p>
-<p>其实在装双系统之前，我也考虑过装虚拟机，但当时想的是，虚拟机肯定没有直接装在电脑上性能上好。不过，现在我觉得，虚拟机其实足够了，而且同时运行着两个系统是相当的方便。</p>
-<p>所以，如果不是一直用linux做开发而很少用windows的话，都用虚拟机吧。毕竟QQ，游戏，都得在windows平台。</p>
-<a id="more"></a>
+        <h2 id="简介">简介</h2>
+<p>最近有小伙伴问ant打包的事，google现在又在推广它的gradle构建工具，但是，目前有许多朋友还是用的ant，而且，在SDK多次更新之后，之前写好的ant文件不适用了，典型的例子就是<code>apkbuilder</code>命令。那么，怎么办呢？？</p>
+<p>好多人在网上搜索写好的打包脚本，并费劲心机的寻找工程依赖的打包方法，其实，android的SDK已经给我们提供了该build.xml文件了，就在<code>/tools/ant/</code>下面，这个脚本引用了<code>tools/lib</code>下的<code>ant-task.jar</code>，封装了好多target，我这里就说说怎么使用该脚本。</p>
+<h2 id="生成ant脚本">生成ant脚本</h2>
+<ul>
+<li>在sdk/tools目录下执行下面的命令，注意将命令里面的目录改成你的工程的目录</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
 
-<h2 id="删除双系统_回归虚拟机">删除双系统 回归虚拟机</h2>
-<p>因为电脑装过双系统了，所以，得删除啊，要不就造成资源浪费了。因为linux在mbr里写入了grub引导菜单，首先得还原mbr。</p>
-<p>下载<code>mbrfix.exe</code>，执行</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">MbrFix</span> /drive <span class="number">0</span> fixmbr</div></pre></td></tr></table></figure>
+<p>bash<br>android update project -p /dir/to/ur/project </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- 如果你的工程没问题，就会在目录下生成<span class="number">2</span>个文件，<span class="escape">`b</span>uild.xml<span class="escape">`和</span><span class="escape">`l</span>ocal.properties<span class="escape">`,</span>打开<span class="escape">`l</span>ocal.properties<span class="escape">`</span></div><div class="line">- 在工程目录新建<span class="escape">`a</span>nt.properties<span class="escape">`，</span>将下面的配置信息添加到该文件中，注意将keystore的信息改成你的</div></pre></td></tr></table></figure>
 
-<p>这样mbr就改回来了，剩下的就是之前linux下的分区了。要注意的是，linux下的分区，是千万不能在windows的磁盘管理里删除的。我就是受害者，至于怎么删除，大家百度一下，有各种工具，就不说了。</p>
-<p>如果你在windows下删除了，你会发现你的windows的分区也会少掉，我的E和F盘就一下子不见了。不过，删除了也不要紧，还有一款神器：<code>diskgenius</code>，分区丢了，也能给你找回来，而且还能恢复里面的文件。</p>
-<h2 id="附：">附：</h2>
-<p>我顺便还装了一个MAC的虚拟机，因为内存不够，在某东上面淘了一块内存。金士顿的贴牌产品，颗粒是南亚易胜的。哎！！条子贵死了 4G 250RMB ，我TMD的现在买条子，我简直就是二百五。</p>
+<p>key.store=/home/android/android/build-res/safetrip.releasekey<br>key.alias=android<br>key.store.password=password<br>key.alias.password=password</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="bullet">4. </span>打包，在工程下使用命令<span class="code">`ant release`</span>，或者在eclipse中用ant运行</div><div class="line"></div><div class="line"><span class="header">##项目依赖怎么办</span></div><div class="line">在eclipse中配置好依赖关系，在每个工程下面都执行</div></pre></td></tr></table></figure>
+
+<p>bash<br>    android update project -p /dir/to/ur/project</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">生成build.xml文件就可以啦，就是这么简单，因为在project.properties中已经能读取到依赖关系，build.xml会根据这个文件自动依赖并打入包中的。</div><div class="line"></div><div class="line">##批量打包：</div><div class="line">可以看到生成的build.xml文件在最后是import了sdk中的<span class="escape">`/</span>tools/ant/build.xml<span class="escape">`了</span>，我这里打包用的是<span class="escape">`a</span>nt contrib<span class="escape">`,</span>大家百度一下用法就清楚了。在工程下的build.xml最后加入下面的代码，注意修改清单文件中具体的属性。打包时候，就是执行<span class="escape">`a</span>nt deploy<span class="escape">`，</span>在deploy的target中，会循环调用release的。</div></pre></td></tr></table></figure>
+
+<p><condition property="has.contrib"><br>    <and><br>        <isset property="ant.contrib"><br>    </isset></and><br></condition></p>
+<p><target name="deploy"><br>    <if condition="${has.contrib}"><br>        <then><br>            <foreach target="modify_manifest" list="${market_channels}" param="channel" delimiter=","><br>            </foreach><br>        </then><br>        <else><br>            <echo level="info">ant contrib not found!</echo><br>        </else><br>    </if><br></target></p>
+<p><target name="modify_manifest"><br>    <replaceregexp flags="g" byline="false"><br>       <regexp pattern="meta-data[^/>]*android:name="UMENG_CHANNEL"[^/>]*"><br>        <substitution expression="meta-data android:value="${channel}" android:name="UMENG_CHANNEL""><br>        <fileset dir="" includes="AndroidManifest.xml"><br>    </fileset></substitution></regexp></replaceregexp><br>    <property name="build.deploy" value="true"><br>    <mkdir dir="${out.absolute.dir}/out"><br>    <property name="out.final.file" location="${out.absolute.dir}/out/${ant.project.name}_${channel}.apk"><br>    <antcall target="release"><br></antcall></property></mkdir></property></target><br>```</p>
 
       
     </div>
@@ -89,13 +95,13 @@
         
   
   <div class="categories">
-    <a href="/categories/linux/">linux</a>
+    <a href="/categories/android/">android</a>
   </div>
 
         
   
   <div class="tags">
-    <a href="/tags/linux/">linux</a>
+    <a href="/tags/android/">android</a>
   </div>
 
         
@@ -108,17 +114,17 @@
 
  <nav id="pagination" >
     
-    <a href="/2014/07/19/three-months/" class="alignleft prev" >上一页</a>
+    <a href="/2014/10/13/ant_lib_apk_jenkins(LEFENG-PC--lephone.zh--2014-10-13-18,35,43)/" class="alignleft prev" >上一页</a>
     
     
-    <a href="/2014/03/05/android-app-safety/" class="alignright next" >下一页</a>
+    <a href="/2014/09/29/alipay-dynamic_load/" class="alignright next" >下一页</a>
     
     <div class="clearfix"></div>
 </nav>
 <section id="comment">
   <h1 class="title"> <!-- 留言</h1> -->
 <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="2014/03/12/linux-windows-disk/" data-title="双系统回归虚拟机" ></div>  
+	<div class="ds-thread" data-thread-key="2014/10/13/ant_lib_apk_jenkins/" data-title="使用ant打包APK及依赖包最佳解决办法" ></div>  
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">

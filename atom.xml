@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-09-29T11:03:57.905Z</updated>
+  <updated>2014-10-13T10:39:30.113Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -15,34 +15,115 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[研究支付宝动态加载]]></title>
+    <title><![CDATA[使用ant打包APK及依赖包最佳解决办法]]></title>
+    <link href="http://www.lephones.net/2014/10/13/ant_lib_apk_jenkins(LEFENG-PC--lephone.zh--2014-10-13-18,35,43)/"/>
+    <id>http://www.lephones.net/2014/10/13/ant_lib_apk_jenkins(LEFENG-PC--lephone.zh--2014-10-13-18,35,43)/</id>
+    <published>2014-10-13T09:17:06.000Z</published>
+    <updated>2014-10-13T10:35:40.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="简介">简介</h2>
+<p>最近有小伙伴问ant打包的事，google现在又在推广它的gradle构建工具，但是，目前有许多朋友还是用的ant，而且，在SDK多次更新之后，之前写好的ant文件不适用了，典型的例子就是<code>apkbuilder</code>命令。那么，怎么办呢？？</p>
+<p>好多人在网上搜索写好的打包脚本，并费劲心机的寻找工程依赖的打包方法，其实，android的SDK已经给我们提供了该build.xml文件了，就在<code>/tools/ant/</code>下面，这个脚本引用了<code>tools/lib</code>下的<code>ant-task.jar</code>，封装了好多target，我这里就说说怎么使用该脚本。</p>
+<h2 id="生成ant脚本">生成ant脚本</h2>
+<ol>
+<li>在sdk/tools目录下执行下面的命令，注意将命令里面的目录改成你的工程的目录</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android update <span class="keyword">project</span> -p <span class="regexp">/dir/</span>to<span class="regexp">/ur/</span><span class="keyword">project</span></div></pre></td></tr></table></figure>
+
+<ol>
+<li>如果你的工程没问题，就会在目录下生成2个文件，<code>build.xml</code>和<code>local.properties</code>,打开<code>local.properties</code></li>
+<li>在工程目录新建<code>ant.properties</code>，将下面的配置信息添加到该文件中，注意将keystore的信息改成你的</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">key</span>.store=/home/android/android/build-res/safetrip.releasekey</div><div class="line"><span class="keyword">key</span>.<span class="keyword">alias</span>=android</div><div class="line"><span class="keyword">key</span>.store.password=password</div><div class="line"><span class="keyword">key</span>.<span class="keyword">alias</span>.password=password</div></pre></td></tr></table></figure>
+
+<ol>
+<li>打包，在工程下使用命令<code>ant release</code>，或者在eclipse中用ant运行</li>
+</ol>
+<h2 id="项目依赖怎么办">项目依赖怎么办</h2>
+<p>在eclipse中配置好依赖关系，在每个工程下面都执行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android update <span class="keyword">project</span> -p <span class="regexp">/dir/</span>to<span class="regexp">/ur/</span><span class="keyword">project</span></div></pre></td></tr></table></figure>
+
+<p>生成build.xml文件就可以啦，就是这么简单，因为在project.properties中已经能读取到依赖关系，build.xml会根据这个文件自动依赖并打入包中的。</p>
+<h2 id="批量打包：">批量打包：</h2>
+<p>可以看到生成的build.xml文件在最后是import了sdk中的<code>/tools/ant/build.xml</code>了，我这里打包用的是<code>ant contrib</code>,大家百度一下用法就清楚了。在工程下的build.xml最后加入下面的代码，注意修改清单文件中具体的属性。打包时候，就是执行<code>ant deploy</code>，在deploy的target中，会循环调用release的。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">&lt;condition <span class="variable">property=</span><span class="string">"has.contrib"</span>&gt;</div><div class="line">    &lt;<span class="constant">and</span>&gt;</div><div class="line">        &lt;isset <span class="variable">property=</span><span class="string">"ant.contrib"</span>/&gt;</div><div class="line">    &lt;/<span class="constant">and</span>&gt;</div><div class="line">&lt;/condition&gt;</div><div class="line">&lt;target <span class="variable">name=</span><span class="string">"deploy"</span>&gt;</div><div class="line">    &lt;<span class="keyword">if</span> <span class="variable">condition=</span><span class="string">"<span class="subst">${has.contrib}</span>"</span>&gt;</div><div class="line">        &lt;<span class="keyword">then</span>&gt;</div><div class="line">            &lt;foreach <span class="variable">target=</span><span class="string">"modify_manifest"</span> <span class="variable">list=</span><span class="string">"<span class="subst">${market_channels}</span>"</span> <span class="variable">param=</span><span class="string">"channel"</span> <span class="variable">delimiter=</span><span class="string">","</span>&gt;</div><div class="line">            &lt;/foreach&gt;</div><div class="line">        &lt;/<span class="keyword">then</span>&gt;</div><div class="line">        &lt;<span class="keyword">else</span>&gt;</div><div class="line">            &lt;echo <span class="variable">level=</span><span class="string">"info"</span>&gt;ant contrib not found!&lt;/echo&gt;</div><div class="line">        &lt;/<span class="keyword">else</span>&gt;</div><div class="line">    &lt;/<span class="keyword">if</span>&gt;</div><div class="line">&lt;/target&gt;</div><div class="line">&lt;target <span class="variable">name=</span><span class="string">"modify_manifest"</span>&gt;</div><div class="line">    &lt;replaceregexp <span class="variable">flags=</span><span class="string">"g"</span> <span class="variable">byline=</span><span class="string">"false"</span>&gt;</div><div class="line">       &lt;regexp <span class="variable">pattern=</span>'meta-data[^/&gt;]*android:<span class="variable">name=</span><span class="string">"UMENG_CHANNEL"</span>[^/&gt;]*'/&gt;</div><div class="line">        &lt;substitution <span class="variable">expression=</span>'meta-data android:<span class="variable">value=</span><span class="string">"<span class="subst">${channel}</span>"</span> android:<span class="variable">name=</span><span class="string">"UMENG_CHANNEL"</span>'/&gt; </div><div class="line">        &lt;fileset <span class="variable">dir=</span><span class="string">""</span> <span class="variable">includes=</span><span class="string">"AndroidManifest.xml"</span>/&gt;</div><div class="line">    &lt;/replaceregexp&gt;</div><div class="line">    &lt;property <span class="variable">name=</span><span class="string">"build.deploy"</span> <span class="variable">value=</span><span class="string">"true"</span>/&gt;</div><div class="line">    &lt;mkdir <span class="variable">dir=</span><span class="string">"<span class="subst">${out.absolute.dir}</span>/out"</span>/&gt;</div><div class="line">    &lt;property <span class="variable">name=</span><span class="string">"out.final.file"</span> <span class="variable">location=</span><span class="string">"<span class="subst">${out.absolute.dir}</span>/out/<span class="subst">${ant.project.name}</span>_<span class="subst">${channel}</span>.apk"</span>/&gt;</div><div class="line">    &lt;antcall <span class="variable">target=</span><span class="string">"release"</span>/&gt; </div><div class="line">&lt;/target&gt;</div></pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
+    
+      <category term="android" scheme="http://www.lephones.net/categories/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[使用ant打包APK及依赖包最佳解决办法]]></title>
+    <link href="http://www.lephones.net/2014/10/13/ant_lib_apk_jenkins/"/>
+    <id>http://www.lephones.net/2014/10/13/ant_lib_apk_jenkins/</id>
+    <published>2014-10-13T09:17:06.000Z</published>
+    <updated>2014-10-13T10:39:04.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="简介">简介</h2>
+<p>最近有小伙伴问ant打包的事，google现在又在推广它的gradle构建工具，但是，目前有许多朋友还是用的ant，而且，在SDK多次更新之后，之前写好的ant文件不适用了，典型的例子就是<code>apkbuilder</code>命令。那么，怎么办呢？？</p>
+<p>好多人在网上搜索写好的打包脚本，并费劲心机的寻找工程依赖的打包方法，其实，android的SDK已经给我们提供了该build.xml文件了，就在<code>/tools/ant/</code>下面，这个脚本引用了<code>tools/lib</code>下的<code>ant-task.jar</code>，封装了好多target，我这里就说说怎么使用该脚本。</p>
+<h2 id="生成ant脚本">生成ant脚本</h2>
+<ul>
+<li>在sdk/tools目录下执行下面的命令，注意将命令里面的目录改成你的工程的目录</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+
+<p>bash<br>android update project -p /dir/to/ur/project </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- 如果你的工程没问题，就会在目录下生成<span class="number">2</span>个文件，<span class="escape">`b</span>uild.xml<span class="escape">`和</span><span class="escape">`l</span>ocal.properties<span class="escape">`,</span>打开<span class="escape">`l</span>ocal.properties<span class="escape">`</span></div><div class="line">- 在工程目录新建<span class="escape">`a</span>nt.properties<span class="escape">`，</span>将下面的配置信息添加到该文件中，注意将keystore的信息改成你的</div></pre></td></tr></table></figure>
+
+<p>key.store=/home/android/android/build-res/safetrip.releasekey<br>key.alias=android<br>key.store.password=password<br>key.alias.password=password</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="bullet">4. </span>打包，在工程下使用命令<span class="code">`ant release`</span>，或者在eclipse中用ant运行</div><div class="line"></div><div class="line"><span class="header">##项目依赖怎么办</span></div><div class="line">在eclipse中配置好依赖关系，在每个工程下面都执行</div></pre></td></tr></table></figure>
+
+<p>bash<br>    android update project -p /dir/to/ur/project</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">生成build.xml文件就可以啦，就是这么简单，因为在project.properties中已经能读取到依赖关系，build.xml会根据这个文件自动依赖并打入包中的。</div><div class="line"></div><div class="line">##批量打包：</div><div class="line">可以看到生成的build.xml文件在最后是import了sdk中的<span class="escape">`/</span>tools/ant/build.xml<span class="escape">`了</span>，我这里打包用的是<span class="escape">`a</span>nt contrib<span class="escape">`,</span>大家百度一下用法就清楚了。在工程下的build.xml最后加入下面的代码，注意修改清单文件中具体的属性。打包时候，就是执行<span class="escape">`a</span>nt deploy<span class="escape">`，</span>在deploy的target中，会循环调用release的。</div></pre></td></tr></table></figure>
+
+<p><condition property="has.contrib"><br>    <and><br>        <isset property="ant.contrib"><br>    </isset></and><br></condition></p>
+<p><target name="deploy"><br>    <if condition="${has.contrib}"><br>        <then><br>            <foreach target="modify_manifest" list="${market_channels}" param="channel" delimiter=","><br>            </foreach><br>        </then><br>        <else><br>            <echo level="info">ant contrib not found!</echo><br>        </else><br>    </if><br></target></p>
+<p><target name="modify_manifest"><br>    <replaceregexp flags="g" byline="false"><br>       <regexp pattern="meta-data[^/>]*android:name="UMENG_CHANNEL"[^/>]*"><br>        <substitution expression="meta-data android:value="${channel}" android:name="UMENG_CHANNEL""><br>        <fileset dir="" includes="AndroidManifest.xml"><br>    </fileset></substitution></regexp></replaceregexp><br>    <property name="build.deploy" value="true"><br>    <mkdir dir="${out.absolute.dir}/out"><br>    <property name="out.final.file" location="${out.absolute.dir}/out/${ant.project.name}_${channel}.apk"><br>    <antcall target="release"><br></antcall></property></mkdir></property></target><br>```</p>
+]]></content>
+    
+    
+      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
+    
+      <category term="android" scheme="http://www.lephones.net/categories/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[探究支付宝android客户端的动态加载]]></title>
     <link href="http://www.lephones.net/2014/09/29/alipay-dynamic_load/"/>
     <id>http://www.lephones.net/2014/09/29/alipay-dynamic_load/</id>
     <published>2014-09-29T08:15:14.000Z</published>
-    <updated>2014-09-29T11:02:32.000Z</updated>
-    <content type="html"><![CDATA[<p>在早期的支付宝客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
+    <updated>2014-09-29T14:42:32.000Z</updated>
+    <content type="html"><![CDATA[<p>在早期的支付宝android客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
 <p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，反编译了一下支付宝的插件化。</p>
 <p>在下资历不高，简单分享一下，大牛看到也不要喷我，在下也是在探索学习中，欢迎交流！</p>
 <h2 id="工具：">工具：</h2>
 <p>工欲善其事，必先利其器。因为平时拆包少，对某些好工具也了解不多，基本用了手工的方法来处理的。大家可以用什么APK改之理之类的工具。<br><a id="more"></a></p>
-<ol>
+<ul>
 <li><code>apktool</code>：这个大家都知道，反编译利器，我下的是apktool_2.0.0b9版本</li>
 <li><code>dex2jar</code>：不是必须，但看smali代码太累，用这个工具好受一些</li>
 <li><code>jd-gui</code>：不解释</li>
 <li><code>Replace Studio</code>：文本搜索工具，可以搜索某文件夹下的文件是否有某文本，我一直用这个，不知道大家有没有其它好工具推荐。</li>
 <li><code>notepad++</code>：如果你用记事本也可以</li>
 <li><code>android环境</code>：这个必须，你看完它的代码了，你起码得自己写的试试吧</li>
-</ol>
+</ul>
 <h2 id="简单拆包分析">简单拆包分析</h2>
 <p>先copy一份apk出来，改后缀名为zip，直接解压，先瞧瞧里面的内容，发现在/lib/armeabi/下的so文件相当的多，有蹊跷！</p>
 <p><img src="/image/alipay/so_list.jpg" alt=""></p>
 <p>出于习惯，立马就拿notepad++打开了，结果发现，在文本的最前边是<code>PK</code>开头的两个字符，哈哈，这绝对的是一个zip文件，我们都知道apk其实就是一个zip，而且，真正的so文件应该是以<code>ELF</code>开头的。随便找一个打开，发现了APK的结构：</p>
 <p><img src="/image/alipay/so_is_apk.jpg" alt=""></p>
-<p>该上工具了，一步到位。使用<code>apktool d xxx.apk</code>命令，直接拆成smali，再使用<code>dex2jar</code>命令拆成jar包。<br>打开<code>AndroidManifest.xml</code>文件，找到<code>application</code><br>    com.alipay.mobile.quinox.LauncherApplication</p>
-<p>用jd-gui打开jar包，找到该类，查看onCreate方法，找到这段代码<br><img src="/image/alipay/application_create.jpg" alt=""></p>
+<p>该上工具了，一步到位。对支付宝主APK进行拆包，使用<code>apktool d xxx.apk</code>命令，直接拆成smali，再使用<code>dex2jar</code>命令拆成jar包，再保存成java文件。<br>打开<code>AndroidManifest.xml</code>文件，找到<code>application</code></p>
+<pre><code><span class="keyword">com</span>.alipay.mobile.quinox.LauncherApplication
+</code></pre><p>用jd-gui打开jar包，找到该类，查看onCreate方法，找到这段代码<br><img src="/image/alipay/application_create.jpg" alt=""></p>
 <p>代码中反射的<code>mPackageInfo</code>其实就是有名的<code>LoadedApk</code>类。</p>
-<p>通过对代码的加log的跟踪，JAVA文件和smali文件相互对照（因为不是所有的class都能反编译回来），大概整理了一些逻辑与类的结构。</p>
-<h2 id="动态加载原理">动态加载原理</h2>
+<p>使用<code>Replace Studio</code>在生成的java文件目录下搜索<code>pathClassloader</code></p>
+<p>我发现在com.alipay.mobile.quinox.classloader下有两个类继承自该类。</p>
+<p>通过对smali代码的注入log日志的跟踪，JAVA文件和smali文件相互对照（因为不是所有的class都能反编译回来），我大概整理了一些逻辑与类的结构。</p>
+<h2 id="安卓动态加载原理">安卓动态加载原理</h2>
 <p>支付宝把一个一个插件称为bundle，在<code>application</code>的onCreate方法中，反射<code>mPackageInfo</code>中的<code>mClassloader</code>字段，该属性是一个pathClassloade，将其替换成自己的PathClassloader（这段代码在dex2jar后的代码中看不到，我是直接读的smali代码）。</p>
 <p>在自定义的PathClassloader中处理，如果是自身dex中的类，则用原pathClassloader加载，如果是bundle，则用bundle的<code>dexfile.loadClass</code>来加载</p>
 <ul>
@@ -57,7 +138,8 @@
 
 <p>使用反射替换掉 <code>mPackageInfo</code> 的<code>mResources</code>字段</p>
 <h2 id="代码">代码</h2>
-<p>我只写了一下动态加载activity的代码，具体的资源我没有加载，小伙伴们可以自己试试。activity我没有添加，大家可以添加到主工程下，也可以添加的被加载的工程下，不过一定要记得在<code>AndroidManifest.xml</code>里注册</p>
+<p>我只写了一下动态加载activity的代码，具体的资源我没有加载，小伙伴们可以自己试试。</p>
+<p>activity我没有添加，大家可以添加到主工程下，也可以添加的被加载的工程下，不过一定要记得在<code>AndroidManifest.xml</code>里注册</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyApplication</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>{</div><div class="line"></div><div class="line">	<span class="keyword">private</span> Field field;</div><div class="line"></div><div class="line">	<span class="annotation">@Override</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span>() {</div><div class="line">		<span class="keyword">super</span>.onCreate();</div><div class="line"></div><div class="line">		Context context = getBaseContext();</div><div class="line"></div><div class="line">		Field localField1;</div><div class="line">		<span class="keyword">try</span> {</div><div class="line">			localField1 = context.getClass().getDeclaredField(<span class="string">"mPackageInfo"</span>);</div><div class="line">			localField1.setAccessible(<span class="keyword">true</span>);</div><div class="line">			Object mPackageInfo = localField1.get(context);</div><div class="line">			field = mPackageInfo.getClass().getDeclaredField(<span class="string">"mClassLoader"</span>);</div><div class="line">			field.setAccessible(<span class="keyword">true</span>);</div><div class="line">			Object mClassLoader = field.get(mPackageInfo);</div><div class="line">			ClassLoader loader = <span class="keyword">new</span> MyPathClassLoader(<span class="keyword">this</span>,</div><div class="line">					<span class="keyword">this</span>.getApplicationInfo().sourceDir,</div><div class="line">					(PathClassLoader) mClassLoader);</div><div class="line"></div><div class="line">			field.set(mPackageInfo, loader);</div><div class="line"></div><div class="line">		} <span class="keyword">catch</span> (Exception e) {</div><div class="line">		}</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
 
 <p>下面是我的Classloader 比较粗糙</p>
@@ -78,9 +160,9 @@
 <li>资源文件处理，如果bundle中的id和主工程下的id冲突了就悲剧了。支付宝自己修改了aapt的源码，把资源<code>0x7f010001</code>前面的7f改了。所有应用的生成id都是7f打头的，该方法不修改aapt办不到，会给你自动改回来。一般我们也可以通过public.xml下指定id</li>
 </ol>
 <h2 id="说明：">说明：</h2>
-<p>同是阿里系的淘宝网有一套框架叫atlas，该框架是一套重量级框架，完全突破了manifest的封锁，不同的bundle使用的不同的context</p>
+<p>同是阿里系的淘宝网有一套框架叫atlas，该框架是一套重量级框架，完全突破了manifest的封锁，不同的bundle使用的不同的context。</p>
 ]]></content>
-    <summary type="html"><![CDATA[<p>在早期的支付宝客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
+    <summary type="html"><![CDATA[<p>在早期的支付宝android客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
 <p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，反编译了一下支付宝的插件化。</p>
 <p>在下资历不高，简单分享一下，大牛看到也不要喷我，在下也是在探索学习中，欢迎交流！</p>
 <h2 id="工具：">工具：</h2>
