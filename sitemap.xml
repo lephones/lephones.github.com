@@ -2,8 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://www.lephones.net/2014/10/13/ant_lib_apk_jenkins/</loc>
-    <lastmod>2014-10-13T10:40:59.000Z</lastmod>
+    <loc>http://www.lephones.net/2014/10/13/ant_apk_with_lib/</loc>
+    <lastmod>2014-10-13T11:21:35.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.lephones.net/2014/02/28/android-lib-res/</loc>
+    <lastmod>2014-10-13T10:51:45.000Z</lastmod>
   </url>
   
   <url>
@@ -44,11 +49,6 @@
   <url>
     <loc>http://www.lephones.net/2014/03/12/linux-windows-disk/</loc>
     <lastmod>2014-03-12T16:35:01.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.lephones.net/2014/02/28/android-lib-res/</loc>
-    <lastmod>2014-03-09T11:31:29.000Z</lastmod>
   </url>
   
   <url>
