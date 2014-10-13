@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-10-13T10:39:30.113Z</updated>
+  <updated>2014-10-13T10:41:17.597Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -13,6 +13,48 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[使用ant打包APK及依赖包最佳解决办法]]></title>
+    <link href="http://www.lephones.net/2014/10/13/ant_lib_apk_jenkins/"/>
+    <id>http://www.lephones.net/2014/10/13/ant_lib_apk_jenkins/</id>
+    <published>2014-10-13T09:17:06.000Z</published>
+    <updated>2014-10-13T10:40:59.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="简介">简介</h2>
+<p>最近有小伙伴问ant打包的事，google现在又在推广它的gradle构建工具，但是，目前有许多朋友还是用的ant，而且，在SDK多次更新之后，之前写好的ant文件不适用了，典型的例子就是<code>apkbuilder</code>命令。那么，怎么办呢？？</p>
+<p>好多人在网上搜索写好的打包脚本，并费劲心机的寻找工程依赖的打包方法，其实，android的SDK已经给我们提供了该build.xml文件了，就在<code>/tools/ant/</code>下面，这个脚本引用了<code>tools/lib</code>下的<code>ant-task.jar</code>，封装了好多target，我这里就说说怎么使用该脚本。</p>
+<h2 id="生成ant脚本">生成ant脚本</h2>
+<ul>
+<li>在sdk/tools目录下执行下面的命令，注意将命令里面的目录改成你的工程的目录</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android update project -p /dir/to/ur/project</div></pre></td></tr></table></figure>
+
+<ul>
+<li>如果你的工程没问题，就会在目录下生成2个文件，<code>build.xml</code>和<code>local.properties</code>,打开<code>local.properties</code></li>
+<li>在工程目录新建<code>ant.properties</code>，将下面的配置信息添加到该文件中，注意将keystore的信息改成你的</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">key</span>.store=/home/android/android/build-res/safetrip.releasekey</div><div class="line"><span class="keyword">key</span>.<span class="keyword">alias</span>=android</div><div class="line"><span class="keyword">key</span>.store.password=password</div><div class="line"><span class="keyword">key</span>.<span class="keyword">alias</span>.password=password</div></pre></td></tr></table></figure>
+
+<ol>
+<li>打包，在工程下使用命令<code>ant release</code>，或者在eclipse中用ant运行</li>
+</ol>
+<h2 id="项目依赖怎么办">项目依赖怎么办</h2>
+<p>在eclipse中配置好依赖关系，在每个工程下面都执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android update project -p /dir/to/ur/project</div></pre></td></tr></table></figure>
+
+<p>生成build.xml文件就可以啦，就是这么简单，因为在project.properties中已经能读取到依赖关系，build.xml会根据这个文件自动依赖并打入包中的。</p>
+<h2 id="批量打包：">批量打包：</h2>
+<p>可以看到生成的build.xml文件在最后是import了sdk中的<code>/tools/ant/build.xml</code>了，我这里打包用的是<code>ant contrib</code>,大家百度一下用法就清楚了。在工程下的build.xml最后加入下面的代码，注意修改清单文件中具体的属性。打包时候，就是执行<code>ant deploy</code>，在deploy的target中，会循环调用release的。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">&lt;condition <span class="variable">property=</span><span class="string">"has.contrib"</span>&gt;</div><div class="line">    &lt;<span class="constant">and</span>&gt;</div><div class="line">        &lt;isset <span class="variable">property=</span><span class="string">"ant.contrib"</span>/&gt;</div><div class="line">    &lt;/<span class="constant">and</span>&gt;</div><div class="line">&lt;/condition&gt;</div><div class="line">&lt;target <span class="variable">name=</span><span class="string">"deploy"</span>&gt;</div><div class="line">    &lt;<span class="keyword">if</span> <span class="variable">condition=</span><span class="string">"<span class="subst">${has.contrib}</span>"</span>&gt;</div><div class="line">        &lt;<span class="keyword">then</span>&gt;</div><div class="line">            &lt;foreach <span class="variable">target=</span><span class="string">"modify_manifest"</span> <span class="variable">list=</span><span class="string">"<span class="subst">${market_channels}</span>"</span> <span class="variable">param=</span><span class="string">"channel"</span> <span class="variable">delimiter=</span><span class="string">","</span>&gt;</div><div class="line">            &lt;/foreach&gt;</div><div class="line">        &lt;/<span class="keyword">then</span>&gt;</div><div class="line">        &lt;<span class="keyword">else</span>&gt;</div><div class="line">            &lt;echo <span class="variable">level=</span><span class="string">"info"</span>&gt;ant contrib not found!&lt;/echo&gt;</div><div class="line">        &lt;/<span class="keyword">else</span>&gt;</div><div class="line">    &lt;/<span class="keyword">if</span>&gt;</div><div class="line">&lt;/target&gt;</div><div class="line">&lt;target <span class="variable">name=</span><span class="string">"modify_manifest"</span>&gt;</div><div class="line">    &lt;replaceregexp <span class="variable">flags=</span><span class="string">"g"</span> <span class="variable">byline=</span><span class="string">"false"</span>&gt;</div><div class="line">       &lt;regexp <span class="variable">pattern=</span>'meta-data[^/&gt;]*android:<span class="variable">name=</span><span class="string">"UMENG_CHANNEL"</span>[^/&gt;]*'/&gt;</div><div class="line">        &lt;substitution <span class="variable">expression=</span>'meta-data android:<span class="variable">value=</span><span class="string">"<span class="subst">${channel}</span>"</span> android:<span class="variable">name=</span><span class="string">"UMENG_CHANNEL"</span>'/&gt; </div><div class="line">        &lt;fileset <span class="variable">dir=</span><span class="string">""</span> <span class="variable">includes=</span><span class="string">"AndroidManifest.xml"</span>/&gt;</div><div class="line">    &lt;/replaceregexp&gt;</div><div class="line">    &lt;property <span class="variable">name=</span><span class="string">"build.deploy"</span> <span class="variable">value=</span><span class="string">"true"</span>/&gt;</div><div class="line">    &lt;mkdir <span class="variable">dir=</span><span class="string">"<span class="subst">${out.absolute.dir}</span>/out"</span>/&gt;</div><div class="line">    &lt;property <span class="variable">name=</span><span class="string">"out.final.file"</span> <span class="variable">location=</span><span class="string">"<span class="subst">${out.absolute.dir}</span>/out/<span class="subst">${ant.project.name}</span>_<span class="subst">${channel}</span>.apk"</span>/&gt;</div><div class="line">    &lt;antcall <span class="variable">target=</span><span class="string">"release"</span>/&gt; </div><div class="line">&lt;/target&gt;</div></pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
+    
+      <category term="android" scheme="http://www.lephones.net/categories/android/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[使用ant打包APK及依赖包最佳解决办法]]></title>
@@ -47,42 +89,6 @@
 <p>可以看到生成的build.xml文件在最后是import了sdk中的<code>/tools/ant/build.xml</code>了，我这里打包用的是<code>ant contrib</code>,大家百度一下用法就清楚了。在工程下的build.xml最后加入下面的代码，注意修改清单文件中具体的属性。打包时候，就是执行<code>ant deploy</code>，在deploy的target中，会循环调用release的。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">&lt;condition <span class="variable">property=</span><span class="string">"has.contrib"</span>&gt;</div><div class="line">    &lt;<span class="constant">and</span>&gt;</div><div class="line">        &lt;isset <span class="variable">property=</span><span class="string">"ant.contrib"</span>/&gt;</div><div class="line">    &lt;/<span class="constant">and</span>&gt;</div><div class="line">&lt;/condition&gt;</div><div class="line">&lt;target <span class="variable">name=</span><span class="string">"deploy"</span>&gt;</div><div class="line">    &lt;<span class="keyword">if</span> <span class="variable">condition=</span><span class="string">"<span class="subst">${has.contrib}</span>"</span>&gt;</div><div class="line">        &lt;<span class="keyword">then</span>&gt;</div><div class="line">            &lt;foreach <span class="variable">target=</span><span class="string">"modify_manifest"</span> <span class="variable">list=</span><span class="string">"<span class="subst">${market_channels}</span>"</span> <span class="variable">param=</span><span class="string">"channel"</span> <span class="variable">delimiter=</span><span class="string">","</span>&gt;</div><div class="line">            &lt;/foreach&gt;</div><div class="line">        &lt;/<span class="keyword">then</span>&gt;</div><div class="line">        &lt;<span class="keyword">else</span>&gt;</div><div class="line">            &lt;echo <span class="variable">level=</span><span class="string">"info"</span>&gt;ant contrib not found!&lt;/echo&gt;</div><div class="line">        &lt;/<span class="keyword">else</span>&gt;</div><div class="line">    &lt;/<span class="keyword">if</span>&gt;</div><div class="line">&lt;/target&gt;</div><div class="line">&lt;target <span class="variable">name=</span><span class="string">"modify_manifest"</span>&gt;</div><div class="line">    &lt;replaceregexp <span class="variable">flags=</span><span class="string">"g"</span> <span class="variable">byline=</span><span class="string">"false"</span>&gt;</div><div class="line">       &lt;regexp <span class="variable">pattern=</span>'meta-data[^/&gt;]*android:<span class="variable">name=</span><span class="string">"UMENG_CHANNEL"</span>[^/&gt;]*'/&gt;</div><div class="line">        &lt;substitution <span class="variable">expression=</span>'meta-data android:<span class="variable">value=</span><span class="string">"<span class="subst">${channel}</span>"</span> android:<span class="variable">name=</span><span class="string">"UMENG_CHANNEL"</span>'/&gt; </div><div class="line">        &lt;fileset <span class="variable">dir=</span><span class="string">""</span> <span class="variable">includes=</span><span class="string">"AndroidManifest.xml"</span>/&gt;</div><div class="line">    &lt;/replaceregexp&gt;</div><div class="line">    &lt;property <span class="variable">name=</span><span class="string">"build.deploy"</span> <span class="variable">value=</span><span class="string">"true"</span>/&gt;</div><div class="line">    &lt;mkdir <span class="variable">dir=</span><span class="string">"<span class="subst">${out.absolute.dir}</span>/out"</span>/&gt;</div><div class="line">    &lt;property <span class="variable">name=</span><span class="string">"out.final.file"</span> <span class="variable">location=</span><span class="string">"<span class="subst">${out.absolute.dir}</span>/out/<span class="subst">${ant.project.name}</span>_<span class="subst">${channel}</span>.apk"</span>/&gt;</div><div class="line">    &lt;antcall <span class="variable">target=</span><span class="string">"release"</span>/&gt; </div><div class="line">&lt;/target&gt;</div></pre></td></tr></table></figure>
 
-]]></content>
-    
-    
-      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
-    
-      <category term="android" scheme="http://www.lephones.net/categories/android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[使用ant打包APK及依赖包最佳解决办法]]></title>
-    <link href="http://www.lephones.net/2014/10/13/ant_lib_apk_jenkins/"/>
-    <id>http://www.lephones.net/2014/10/13/ant_lib_apk_jenkins/</id>
-    <published>2014-10-13T09:17:06.000Z</published>
-    <updated>2014-10-13T10:39:04.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="简介">简介</h2>
-<p>最近有小伙伴问ant打包的事，google现在又在推广它的gradle构建工具，但是，目前有许多朋友还是用的ant，而且，在SDK多次更新之后，之前写好的ant文件不适用了，典型的例子就是<code>apkbuilder</code>命令。那么，怎么办呢？？</p>
-<p>好多人在网上搜索写好的打包脚本，并费劲心机的寻找工程依赖的打包方法，其实，android的SDK已经给我们提供了该build.xml文件了，就在<code>/tools/ant/</code>下面，这个脚本引用了<code>tools/lib</code>下的<code>ant-task.jar</code>，封装了好多target，我这里就说说怎么使用该脚本。</p>
-<h2 id="生成ant脚本">生成ant脚本</h2>
-<ul>
-<li>在sdk/tools目录下执行下面的命令，注意将命令里面的目录改成你的工程的目录</li>
-</ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-
-<p>bash<br>android update project -p /dir/to/ur/project </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- 如果你的工程没问题，就会在目录下生成<span class="number">2</span>个文件，<span class="escape">`b</span>uild.xml<span class="escape">`和</span><span class="escape">`l</span>ocal.properties<span class="escape">`,</span>打开<span class="escape">`l</span>ocal.properties<span class="escape">`</span></div><div class="line">- 在工程目录新建<span class="escape">`a</span>nt.properties<span class="escape">`，</span>将下面的配置信息添加到该文件中，注意将keystore的信息改成你的</div></pre></td></tr></table></figure>
-
-<p>key.store=/home/android/android/build-res/safetrip.releasekey<br>key.alias=android<br>key.store.password=password<br>key.alias.password=password</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="bullet">4. </span>打包，在工程下使用命令<span class="code">`ant release`</span>，或者在eclipse中用ant运行</div><div class="line"></div><div class="line"><span class="header">##项目依赖怎么办</span></div><div class="line">在eclipse中配置好依赖关系，在每个工程下面都执行</div></pre></td></tr></table></figure>
-
-<p>bash<br>    android update project -p /dir/to/ur/project</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">生成build.xml文件就可以啦，就是这么简单，因为在project.properties中已经能读取到依赖关系，build.xml会根据这个文件自动依赖并打入包中的。</div><div class="line"></div><div class="line">##批量打包：</div><div class="line">可以看到生成的build.xml文件在最后是import了sdk中的<span class="escape">`/</span>tools/ant/build.xml<span class="escape">`了</span>，我这里打包用的是<span class="escape">`a</span>nt contrib<span class="escape">`,</span>大家百度一下用法就清楚了。在工程下的build.xml最后加入下面的代码，注意修改清单文件中具体的属性。打包时候，就是执行<span class="escape">`a</span>nt deploy<span class="escape">`，</span>在deploy的target中，会循环调用release的。</div></pre></td></tr></table></figure>
-
-<p><condition property="has.contrib"><br>    <and><br>        <isset property="ant.contrib"><br>    </isset></and><br></condition></p>
-<p><target name="deploy"><br>    <if condition="${has.contrib}"><br>        <then><br>            <foreach target="modify_manifest" list="${market_channels}" param="channel" delimiter=","><br>            </foreach><br>        </then><br>        <else><br>            <echo level="info">ant contrib not found!</echo><br>        </else><br>    </if><br></target></p>
-<p><target name="modify_manifest"><br>    <replaceregexp flags="g" byline="false"><br>       <regexp pattern="meta-data[^/>]*android:name="UMENG_CHANNEL"[^/>]*"><br>        <substitution expression="meta-data android:value="${channel}" android:name="UMENG_CHANNEL""><br>        <fileset dir="" includes="AndroidManifest.xml"><br>    </fileset></substitution></regexp></replaceregexp><br>    <property name="build.deploy" value="true"><br>    <mkdir dir="${out.absolute.dir}/out"><br>    <property name="out.final.file" location="${out.absolute.dir}/out/${ant.project.name}_${channel}.apk"><br>    <antcall target="release"><br></antcall></property></mkdir></property></target><br>```</p>
 ]]></content>
     
     
