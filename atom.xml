@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-10-13T11:33:27.502Z</updated>
+  <updated>2014-10-14T02:24:10.487Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.lephones.net/2014/10/13/ant_apk_with_lib/"/>
     <id>http://www.lephones.net/2014/10/13/ant_apk_with_lib/</id>
     <published>2014-10-13T09:17:06.000Z</published>
-    <updated>2014-10-13T11:31:05.000Z</updated>
+    <updated>2014-10-14T02:23:12.000Z</updated>
     <content type="html"><![CDATA[<h2 id="简介">简介</h2>
 <p>最近有小伙伴问ant打包的事，google现在又在推广它的gradle构建工具，但是，目前有许多朋友还是用的ant，而且，在SDK多次更新之后，之前写好的ant文件不适用了，典型的例子就是<code>apkbuilder</code>命令。那么，怎么办呢？？</p>
 <p>好多人在网上搜索写好的打包脚本，并费劲心机的寻找工程依赖的打包方法，其实，android的SDK已经给我们提供了该build.xml文件了，就在<code>/tools/ant/</code>下面，这个脚本引用了<code>tools/lib</code>下的<code>ant-task.jar</code>，封装了好多target，我这里就说说怎么使用该脚本。</p>
@@ -31,7 +31,7 @@
 
 <p><a id="more"></a></p>
 <ul>
-<li>如果你的工程没问题，就会在目录下生成2个文件，<code>build.xml</code>和<code>local.properties</code>,打开<code>local.properties</code></li>
+<li>如果你的工程没问题，就会在目录下生成2个文件，<code>build.xml</code>和<code>local.properties</code>,打开<code>local.properties</code>，可看到其实是一个环境配置</li>
 <li>在工程目录新建<code>ant.properties</code>，将下面的配置信息添加到该文件中，注意将keystore的信息改成你的</li>
 </ul>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">key</span>.store=/home/android/android/build-res/safetrip.releasekey</div><div class="line"><span class="keyword">key</span>.<span class="keyword">alias</span>=android</div><div class="line"><span class="keyword">key</span>.store.password=password</div><div class="line"><span class="keyword">key</span>.<span class="keyword">alias</span>.password=password</div></pre></td></tr></table></figure>
@@ -379,8 +379,9 @@
     <link href="http://www.lephones.net/2014/03/04/ant-src-lib-proguard/"/>
     <id>http://www.lephones.net/2014/03/04/ant-src-lib-proguard/</id>
     <published>2014-03-04T02:42:07.000Z</published>
-    <updated>2014-03-06T15:28:06.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="概述">概述</h2>
+    <updated>2014-10-14T02:22:30.000Z</updated>
+    <content type="html"><![CDATA[<p>关于ant打包，请参考<strong><a href="http://www.lephones.net/2014/10/13/ant_apk_with_lib/" title="使用ant打包APK及依赖包最佳解决办法" target="_blank" rel="external">使用ant打包APK及依赖包最佳解决办法</a></strong></p>
+<h2 id="概述">概述</h2>
 <p>在android开发中，ant是用的最多的打包工具。有时候，我们会经常用到一些工程来做为依赖库，也就是src library。那么加入src library project的工程，怎么使用ant的脚本打包成一个apk呢。</p>
 <h2 id="原理">原理</h2>
 <p>我们都知道，src lib无非就是源码和资源。将src打包成jar，这绝对没问题，但是资源文件怎么打包呢？资源文件打包，其实主要就是R文件的运用，因为R文件中保存着资源的ID。</p>
@@ -405,7 +406,8 @@ AAPT在打包的时候，会保证lib工程<span class="keyword">package</span>�
 
 <p>这样，就不用在ant脚本里编写混淆参数了。</p>
 ]]></content>
-    <summary type="html"><![CDATA[<h2 id="概述">概述</h2>
+    <summary type="html"><![CDATA[<p>关于ant打包，请参考<strong><a href="http://www.lephones.net/2014/10/13/ant_apk_with_lib/" title="使用ant打包APK及依赖包最佳解决办法" target="_blank" rel="external">使用ant打包APK及依赖包最佳解决办法</a></strong></p>
+<h2 id="概述">概述</h2>
 <p>在android开发中，ant是用的最多的打包工具。有时候，我们会经常用到一些工程来做为依赖库，也就是src library。那么加入src library project的工程，怎么使用ant的脚本打包成一个apk呢。</p>
 <h2 id="原理">原理</h2>
 <p>我们都知道，src lib无非就是源码和资源。将src打包成jar，这绝对没问题，但是资源文件怎么打包呢？资源文件打包，其实主要就是R文件的运用，因为R文件中保存着资源的ID。</p>
