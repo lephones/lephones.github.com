@@ -66,9 +66,9 @@
     </header>
     <div class="entry">
       
-        <p>关于ant打包，请参考<strong><a href="http://www.lephones.net/2014/10/13/ant_apk_with_lib/" title="使用ant打包APK及依赖包最佳解决办法" target="_blank" rel="external">使用ant打包APK及依赖包最佳解决办法</a></strong></p>
-<h2 id="概述">概述</h2>
+        <h2 id="概述">概述</h2>
 <p>在android开发中，ant是用的最多的打包工具。有时候，我们会经常用到一些工程来做为依赖库，也就是src library。那么加入src library project的工程，怎么使用ant的脚本打包成一个apk呢。</p>
+<p>关于ant打包，请参考 <strong><a href="http://www.lephones.net/2014/10/13/ant_apk_with_lib/" title="使用ant打包APK及依赖包最佳解决办法" target="_blank" rel="external">使用ant打包APK及依赖包最佳解决办法</a></strong></p>
 <h2 id="原理">原理</h2>
 <p>我们都知道，src lib无非就是源码和资源。将src打包成jar，这绝对没问题，但是资源文件怎么打包呢？资源文件打包，其实主要就是R文件的运用，因为R文件中保存着资源的ID。</p>
 <p><a id="more"></a><br>先来看ADT是怎么打包的，打开主工程的    <code>gen</code> 目录，我们会发现，有两个R文件，一个是在主工程的package下面，一个是在lib工程的package下面。打开两个R文件，细心的网友会发现，主工程的R文件中，会把lib工程的R文件copy一份过来，也就是，在主工程的R文件中，同时包括了主工程的资源和lib工程的资源。</p>
