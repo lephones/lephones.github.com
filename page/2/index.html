@@ -57,19 +57,58 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-02-27T16:02:33.000Z"><a href="/2014/02/28/alipay-plugin-mechanism/">2月 28 2014</a></time>
+        <time datetime="2014-07-18T18:27:36.000Z"><a href="/2014/07/19/three-months/">7月 19 2014</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/02/28/alipay-plugin-mechanism/">支付宝插件机制研究</a></h1>
+    <h1 class="title"><a href="/2014/07/19/three-months/">三个月以来</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h2 id="前言">前言</h2>
-<p>使用过支付宝android客户端的小伙伴们都知道，支付宝android客户端可以增量更新，不仅能够随时改变内部APP的个数，还可以改变它的布局，结构等。为本人也在做移动支付，对支付宝客户端颇感兴趣，于是找时间来简单破解研究一下。</p>
-<p>支付宝的插件化，一共有两种方式，一种是通过html网页来实现布局。html技术相信coder们都清楚，不再介绍。这里只介绍native的插件化。</p>
+        <p>有三个月没有更新这个东西了。。管它叫东西，是因为我还没有彻底玩转静态BLOG，从写到发表还有些生疏。尤其是在使用了各种主题以后，觉得不管用哪一款都让人心里不舒服，更不舒服的是，我却不知道我用什么样的才舒服。</p>
+<h2 id="4月_入职_加班_累">4月 入职 加班 累</h2>
+<p>三个月发生了好多事，三月底跳槽找工作，新公司刚入职后，先是一个周六、日被叫去加班，结果第二周刚到周五，就被拉去封闭开发，主要是切换引擎+代码结构重构。整整一个月，每天从早上10点到晚上10点，无周末。好歹最后也不是白劳累，没有规定所说发双薪，或者安排调休，但发了一个红包奖励。中间的法定节假日—清明节，对公司还意外的当天发了三薪，十分欣慰。不过对于其它工作时间给的补偿，算下来甚至都不到普通上班的时薪，我只能说：呵呵！结合初中学习的政治，立刻感觉资本家总是在无尽的剥削。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/07/19/three-months/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-12T15:45:27.000Z"><a href="/2014/03/12/linux-windows-disk/">3月 12 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/12/linux-windows-disk/">双系统回归虚拟机</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="虚拟机还是双系统">虚拟机还是双系统</h2>
+<p>我的电脑是DELL 3420，最早买回来的时候，内带的是linux系统。于是折腾成windows 7。后来发现开发中有时候用linux，而且可以学学linux知识，于是就又装了个ubuntu（最早自带的也是ubuntu）。一直用的挺好，但是，渐渐发现，linux装上去就是鸡肋，这个系统从来不进去，进去后，上个QQ都没有官方版本的，慢慢就觉得麻烦了，还不如虚拟机好用。</p>
+<p>其实在装双系统之前，我也考虑过装虚拟机，但当时想的是，虚拟机肯定没有直接装在电脑上性能上好。不过，现在我觉得，虚拟机其实足够了，而且同时运行着两个系统是相当的方便。</p>
+<p>所以，如果不是一直用linux做开发而很少用windows的话，都用虚拟机吧。毕竟QQ，游戏，都得在windows平台。</p>
 
       
     </div>
@@ -77,7 +116,130 @@
       
         
           <div class="alignleft">
-            <a href="/2014/02/28/alipay-plugin-mechanism/#more" class="more-link">Read More</a>
+            <a href="/2014/03/12/linux-windows-disk/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-05T11:29:29.000Z"><a href="/2014/03/05/android-app-safety/">3月 5 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/05/android-app-safety/">android应用程序的一些安全技巧</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="介绍">介绍</h2>
+<p>做android支付，少不了android的一些安全，如果不说系统，单纯对于APP本身而言，安全性可做手脚的地方很小。简单介绍一下</p>
+<h2 id="内容的安全">内容的安全</h2>
+<p>加解密是对内容安全处理最常用的方法了，有<code>对称加密</code>和<code>非对称加密</code>。关于<code>对称加密</code>和<code>非对称加密</code>，大家去google查找资料。在开发中，我们常常把加密算法写在JNI层，更保密。</p>
+<p>联网时内容的安全，大家一定都知道https，如果不用Https，我们就可以使用非对称加密，做一个伪https。</p>
+<p>为了保证数据的完整，可加入签名机制。</p>
+<p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/03/05/android-app-safety/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-04T02:42:07.000Z"><a href="/2014/03/04/ant-src-lib-proguard/">3月 4 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/04/ant-src-lib-proguard/">ant打包中依赖工程的处理及混淆</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>关于ant打包，请参考<strong><a href="http://www.lephones.net/2014/10/13/ant_apk_with_lib/" title="使用ant打包APK及依赖包最佳解决办法" target="_blank" rel="external">使用ant打包APK及依赖包最佳解决办法</a></strong></p>
+<h2 id="概述">概述</h2>
+<p>在android开发中，ant是用的最多的打包工具。有时候，我们会经常用到一些工程来做为依赖库，也就是src library。那么加入src library project的工程，怎么使用ant的脚本打包成一个apk呢。</p>
+<h2 id="原理">原理</h2>
+<p>我们都知道，src lib无非就是源码和资源。将src打包成jar，这绝对没问题，但是资源文件怎么打包呢？资源文件打包，其实主要就是R文件的运用，因为R文件中保存着资源的ID。</p>
+<p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/03/04/ant-src-lib-proguard/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-02-28T08:22:24.000Z"><a href="/2014/02/28/android-lib-res/">2月 28 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/02/28/android-lib-res/">将android程序打包成sdk中资源的处理</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="背景">背景</h2>
+<p>通常的android项目，都是以apk的形式对外发布的，但有一部分程序，是做为二次开发包提供给其它开发商的，例如，淘宝SDK，新浪微博SDK。笔者参与公司的一款支付插件的开发与维护，最终打包成<strong>jar</strong>+<strong>res</strong>的格式(与支付宝支付提供的支付不同。支付宝的交易功能，也是一个APK，商户接入后，通过AIDL调用支付)。以这款插件为例，讲解一下资源文件的处理。</p>
+<h2 id="工程设置与打包形式">工程设置与打包形式</h2>
+<p><strong>工程设置：</strong></p>
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/02/28/android-lib-res/#more" class="more-link">Read More</a>
           </div>
         
         
@@ -95,6 +257,8 @@
   
     <a href="/" class="alignleft prev">上一页</a>
   
+  
+    <a href="/page/3/" class="alignright next">下一页</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
