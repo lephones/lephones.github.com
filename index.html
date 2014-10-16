@@ -69,14 +69,7 @@
       
         <h2 id="简介">简介</h2>
 <p>最近有小伙伴问ant打包的事，google现在又在推广它的gradle构建工具，但是，目前有许多朋友还是用的ant，而且，在SDK多次更新之后，之前写好的ant文件不适用了，典型的例子就是<code>apkbuilder</code>命令。那么，怎么办呢？？</p>
-<p>好多人在网上搜索写好的打包脚本，并费劲心机的寻找工程依赖的打包方法，其实，android的SDK已经给我们提供了该build.xml文件了，就在<code>/tools/ant/</code>下面，这个脚本引用了<code>tools/lib</code>下的<code>ant-task.jar</code>，封装了好多target，我这里就说说怎么使用该脚本。</p>
-<h2 id="生成ant脚本">生成ant脚本</h2>
-<ul>
-<li>在sdk/tools目录下执行下面的命令，注意将命令里面的目录改成你的工程的目录</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android update project -p /dir/to/ur/project</div></pre></td></tr></table></figure>
-
-<p>
+<p>好多人在网上搜索写好的打包脚本，并费劲心机的寻找工程依赖的打包方法，其实，android的SDK已经给我们提供了该build.xml文件了，就在<code>/tools/ant/</code>下面，这个脚本引用了<code>tools/lib</code>下的<code>ant-task.jar</code>，封装了好多target，我这里就说说怎么使用该脚本。<br>
       
     </div>
     <footer>
@@ -113,10 +106,7 @@
     <div class="entry">
       
         <p>在早期的支付宝android客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
-<p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，反编译了一下支付宝的插件化。</p>
-<p>在下资历不高，简单分享一下，大牛看到也不要喷我，在下也是在探索学习中，欢迎交流！</p>
-<h2 id="工具：">工具：</h2>
-<p>工欲善其事，必先利其器。因为平时拆包少，对某些好工具也了解不多，基本用了手工的方法来处理的。大家可以用什么APK改之理之类的工具。<br>
+<p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，反编译了一下支付宝的插件化。<br>
       
     </div>
     <footer>
@@ -159,9 +149,6 @@
 <li>自己写<code>SurfaceView</code>调用相机来实现拍照，用该方法会触发一个回调，回调的参数中包含一个字节数组，里面就是图片信息。</li>
 </ol>
 <p>这在网上已经有了好多的资料。</p>
-<h2 id="问题">问题</h2>
-<p>按照需求我们采用的是第2种方案，基本的流程就是：拍照—压缩—保存—上传</p>
-<p>本来一切挺顺利，但当我遇上小米。。</p>
 
       
     </div>
