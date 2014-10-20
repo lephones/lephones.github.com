@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.lephones.net/2014/09/29/alipay-dynamic_load/</loc>
+    <lastmod>2014-10-20T02:17:00.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.lephones.net/2014/07/19/three-months/</loc>
     <lastmod>2014-10-16T06:27:21.000Z</lastmod>
   </url>
@@ -19,11 +24,6 @@
   <url>
     <loc>http://www.lephones.net/2014/02/28/alipay-plugin-mechanism/</loc>
     <lastmod>2014-10-16T06:23:56.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.lephones.net/2014/09/29/alipay-dynamic_load/</loc>
-    <lastmod>2014-10-16T06:21:58.000Z</lastmod>
   </url>
   
   <url>
