@@ -103,6 +103,7 @@ a:hover {
 #header {
   text-shadow: 0 0 1px #fff;
   margin: 50px auto;
+  font-size: 1.3em;
 }
 #header a {
   color: #999;
@@ -126,10 +127,10 @@ a:hover {
   font-family: "Lato", Helvetica Neue, Helvetica, Arial, sans-serif;
   line-height: 2.5em;
 }
-font-size 1.3em ul {
+#header #main-nav ul {
   list-style: none;
 }
-font-size 1.3em ul li {
+#header #main-nav ul li {
   float: left;
   margin-left: 30px;
 }
