@@ -11,8 +11,8 @@
 body {
   background: #eee;
   color: #444;
-  font-family: "Microsoft YaHei", "Helvetica Neue", "Helvetica", Arial, sans-serif;
-  font-size: 16px;
+  font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
+  font-size: 14px;
   text-shadow: 0 0 1px transparent;
 }
 @media screen and (max-width: 1260px) {
@@ -443,6 +443,14 @@ article footer a:before {
   font: 1.1em FontAwesome;
   padding-right: 10px;
   vertical-align: middle;
+}
+article footer a.more-link {
+  color: #fff;
+  background: #258fb8;
+  border: 1px solid #ccc olor-link;
+  padding: 0.5em 0.8em 0.6em;
+  -webkit-border-radius: 0.5em;
+  border-radius: 0.5em;
 }
 article footer a.more-link:before {
   content: '\f054';
