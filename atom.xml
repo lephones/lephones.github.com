@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-10-20T11:38:53.540Z</updated>
+  <updated>2014-11-11T06:07:31.231Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -13,6 +13,120 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[android pcm转amr格式]]></title>
+    <link href="http://www.lephones.net/2014/11/10/android_pcm2amr(LEFENG-PC--lephone.zh--2014-11-11-14,06,00)/"/>
+    <id>http://www.lephones.net/2014/11/10/android_pcm2amr(LEFENG-PC--lephone.zh--2014-11-11-14,06,00)/</id>
+    <published>2014-11-10T06:23:46.000Z</published>
+    <updated>2014-11-11T06:05:56.000Z</updated>
+    <content type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br><a id="more"></a></p>
+<h2 id="用法">用法</h2>
+<p>首先将<code>AmrInputStream</code>复制到工程下，注意包名也不要改动，因为该类调用的是libmedia.so的native方法。</p>
+<p>只要将原来的pcm文件用<code>AmrInputStream</code>read后生成的字节写入新文件就成了amr格式的了。</p>
+<p>起初我就是这样试的，结果生成的文件一直不能播放，我以为是采样率的问题，后来试了几个参数都不行。</p>
+<p>各种google，百度，终于找到了原因，原来这个只能转内容，而amr文件还需要一个<code>文件头</code>。其文件头为六个字节,分别是<code>0x23</code> <code>0x21</code> <code>0x41</code> <code>0x4D</code> <code>0x52</code> <code>0x0A</code>，下面是我写的一个工具类</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.FileInputStream;</div><div class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</div><div class="line"><span class="keyword">import</span> java.io.FileOutputStream;</div><div class="line"><span class="keyword">import</span> java.io.IOException;</div><div class="line"><span class="keyword">import</span> java.io.OutputStream;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.media.AmrInputStream;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> Pcm2Amr {</div><div class="line">	</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> pcm2Amr(String pcmPath , String amrPath) {</div><div class="line">		<span class="keyword">try</span> {</div><div class="line">			FileInputStream fis = <span class="keyword">new</span> FileInputStream(pcmPath);</div><div class="line">			AmrInputStream ais = <span class="keyword">new</span> AmrInputStream(fis);</div><div class="line">			OutputStream <span class="keyword">out</span> = <span class="keyword">new</span> FileOutputStream(amrPath);</div><div class="line">			<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</div><div class="line">			<span class="keyword">int</span> len = -<span class="number">1</span>;</div><div class="line">			<span class="comment">/*</span></div><div class="line">			 * 下面的amr的文件头</div><div class="line">			 * 缺少这几个字节是不行的</div><div class="line">			 */</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x23);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x21);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x41);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x4D);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x52);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x0A);   </div><div class="line">			<span class="keyword">while</span>((len = ais.read(buf)) &gt;<span class="number">0</span>){</div><div class="line">				<span class="keyword">out</span>.write(buf,<span class="number">0</span>,len);</div><div class="line">			}</div><div class="line">			<span class="keyword">out</span>.close();</div><div class="line">			ais.close();</div><div class="line">		} <span class="keyword">catch</span> (FileNotFoundException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		} <span class="keyword">catch</span> (IOException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		}		</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br>]]></summary>
+    
+      <category term="android-ant" scheme="http://www.lephones.net/tags/android-ant/"/>
+    
+      <category term="android开发" scheme="http://www.lephones.net/categories/android%E5%BC%80%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[android pcm转amr格式]]></title>
+    <link href="http://www.lephones.net/2014/11/10/android_pcm2amr(LEFENG-PC--lephone.zh--2014-11-11-14,06,03)/"/>
+    <id>http://www.lephones.net/2014/11/10/android_pcm2amr(LEFENG-PC--lephone.zh--2014-11-11-14,06,03)/</id>
+    <published>2014-11-10T06:23:46.000Z</published>
+    <updated>2014-11-11T06:06:01.000Z</updated>
+    <content type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br><a id="more"></a></p>
+<h2 id="用法">用法</h2>
+<p>首先将<code>AmrInputStream</code>复制到工程下，注意包名也不要改动，因为该类调用的是libmedia.so的native方法。</p>
+<p>只要将原来的pcm文件用<code>AmrInputStream</code>read后生成的字节写入新文件就成了amr格式的了。</p>
+<p>起初我就是这样试的，结果生成的文件一直不能播放，我以为是采样率的问题，后来试了几个参数都不行。</p>
+<p>各种google，百度，终于找到了原因，原来这个只能转内容，而amr文件还需要一个<code>文件头</code>。其文件头为六个字节,分别是<code>0x23</code> <code>0x21</code> <code>0x41</code> <code>0x4D</code> <code>0x52</code> <code>0x0A</code>，下面是我写的一个工具类</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.FileInputStream;</div><div class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</div><div class="line"><span class="keyword">import</span> java.io.FileOutputStream;</div><div class="line"><span class="keyword">import</span> java.io.IOException;</div><div class="line"><span class="keyword">import</span> java.io.OutputStream;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.media.AmrInputStream;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> Pcm2Amr {</div><div class="line">	</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> pcm2Amr(String pcmPath , String amrPath) {</div><div class="line">		<span class="keyword">try</span> {</div><div class="line">			FileInputStream fis = <span class="keyword">new</span> FileInputStream(pcmPath);</div><div class="line">			AmrInputStream ais = <span class="keyword">new</span> AmrInputStream(fis);</div><div class="line">			OutputStream <span class="keyword">out</span> = <span class="keyword">new</span> FileOutputStream(amrPath);</div><div class="line">			<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</div><div class="line">			<span class="keyword">int</span> len = -<span class="number">1</span>;</div><div class="line">			<span class="comment">/*</span></div><div class="line">			 * 下面的amr的文件头</div><div class="line">			 * 缺少这几个字节是不行的</div><div class="line">			 */</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x23);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x21);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x41);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x4D);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x52);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x0A);   </div><div class="line">			<span class="keyword">while</span>((len = ais.read(buf)) &gt;<span class="number">0</span>){</div><div class="line">				<span class="keyword">out</span>.write(buf,<span class="number">0</span>,len);</div><div class="line">			}</div><div class="line">			<span class="keyword">out</span>.close();</div><div class="line">			ais.close();</div><div class="line">		} <span class="keyword">catch</span> (FileNotFoundException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		} <span class="keyword">catch</span> (IOException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		}		</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br>]]></summary>
+    
+      <category term="android:ant" scheme="http://www.lephones.net/tags/androidant/"/>
+    
+      <category term="android开发" scheme="http://www.lephones.net/categories/android%E5%BC%80%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[android pcm转amr格式]]></title>
+    <link href="http://www.lephones.net/2014/11/10/android_pcm2amr/"/>
+    <id>http://www.lephones.net/2014/11/10/android_pcm2amr/</id>
+    <published>2014-11-10T06:23:46.000Z</published>
+    <updated>2014-11-11T06:07:03.000Z</updated>
+    <content type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br><a id="more"></a></p>
+<h2 id="用法">用法</h2>
+<p>首先将<code>AmrInputStream</code>复制到工程下，注意包名也不要改动，因为该类调用的是libmedia.so的native方法。</p>
+<p>只要将原来的pcm文件用<code>AmrInputStream</code>read后生成的字节写入新文件就成了amr格式的了。</p>
+<p>起初我就是这样试的，结果生成的文件一直不能播放，我以为是采样率的问题，后来试了几个参数都不行。</p>
+<p>各种google，百度，终于找到了原因，原来这个只能转内容，而amr文件还需要一个<code>文件头</code>。其文件头为六个字节,分别是<code>0x23</code> <code>0x21</code> <code>0x41</code> <code>0x4D</code> <code>0x52</code> <code>0x0A</code>，下面是我写的一个工具类</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.FileInputStream;</div><div class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</div><div class="line"><span class="keyword">import</span> java.io.FileOutputStream;</div><div class="line"><span class="keyword">import</span> java.io.IOException;</div><div class="line"><span class="keyword">import</span> java.io.OutputStream;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.media.AmrInputStream;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> Pcm2Amr {</div><div class="line">	</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> pcm2Amr(String pcmPath , String amrPath) {</div><div class="line">		<span class="keyword">try</span> {</div><div class="line">			FileInputStream fis = <span class="keyword">new</span> FileInputStream(pcmPath);</div><div class="line">			AmrInputStream ais = <span class="keyword">new</span> AmrInputStream(fis);</div><div class="line">			OutputStream <span class="keyword">out</span> = <span class="keyword">new</span> FileOutputStream(amrPath);</div><div class="line">			<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</div><div class="line">			<span class="keyword">int</span> len = -<span class="number">1</span>;</div><div class="line">			<span class="comment">/*</span></div><div class="line">			 * 下面的amr的文件头</div><div class="line">			 * 缺少这几个字节是不行的</div><div class="line">			 */</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x23);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x21);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x41);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x4D);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x52);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x0A);   </div><div class="line">			<span class="keyword">while</span>((len = ais.read(buf)) &gt;<span class="number">0</span>){</div><div class="line">				<span class="keyword">out</span>.write(buf,<span class="number">0</span>,len);</div><div class="line">			}</div><div class="line">			<span class="keyword">out</span>.close();</div><div class="line">			ais.close();</div><div class="line">		} <span class="keyword">catch</span> (FileNotFoundException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		} <span class="keyword">catch</span> (IOException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		}		</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br>]]></summary>
+    
+      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
+    
+      <category term="amr" scheme="http://www.lephones.net/tags/amr/"/>
+    
+      <category term="android开发" scheme="http://www.lephones.net/categories/android%E5%BC%80%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[android如何将资源打入jar并对资源进行保护]]></title>
+    <link href="http://www.lephones.net/2014/10/28/res-safty-in-sdk/"/>
+    <id>http://www.lephones.net/2014/10/28/res-safty-in-sdk/</id>
+    <published>2014-10-28T00:45:58.000Z</published>
+    <updated>2014-10-27T19:19:34.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="引言">引言</h2>
+<p>有很多项目需要将Android工程打包成SDK，将java代码编译后打成一个jar包提供给二次开发商，但是，因为android工程会含有资源文件，那资源文件怎么提供给对方？怎么直接打到jar中？怎么保证资源的完全性？<br><a id="more"></a></p>
+<h2 id="走过的弯路">走过的弯路</h2>
+<h3 id="将资源直接提供给对方">将资源直接提供给对方</h3>
+<p>之前我做的XX支付插件的项目是将资源文件做为一个<code>lib-project</code>提供给商户的，这种方法实际是可行的。但是，这时候问题来了，对于商户我们是不可控的，也就是说，二次开发中可以对我们的资源做任何手脚。XX曾经给我们的检测报告上写着，修改关键资源，修改关键LOGO后仍能使用。</p>
+<h3 id="对关键资源加密">对关键资源加密</h3>
+<p>因为XX方主要是在意其logo被篡改，于是就对包含logo的文件用公钥做了一份签名，启动插件的时候，进行签名校验。这份方案在我入职之前，代码里就有了的，刚开始用着是没问题的，但是当我入职后不久，问题就来了。有一个带关键信息的图片文件需要适配，因为对资源采用的是<code>getResources().openRawResource(id)</code>来访问取签名值的，但是在预先保存的签名，只能校验一个屏幕的，而适配的图片是有多份的。</p>
+<h3 id="和商户建立了默认的“契约”">和商户建立了默认的“契约”</h3>
+<p>其实商户也是相当诚信的，也没有任何必要去修改插件方的资源文件，毕竟支付是“双赢”，商户也不会乱动。</p>
+<h2 id="新的办法">新的办法</h2>
+<h3 id="发现">发现</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">item</span> <span class="attribute">type</span>=<span class="value">"layout"</span> <span class="attribute">name</span>=<span class="value">"xxx"</span> &gt;</span>r/dir/xxx.xml/&gt;</div><div class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>偶然发现，在android开发时候，其实我们可以自定义资源的存放位置。怎么弄呢？只要将上面的代码放到<code>values</code>下面（类似strings文件格式，但type是layout），就会有一个<code>R.layout.xx</code>x的id指定到<code>r/dir/xxx.xml</code>,当然图片资源也可以这样用，type是drawable。</p>
+<p>而我们可以直接在工程的<code>src</code>项目下新建<code>r.dir</code>的包名，未来打jar会自动打包成目录的。</p>
+<p>关键是xml文件，这里我们<code>r.dir</code>不能再放源文件了，需要放用aapt编译的二进制文件。但是该方法也存在一个限制，就是你的values必须是源文件跟随调用你jar的主工程编译</p>
+<h3 id="资源的安全防护">资源的安全防护</h3>
+<p>之前写过一篇文章，讲的是怎么把资源和jar一起做为SDK的时候，id的处理。<a href="http://www.lephones.net/2014/02/28/android-lib-res/" title="传送门" target="_blank" rel="external">传送门</a>。这里我再简单说说</p>
+<p>因为安卓资源通过R文件来读取，而R里面的id是在编译时候打入APK的。如果你编译sdk的时候写的是<code>R.xx.xxx</code>这种格式的，编译器会直接将id值写到class文件中，当sdk再在商户项目中编译时候，jar里面的id对应的其实已经不是你的资源了。</p>
+<p>之前的文章讲的是把资源直接发给商户来编译，这就给商户提供了改动的空间。但如果是预先用aapt处理过的二进制XML文件，在就不会在商户再做编译，而是直接打入到apk中，所以只要我们验证自定义的路径中保存的二进制XML文件、图片资源文件的md5就可以了。</p>
+<p><strong>问：验证归你验证，我这边还有values文件，我只要修改一下路径，指定到我的资源不就行了？或者，删除你的资源。</strong></p>
+<p>打包时候，生成一份dir和md5的配置文件，<strong>加密保存</strong>，在jar中也要保存每个id的名字，通过id的名字就能从资源中获得保存的路径。再通过保存的路径获取到文件并校验md5值。当如果发现通过id的名称获得的dir在这份配置文件中没有，这就说明是一定被修改过了。在代码中要获取真正的id值，这就要结合Resources类的getIdentifier()方法了。</p>
+<h2 id="附加说明">附加说明</h2>
+<h3 id="如何读取APK中的资源并校验">如何读取APK中的资源并校验</h3>
+<p>我们都知道APK其实是一个ZIP，而我们通过context.getApplicationInfo().sourceDir就能得到这个zip的dir了。在zip工具类库中，JAVA其实提供了一个叫crc的校验值，类似md5，其实我们校验这个就OK了。</p>
+<h3 id="还需要一套自动化工具！">还需要一套自动化工具！</h3>
+<p>最初是拆了一下腾讯QQ的包才发现的values可以配置type为layout、drawable等，算是也给自己长”姿势”了。腾讯把除了values的资源路径全部混淆了，这需要一套工具，有没有开源呀！或者，要不要自己尝试写一写！毕竟手动修改路径，也是一件麻烦事。</p>
+]]></content>
+    <summary type="html"><![CDATA[<h2 id="引言">引言</h2>
+<p>有很多项目需要将Android工程打包成SDK，将java代码编译后打成一个jar包提供给二次开发商，但是，因为android工程会含有资源文件，那资源文件怎么提供给对方？怎么直接打到jar中？怎么保证资源的完全性？<br>]]></summary>
+    
+      <category term="android" scheme="http://www.lephones.net/tags/android/"/>
+    
+      <category term="android" scheme="http://www.lephones.net/categories/android/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[使用ant打包APK及依赖包最佳解决办法]]></title>
@@ -408,45 +522,43 @@ AAPT在打包的时候，会保证lib工程<span class="keyword">package</span>�
     <link href="http://www.lephones.net/2014/02/28/android-lib-res/"/>
     <id>http://www.lephones.net/2014/02/28/android-lib-res/</id>
     <published>2014-02-28T08:22:24.000Z</published>
-    <updated>2014-10-13T10:51:45.000Z</updated>
+    <updated>2014-10-27T19:21:53.000Z</updated>
     <content type="html"><![CDATA[<h2 id="背景">背景</h2>
 <p>通常的android项目，都是以apk的形式对外发布的，但有一部分程序，是做为二次开发包提供给其它开发商的，例如，淘宝SDK，新浪微博SDK。笔者参与公司的一款支付插件的开发与维护，最终打包成<strong>jar</strong>+<strong>res</strong>的格式(与支付宝支付提供的支付不同。支付宝的交易功能，也是一个APK，商户接入后，通过AIDL调用支付)。以这款插件为例，讲解一下资源文件的处理。</p>
 <h2 id="工程设置与打包形式">工程设置与打包形式</h2>
-<p><strong>工程设置：</strong></p>
+<h3 id="工程设置：">工程设置：</h3>
 <a id="more"></a>
 
 <p>因为插件本身不支持直接运行，必须接入到商户后，才能执行，所以，在维护该插件的时候，还有一个用于调起插件的商户DEMO。怎么样把两个项目整合到一起，可以正常运行呢？</p>
 <pre><code>把插件工程设置成android library <span class="keyword">project</span>
 </code></pre><p>如此一来，只要添加将lib工程添加到商户DEMO中的lib，就可以方便的调用。</p>
-<p><strong>打包：</strong></p>
+<h3 id="打包：">打包：</h3>
 <p>将插件的代码打包成一个jar，再将插件工程复制一份出来，删除掉工程中的java源文件，这样，就留下了一个只有资源的lib project。商户接入的时候，将jar添加到libs下，将res library project添加到src lib下，就可以接入。为什么不把jar也放到res lib project里面呢？</p>
-<pre><code>新版本的ADT支持直接把 lib <span class="keyword">project</span> 里的jar添加到build path，没问题，
-但以前的还得手工添加，单独提取出来，更直观
+<pre><code>新版本的ADT是可以的，支持直接把jar放入 lib <span class="keyword">project</span> 里，会自动加到build path
+但以前的还得手工添加，另外单独提取出来，更直观一些
 </code></pre><h2 id="资源文件的处理">资源文件的处理</h2>
 <p>在插件项目中，资源文件的引用不能再以<code>R.XX.XXXX</code>这样的格式来使用，因为这种代码在编译的时候， 会用具体的int值来替换掉代码，当你的项目在别人的环境下重新编译，资源对应的id就被改了。</p>
-<p><strong>解决办法：</strong></p>
+<h3 id="解决办法：">解决办法：</h3>
 <p>将<code>R.xx.xxx</code>用方法替换。代码如下：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">class ResLink{</div><div class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getIdXXXXX</span>(){</div><div class="line">       <span class="keyword">return</span> R.xx.xx;</div><div class="line">   }</div><div class="line">}</div></pre></td></tr></table></figure>
 
-<ol>
-<li>将ResLink的源码也提供给商户，这样，可以将R的常量的替换放到商户的项目编译时，保证id不紊乱。</li>
-<li>使用资源名称。Resource类提供了一个叫<code>getIdentifier()</code>的方法，该方法可以根据资源的名称和类型来获取具体的值。 </li>
-<li>为自己的资源固定id，查看android的<code>R.java</code>文件，可以发现生成的资源id常量值都是0x7f开头。其实，这个id的组成是 package + type + value ，其中，应用的资源生成的id都是7f开头的。而android提供了一种资源类型叫<code>public</code>，用法：</li>
-</ol>
+<p><strong>方法一：</strong>将ResLink的源码也提供给商户，这样，可以将R的常量的替换放到商户的项目编译时，保证id不紊乱。但要删除你的JAR中的该类的class文件</p>
+<p><strong>方法二：</strong> 使用资源名称。Resource类提供了一个叫<code>getIdentifier()</code>的方法，该方法可以根据资源的名称和类型来获取具体的值。 </p>
+<p><strong>方法三：</strong> 为自己的资源固定id，查看android的<code>R.java</code>文件，可以发现生成的资源id常量值都是0x7f开头。其实，这个id的组成是 package + type + value ，其中，应用的资源生成的id都是7f开头的。而android提供了一种资源类型叫<code>public</code>，用法：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">public</span> <span class="attribute">type</span>=<span class="value">"id"</span> <span class="attribute">name</span>=<span class="value">"xxx"</span> <span class="attribute">id</span>=<span class="value">"0x7f040003"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></div></pre></td></tr></table></figure>
 
 <p>这样，aapt在编译的时候，会自动将该资源指定固定的id。如此一来，就可以在代码中用R.xx.xxx了。</p>
 <h2 id="总结">总结</h2>
-<p>以上方法中第3种方法最佳。</p>
-<p>方法1中，要将源码提供出去，这样，可以给别人修改return的机会，不安全。</p>
+<p>方法1中，编译时候及时报错，商户接入相对麻烦，必须指定类放入到指定包下才可以。</p>
 <p>方法2中，资源全部以<code>string</code>的形式指定，如果资源有改动，每次新加都得手动添加其名字和类型，如果添加的多了，再删除，操作起来相当麻烦，而且都不知道哪些用到哪些没用到，即使没有这个资源也不会在编译时报错。</p>
-<p>方法3中，完全指定了资源，可以用<code>R.XX.XXXX</code>来直接使用，在提供给二次开发商的时候，<code>public.xml</code>资源也会提供出去，这样，编译时候不会造成id冲突，相当完美。</p>
-<p>关于ant打包，请参考<strong><a href="http://www.lephones.net/2014/10/13/ant_apk_with_lib/" title="使用ant打包APK及依赖包最佳解决办法" target="_blank" rel="external">使用ant打包APK及依赖包最佳解决办法</a></strong></p>
+<p>方法3中，完全指定了资源，可以用<code>R.XX.XXXX</code>来直接使用，在提供给二次开发商的时候，<code>public.xml</code>资源也会提供出去，这样，编译时候不会造成id冲突，相当于强制锁定了资源id。</p>
+<p>以上3种方法中，我使用的是方法二，而且我发现很多家都是使用的该方法，尽管它对管理资源名称比较麻烦，但它是唯一的一种不以来R文件的办法。</p>
+<p><strong>不想把资源直接发给商户？</strong>请浏览这里<strong><a href="http://www.lephones.net/2014/10/28/res-safty-in-sdk/" title="android如何将资源打入jar并对资源进行保护" target="_blank" rel="external">android如何将资源打入jar并对资源进行保护</a></strong></p>
 ]]></content>
     <summary type="html"><![CDATA[<h2 id="背景">背景</h2>
 <p>通常的android项目，都是以apk的形式对外发布的，但有一部分程序，是做为二次开发包提供给其它开发商的，例如，淘宝SDK，新浪微博SDK。笔者参与公司的一款支付插件的开发与维护，最终打包成<strong>jar</strong>+<strong>res</strong>的格式(与支付宝支付提供的支付不同。支付宝的交易功能，也是一个APK，商户接入后，通过AIDL调用支付)。以这款插件为例，讲解一下资源文件的处理。</p>
 <h2 id="工程设置与打包形式">工程设置与打包形式</h2>
-<p><strong>工程设置：</strong></p>
+<h3 id="工程设置：">工程设置：</h3>
 ]]></summary>
     
       <category term="android" scheme="http://www.lephones.net/tags/android/"/>

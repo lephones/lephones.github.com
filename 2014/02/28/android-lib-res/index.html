@@ -69,36 +69,34 @@
         <h2 id="背景">背景</h2>
 <p>通常的android项目，都是以apk的形式对外发布的，但有一部分程序，是做为二次开发包提供给其它开发商的，例如，淘宝SDK，新浪微博SDK。笔者参与公司的一款支付插件的开发与维护，最终打包成<strong>jar</strong>+<strong>res</strong>的格式(与支付宝支付提供的支付不同。支付宝的交易功能，也是一个APK，商户接入后，通过AIDL调用支付)。以这款插件为例，讲解一下资源文件的处理。</p>
 <h2 id="工程设置与打包形式">工程设置与打包形式</h2>
-<p><strong>工程设置：</strong></p>
+<h3 id="工程设置：">工程设置：</h3>
 <a id="more"></a>
 
 <p>因为插件本身不支持直接运行，必须接入到商户后，才能执行，所以，在维护该插件的时候，还有一个用于调起插件的商户DEMO。怎么样把两个项目整合到一起，可以正常运行呢？</p>
 <pre><code>把插件工程设置成android library <span class="keyword">project</span>
 </code></pre><p>如此一来，只要添加将lib工程添加到商户DEMO中的lib，就可以方便的调用。</p>
-<p><strong>打包：</strong></p>
+<h3 id="打包：">打包：</h3>
 <p>将插件的代码打包成一个jar，再将插件工程复制一份出来，删除掉工程中的java源文件，这样，就留下了一个只有资源的lib project。商户接入的时候，将jar添加到libs下，将res library project添加到src lib下，就可以接入。为什么不把jar也放到res lib project里面呢？</p>
-<pre><code>新版本的ADT支持直接把 lib <span class="keyword">project</span> 里的jar添加到build path，没问题，
-但以前的还得手工添加，单独提取出来，更直观
+<pre><code>新版本的ADT是可以的，支持直接把jar放入 lib <span class="keyword">project</span> 里，会自动加到build path
+但以前的还得手工添加，另外单独提取出来，更直观一些
 </code></pre><h2 id="资源文件的处理">资源文件的处理</h2>
 <p>在插件项目中，资源文件的引用不能再以<code>R.XX.XXXX</code>这样的格式来使用，因为这种代码在编译的时候， 会用具体的int值来替换掉代码，当你的项目在别人的环境下重新编译，资源对应的id就被改了。</p>
-<p><strong>解决办法：</strong></p>
+<h3 id="解决办法：">解决办法：</h3>
 <p>将<code>R.xx.xxx</code>用方法替换。代码如下：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">class ResLink{</div><div class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getIdXXXXX</span>(){</div><div class="line">       <span class="keyword">return</span> R.xx.xx;</div><div class="line">   }</div><div class="line">}</div></pre></td></tr></table></figure>
 
-<ol>
-<li>将ResLink的源码也提供给商户，这样，可以将R的常量的替换放到商户的项目编译时，保证id不紊乱。</li>
-<li>使用资源名称。Resource类提供了一个叫<code>getIdentifier()</code>的方法，该方法可以根据资源的名称和类型来获取具体的值。 </li>
-<li>为自己的资源固定id，查看android的<code>R.java</code>文件，可以发现生成的资源id常量值都是0x7f开头。其实，这个id的组成是 package + type + value ，其中，应用的资源生成的id都是7f开头的。而android提供了一种资源类型叫<code>public</code>，用法：</li>
-</ol>
+<p><strong>方法一：</strong>将ResLink的源码也提供给商户，这样，可以将R的常量的替换放到商户的项目编译时，保证id不紊乱。但要删除你的JAR中的该类的class文件</p>
+<p><strong>方法二：</strong> 使用资源名称。Resource类提供了一个叫<code>getIdentifier()</code>的方法，该方法可以根据资源的名称和类型来获取具体的值。 </p>
+<p><strong>方法三：</strong> 为自己的资源固定id，查看android的<code>R.java</code>文件，可以发现生成的资源id常量值都是0x7f开头。其实，这个id的组成是 package + type + value ，其中，应用的资源生成的id都是7f开头的。而android提供了一种资源类型叫<code>public</code>，用法：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">public</span> <span class="attribute">type</span>=<span class="value">"id"</span> <span class="attribute">name</span>=<span class="value">"xxx"</span> <span class="attribute">id</span>=<span class="value">"0x7f040003"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></div></pre></td></tr></table></figure>
 
 <p>这样，aapt在编译的时候，会自动将该资源指定固定的id。如此一来，就可以在代码中用R.xx.xxx了。</p>
 <h2 id="总结">总结</h2>
-<p>以上方法中第3种方法最佳。</p>
-<p>方法1中，要将源码提供出去，这样，可以给别人修改return的机会，不安全。</p>
+<p>方法1中，编译时候及时报错，商户接入相对麻烦，必须指定类放入到指定包下才可以。</p>
 <p>方法2中，资源全部以<code>string</code>的形式指定，如果资源有改动，每次新加都得手动添加其名字和类型，如果添加的多了，再删除，操作起来相当麻烦，而且都不知道哪些用到哪些没用到，即使没有这个资源也不会在编译时报错。</p>
-<p>方法3中，完全指定了资源，可以用<code>R.XX.XXXX</code>来直接使用，在提供给二次开发商的时候，<code>public.xml</code>资源也会提供出去，这样，编译时候不会造成id冲突，相当完美。</p>
-<p>关于ant打包，请参考<strong><a href="http://www.lephones.net/2014/10/13/ant_apk_with_lib/" title="使用ant打包APK及依赖包最佳解决办法" target="_blank" rel="external">使用ant打包APK及依赖包最佳解决办法</a></strong></p>
+<p>方法3中，完全指定了资源，可以用<code>R.XX.XXXX</code>来直接使用，在提供给二次开发商的时候，<code>public.xml</code>资源也会提供出去，这样，编译时候不会造成id冲突，相当于强制锁定了资源id。</p>
+<p>以上3种方法中，我使用的是方法二，而且我发现很多家都是使用的该方法，尽管它对管理资源名称比较麻烦，但它是唯一的一种不以来R文件的办法。</p>
+<p><strong>不想把资源直接发给商户？</strong>请浏览这里<strong><a href="http://www.lephones.net/2014/10/28/res-safty-in-sdk/" title="android如何将资源打入jar并对资源进行保护" target="_blank" rel="external">android如何将资源打入jar并对资源进行保护</a></strong></p>
 
       
     </div>
@@ -176,7 +174,9 @@ var duoshuoQuery = {short_name:"lephonesnet"};
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/android/">android</a><small>7</small></li>
+    <li><a href="/categories/android/">android</a><small>8</small></li>
+  
+    <li><a href="/categories/android开发/">android开发</a><small>3</small></li>
   
     <li><a href="/categories/linux/">linux</a><small>1</small></li>
   
@@ -191,7 +191,13 @@ var duoshuoQuery = {short_name:"lephonesnet"};
   <h3 class="title">标签</h3>
   <ul class="entry">
   
-    <li><a href="/tags/android/">android</a><small>8</small></li>
+    <li><a href="/tags/amr/">amr</a><small>1</small></li>
+  
+    <li><a href="/tags/android/">android</a><small>10</small></li>
+  
+    <li><a href="/tags/android-ant/">android-ant</a><small>1</small></li>
+  
+    <li><a href="/tags/androidant/">android:ant</a><small>1</small></li>
   
     <li><a href="/tags/linux/">linux</a><small>1</small></li>
   
@@ -207,6 +213,22 @@ var duoshuoQuery = {short_name:"lephonesnet"};
   <ul class="entry">
     
       <li>
+        <a href="/2014/11/10/android_pcm2amr(LEFENG-PC--lephone.zh--2014-11-11-14,06,00)/">android pcm转amr格式</a>
+      </li>
+    
+      <li>
+        <a href="/2014/11/10/android_pcm2amr(LEFENG-PC--lephone.zh--2014-11-11-14,06,03)/">android pcm转amr格式</a>
+      </li>
+    
+      <li>
+        <a href="/2014/11/10/android_pcm2amr/">android pcm转amr格式</a>
+      </li>
+    
+      <li>
+        <a href="/2014/10/28/res-safty-in-sdk/">android如何将资源打入jar并对资源进行保护</a>
+      </li>
+    
+      <li>
         <a href="/2014/10/13/ant-apk-with-lib/">使用ant打包APK及依赖包最佳解决办法</a>
       </li>
     
@@ -220,22 +242,6 @@ var duoshuoQuery = {short_name:"lephonesnet"};
     
       <li>
         <a href="/2014/08/20/baidu-interview/">百度面试</a>
-      </li>
-    
-      <li>
-        <a href="/2014/07/21/manage-bitmap-memory/">android中图片内存管理-防止OOM</a>
-      </li>
-    
-      <li>
-        <a href="/2014/07/19/three-months/">三个月以来</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/12/linux-windows-disk/">双系统回归虚拟机</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/05/android-app-safety/">android应用程序的一些安全技巧</a>
       </li>
     
   </ul>
