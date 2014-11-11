@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-11-11T06:07:31.231Z</updated>
+  <updated>2014-11-11T06:09:17.015Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -13,52 +13,6 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
-  
-  <entry>
-    <title><![CDATA[android pcm转amr格式]]></title>
-    <link href="http://www.lephones.net/2014/11/10/android_pcm2amr(LEFENG-PC--lephone.zh--2014-11-11-14,06,00)/"/>
-    <id>http://www.lephones.net/2014/11/10/android_pcm2amr(LEFENG-PC--lephone.zh--2014-11-11-14,06,00)/</id>
-    <published>2014-11-10T06:23:46.000Z</published>
-    <updated>2014-11-11T06:05:56.000Z</updated>
-    <content type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br><a id="more"></a></p>
-<h2 id="用法">用法</h2>
-<p>首先将<code>AmrInputStream</code>复制到工程下，注意包名也不要改动，因为该类调用的是libmedia.so的native方法。</p>
-<p>只要将原来的pcm文件用<code>AmrInputStream</code>read后生成的字节写入新文件就成了amr格式的了。</p>
-<p>起初我就是这样试的，结果生成的文件一直不能播放，我以为是采样率的问题，后来试了几个参数都不行。</p>
-<p>各种google，百度，终于找到了原因，原来这个只能转内容，而amr文件还需要一个<code>文件头</code>。其文件头为六个字节,分别是<code>0x23</code> <code>0x21</code> <code>0x41</code> <code>0x4D</code> <code>0x52</code> <code>0x0A</code>，下面是我写的一个工具类</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.FileInputStream;</div><div class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</div><div class="line"><span class="keyword">import</span> java.io.FileOutputStream;</div><div class="line"><span class="keyword">import</span> java.io.IOException;</div><div class="line"><span class="keyword">import</span> java.io.OutputStream;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.media.AmrInputStream;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> Pcm2Amr {</div><div class="line">	</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> pcm2Amr(String pcmPath , String amrPath) {</div><div class="line">		<span class="keyword">try</span> {</div><div class="line">			FileInputStream fis = <span class="keyword">new</span> FileInputStream(pcmPath);</div><div class="line">			AmrInputStream ais = <span class="keyword">new</span> AmrInputStream(fis);</div><div class="line">			OutputStream <span class="keyword">out</span> = <span class="keyword">new</span> FileOutputStream(amrPath);</div><div class="line">			<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</div><div class="line">			<span class="keyword">int</span> len = -<span class="number">1</span>;</div><div class="line">			<span class="comment">/*</span></div><div class="line">			 * 下面的amr的文件头</div><div class="line">			 * 缺少这几个字节是不行的</div><div class="line">			 */</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x23);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x21);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x41);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x4D);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x52);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x0A);   </div><div class="line">			<span class="keyword">while</span>((len = ais.read(buf)) &gt;<span class="number">0</span>){</div><div class="line">				<span class="keyword">out</span>.write(buf,<span class="number">0</span>,len);</div><div class="line">			}</div><div class="line">			<span class="keyword">out</span>.close();</div><div class="line">			ais.close();</div><div class="line">		} <span class="keyword">catch</span> (FileNotFoundException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		} <span class="keyword">catch</span> (IOException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		}		</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
-
-]]></content>
-    <summary type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br>]]></summary>
-    
-      <category term="android-ant" scheme="http://www.lephones.net/tags/android-ant/"/>
-    
-      <category term="android开发" scheme="http://www.lephones.net/categories/android%E5%BC%80%E5%8F%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[android pcm转amr格式]]></title>
-    <link href="http://www.lephones.net/2014/11/10/android_pcm2amr(LEFENG-PC--lephone.zh--2014-11-11-14,06,03)/"/>
-    <id>http://www.lephones.net/2014/11/10/android_pcm2amr(LEFENG-PC--lephone.zh--2014-11-11-14,06,03)/</id>
-    <published>2014-11-10T06:23:46.000Z</published>
-    <updated>2014-11-11T06:06:01.000Z</updated>
-    <content type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br><a id="more"></a></p>
-<h2 id="用法">用法</h2>
-<p>首先将<code>AmrInputStream</code>复制到工程下，注意包名也不要改动，因为该类调用的是libmedia.so的native方法。</p>
-<p>只要将原来的pcm文件用<code>AmrInputStream</code>read后生成的字节写入新文件就成了amr格式的了。</p>
-<p>起初我就是这样试的，结果生成的文件一直不能播放，我以为是采样率的问题，后来试了几个参数都不行。</p>
-<p>各种google，百度，终于找到了原因，原来这个只能转内容，而amr文件还需要一个<code>文件头</code>。其文件头为六个字节,分别是<code>0x23</code> <code>0x21</code> <code>0x41</code> <code>0x4D</code> <code>0x52</code> <code>0x0A</code>，下面是我写的一个工具类</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.FileInputStream;</div><div class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</div><div class="line"><span class="keyword">import</span> java.io.FileOutputStream;</div><div class="line"><span class="keyword">import</span> java.io.IOException;</div><div class="line"><span class="keyword">import</span> java.io.OutputStream;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.media.AmrInputStream;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> Pcm2Amr {</div><div class="line">	</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> pcm2Amr(String pcmPath , String amrPath) {</div><div class="line">		<span class="keyword">try</span> {</div><div class="line">			FileInputStream fis = <span class="keyword">new</span> FileInputStream(pcmPath);</div><div class="line">			AmrInputStream ais = <span class="keyword">new</span> AmrInputStream(fis);</div><div class="line">			OutputStream <span class="keyword">out</span> = <span class="keyword">new</span> FileOutputStream(amrPath);</div><div class="line">			<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</div><div class="line">			<span class="keyword">int</span> len = -<span class="number">1</span>;</div><div class="line">			<span class="comment">/*</span></div><div class="line">			 * 下面的amr的文件头</div><div class="line">			 * 缺少这几个字节是不行的</div><div class="line">			 */</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x23);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x21);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x41);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x4D);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x52);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x0A);   </div><div class="line">			<span class="keyword">while</span>((len = ais.read(buf)) &gt;<span class="number">0</span>){</div><div class="line">				<span class="keyword">out</span>.write(buf,<span class="number">0</span>,len);</div><div class="line">			}</div><div class="line">			<span class="keyword">out</span>.close();</div><div class="line">			ais.close();</div><div class="line">		} <span class="keyword">catch</span> (FileNotFoundException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		} <span class="keyword">catch</span> (IOException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		}		</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
-
-]]></content>
-    <summary type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br>]]></summary>
-    
-      <category term="android:ant" scheme="http://www.lephones.net/tags/androidant/"/>
-    
-      <category term="android开发" scheme="http://www.lephones.net/categories/android%E5%BC%80%E5%8F%91/"/>
-    
-  </entry>
   
   <entry>
     <title><![CDATA[android pcm转amr格式]]></title>
