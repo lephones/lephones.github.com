@@ -57,6 +57,49 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-08-22T06:01:34.000Z"><a href="/2014/08/22/camera-picture-size/">8月 22 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/08/22/camera-picture-size/">用camera类拍照指定图片大小</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="拍照">拍照</h2>
+<p>在安卓上拍照主要有两种方案:</p>
+<ol>
+<li>直接调起系统的照相机拍照片，拍完后，图片会在相册中保存一份，对于程序来说，可以拿到保存照片的路径，从而获取图片。</li>
+<li>自己写<code>SurfaceView</code>调用相机来实现拍照，用该方法会触发一个回调，回调的参数中包含一个字节数组，里面就是图片信息。</li>
+</ol>
+<p>这在网上已经有了好多的资料。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/08/22/camera-picture-size/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-08-20T08:50:17.000Z"><a href="/2014/08/20/baidu-interview/">8月 20 2014</a></time>
       
       
@@ -203,48 +246,6 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-03-05T11:29:29.000Z"><a href="/2014/03/05/android-app-safety/">3月 5 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/03/05/android-app-safety/">android应用程序的一些安全技巧</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="介绍">介绍</h2>
-<p>做android支付，少不了android的一些安全，如果不说系统，单纯对于APP本身而言，安全性可做手脚的地方很小。简单介绍一下</p>
-<h2 id="内容的安全">内容的安全</h2>
-<p>加解密是对内容安全处理最常用的方法了，有<code>对称加密</code>和<code>非对称加密</code>。关于<code>对称加密</code>和<code>非对称加密</code>，大家去google查找资料。在开发中，我们常常把加密算法写在JNI层，更保密。</p>
-<p>联网时内容的安全，大家一定都知道https，如果不用Https，我们就可以使用非对称加密，做一个伪https。</p>
-<p>为了保证数据的完整，可加入签名机制。</p>
-<p>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignright">
-            <a href="/2014/03/05/android-app-safety/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -270,7 +271,7 @@
   
     <li><a href="/categories/android/">android</a><small>8</small></li>
   
-    <li><a href="/categories/android开发/">android开发</a><small>1</small></li>
+    <li><a href="/categories/android开发/">android开发</a><small>2</small></li>
   
     <li><a href="/categories/linux/">linux</a><small>1</small></li>
   
@@ -287,9 +288,13 @@
   
     <li><a href="/tags/amr/">amr</a><small>1</small></li>
   
-    <li><a href="/tags/android/">android</a><small>10</small></li>
+    <li><a href="/tags/android/">android</a><small>11</small></li>
   
     <li><a href="/tags/linux/">linux</a><small>1</small></li>
+  
+    <li><a href="/tags/root/">root</a><small>1</small></li>
+  
+    <li><a href="/tags/su/">su</a><small>1</small></li>
   
     <li><a href="/tags/面试/">面试</a><small>1</small></li>
   
@@ -301,6 +306,10 @@
 <div class="widget tag">
   <h3 class="title">最新文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2014/11/21/su-root-holder/">APP如何只获取一次root权限</a>
+      </li>
     
       <li>
         <a href="/2014/11/10/android_pcm2amr/">android pcm转amr格式</a>
@@ -328,10 +337,6 @@
     
       <li>
         <a href="/2014/07/21/manage-bitmap-memory/">android中图片内存管理-防止OOM</a>
-      </li>
-    
-      <li>
-        <a href="/2014/07/19/three-months/">三个月以来</a>
       </li>
     
   </ul>
