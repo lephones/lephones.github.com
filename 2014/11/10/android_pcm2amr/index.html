@@ -66,7 +66,8 @@
     </header>
     <div class="entry">
       
-        <p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br><a id="more"></a></p>
+        <h2 id="引言">引言</h2>
+<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br><a id="more"></a></p>
 <h2 id="用法">用法</h2>
 <p>首先将<code>AmrInputStream</code>复制到工程下，注意包名也不要改动，因为该类调用的是libmedia.so的native方法。</p>
 <p>只要将原来的pcm文件用<code>AmrInputStream</code>read后生成的字节写入新文件就成了amr格式的了。</p>

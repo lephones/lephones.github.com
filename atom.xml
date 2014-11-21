@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-11-21T05:38:32.177Z</updated>
+  <updated>2014-11-21T05:41:27.418Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -19,8 +19,9 @@
     <link href="http://www.lephones.net/2014/11/21/su-root-holder/"/>
     <id>http://www.lephones.net/2014/11/21/su-root-holder/</id>
     <published>2014-11-21T02:55:22.000Z</published>
-    <updated>2014-11-21T05:38:15.000Z</updated>
-    <content type="html"><![CDATA[<p>最近和小伙伴们讨论到root权限，说有的App只需要请求一次root权限，便可以长期拥有root权限，可以为静默安装等一系列操作开绿灯。</p>
+    <updated>2014-11-21T05:40:49.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="引言">引言</h2>
+<p>最近和小伙伴们讨论到root权限，说有的App只需要请求一次root权限，便可以长期拥有root权限，可以为静默安装等一系列操作开绿灯。</p>
 <p>通常我们的手机root后，会有一款叫superuser.apk的软件来管理root权限，所谓的获取root权限，就是让superuser允许你的app。只要了解了superuser的原理和root的原理，就不在话下了。</p>
 <a id="more"></a>
 
@@ -37,7 +38,8 @@
 <h2 id="哎">哎</h2>
 <p>个人用的手机，还是不要root的好。</p>
 ]]></content>
-    <summary type="html"><![CDATA[<p>最近和小伙伴们讨论到root权限，说有的App只需要请求一次root权限，便可以长期拥有root权限，可以为静默安装等一系列操作开绿灯。</p>
+    <summary type="html"><![CDATA[<h2 id="引言">引言</h2>
+<p>最近和小伙伴们讨论到root权限，说有的App只需要请求一次root权限，便可以长期拥有root权限，可以为静默安装等一系列操作开绿灯。</p>
 <p>通常我们的手机root后，会有一款叫superuser.apk的软件来管理root权限，所谓的获取root权限，就是让superuser允许你的app。只要了解了superuser的原理和root的原理，就不在话下了。</p>
 ]]></summary>
     
@@ -56,8 +58,9 @@
     <link href="http://www.lephones.net/2014/11/10/android_pcm2amr/"/>
     <id>http://www.lephones.net/2014/11/10/android_pcm2amr/</id>
     <published>2014-11-10T06:23:46.000Z</published>
-    <updated>2014-11-11T06:07:03.000Z</updated>
-    <content type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br><a id="more"></a></p>
+    <updated>2014-11-21T05:41:03.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="引言">引言</h2>
+<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br><a id="more"></a></p>
 <h2 id="用法">用法</h2>
 <p>首先将<code>AmrInputStream</code>复制到工程下，注意包名也不要改动，因为该类调用的是libmedia.so的native方法。</p>
 <p>只要将原来的pcm文件用<code>AmrInputStream</code>read后生成的字节写入新文件就成了amr格式的了。</p>
@@ -66,7 +69,8 @@
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.FileInputStream;</div><div class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</div><div class="line"><span class="keyword">import</span> java.io.FileOutputStream;</div><div class="line"><span class="keyword">import</span> java.io.IOException;</div><div class="line"><span class="keyword">import</span> java.io.OutputStream;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.media.AmrInputStream;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> Pcm2Amr {</div><div class="line">	</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> pcm2Amr(String pcmPath , String amrPath) {</div><div class="line">		<span class="keyword">try</span> {</div><div class="line">			FileInputStream fis = <span class="keyword">new</span> FileInputStream(pcmPath);</div><div class="line">			AmrInputStream ais = <span class="keyword">new</span> AmrInputStream(fis);</div><div class="line">			OutputStream <span class="keyword">out</span> = <span class="keyword">new</span> FileOutputStream(amrPath);</div><div class="line">			<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</div><div class="line">			<span class="keyword">int</span> len = -<span class="number">1</span>;</div><div class="line">			<span class="comment">/*</span></div><div class="line">			 * 下面的amr的文件头</div><div class="line">			 * 缺少这几个字节是不行的</div><div class="line">			 */</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x23);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x21);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x41);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x4D);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x52);</div><div class="line">	        <span class="keyword">out</span>.write(<span class="number">0</span>x0A);   </div><div class="line">			<span class="keyword">while</span>((len = ais.read(buf)) &gt;<span class="number">0</span>){</div><div class="line">				<span class="keyword">out</span>.write(buf,<span class="number">0</span>,len);</div><div class="line">			}</div><div class="line">			<span class="keyword">out</span>.close();</div><div class="line">			ais.close();</div><div class="line">		} <span class="keyword">catch</span> (FileNotFoundException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		} <span class="keyword">catch</span> (IOException e) {</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		}		</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
 
 ]]></content>
-    <summary type="html"><![CDATA[<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br>]]></summary>
+    <summary type="html"><![CDATA[<h2 id="引言">引言</h2>
+<p>项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个<code>android.media.AmrInputStream</code>类，其内部分装了将pcm转换为amr的方法。<br>]]></summary>
     
       <category term="android" scheme="http://www.lephones.net/tags/android/"/>
     
