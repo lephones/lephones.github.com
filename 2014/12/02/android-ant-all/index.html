@@ -71,16 +71,16 @@
 <a id="more"></a>
 
 <ol>
-<li><strong><a href="/2014/10/13/ant-apk-with-lib/" title="使用ant打包APK及依赖包最佳解决办法">使用ant打包APK及依赖包最佳解决办法</a> ：</strong><br>主要说了一下如何使用android sdk中的ant脚本来打包，使用android命令在工程下生成build.xml文件，然后再执行<code>ant &quot;target&quot;</code>就OK了。其中的target请参考<code>ant help</code>命令执行后的介绍。如果有依赖库工程，只要在每个库工程目录下都生成build.xml，然后在主工程下执行ant target就行。如果需要自定义脚本，可以在工程目录下生成的build.xml中编写。</li>
+<li><strong><a href="/2014/10/13/ant-apk-with-lib/" title="使用ant打包APK及依赖包最佳解决办法">使用ant打包APK及依赖包最佳解决办法</a> ：</strong>主要说了一下如何使用android sdk中的ant脚本来打包，使用android命令在工程下生成build.xml文件，然后再执行<code>ant &quot;target&quot;</code>就OK了。其中的target请参考<code>ant help</code>命令执行后的介绍。如果有依赖库工程，只要在每个库工程目录下都生成build.xml，然后在主工程下执行ant target就行。如果需要自定义脚本，可以在工程目录下生成的build.xml中编写。</li>
 </ol>
 <ol>
-<li><p><strong><a href="/2014/03/04/ant-src-lib-proguard/" title="ant打包中依赖工程的处理及混淆">ant打包中依赖工程的处理及混淆</a> ：</strong><br>这篇文章是早期，我在有依赖工程时，使用的打包办法，办法比较笨，主要就是说了一下使用ant编写aapt命令时候，如何加入依赖工程，有了之前的那一篇blog中的打包方法，这篇完全可以不看，大家当是了解一下aapt在依赖工程时候的原理就好。</p>
+<li><p><strong><a href="/2014/03/04/ant-src-lib-proguard/" title="ant打包中依赖工程的处理及混淆">ant打包中依赖工程的处理及混淆</a> ：</strong>这篇文章是早期，我在有依赖工程时，使用的打包办法，办法比较笨，主要就是说了一下使用ant编写aapt命令时候，如何加入依赖工程，有了之前的那一篇blog中的打包方法，这篇完全可以不看，大家当是了解一下aapt在依赖工程时候的原理就好。</p>
 </li>
-<li><p><strong><a href="/2014/12/02/android-ant-sdk/" title="android打包成SDK">android打包成SDK</a> ：</strong><br>讲完了如何打包APK，有很多情况下，是要打包成SDK的，也就是通常意义的jar包，本篇BLOG主要讲了一下如何用android sdk中的ant脚本来打jar包并混淆。其实android打jar包和普通的java打jar包一样，无非就是编译成.class，再将.class打包成jar，为了安全，再混淆一下。（顺便说一下，其实，用php，js，java等这些语言写的不开源的程序，基本都是靠的混淆）</p>
+<li><p><strong><a href="/2014/12/02/android-ant-sdk/" title="android打包成SDK">android打包成SDK</a> ：</strong>讲完了如何打包APK，有很多情况下，是要打包成SDK的，也就是通常意义的jar包，本篇BLOG主要讲了一下如何用android sdk中的ant脚本来打jar包并混淆。其实android打jar包和普通的java打jar包一样，无非就是编译成.class，再将.class打包成jar，为了安全，再混淆一下。（顺便说一下，其实，用php，js，java等这些语言写的不开源的程序，基本都是靠的混淆）</p>
 </li>
-<li><p><strong><a href="/2014/02/28/android-lib-res/" title="android打包成SDK中资源的处理">android打包成SDK中资源的处理</a> ：</strong><br>不是所有的SDK只有Jar，有的需要将资源也提供出去。本文主要讲了一下资源文件给商户提供的时候，如何避免<code>R</code>文件中id的问题，因为id是常量，编译时候会用值直接在使用的地方代替。本文介绍了3种方法，使用软链接法，使用字符串，使用public资源。</p>
+<li><p><strong><a href="/2014/02/28/android-lib-res/" title="android打包成SDK中资源的处理">android打包成SDK中资源的处理</a> ：</strong>不是所有的SDK只有Jar，有的需要将资源也提供出去。本文主要讲了一下资源文件给商户提供的时候，如何避免<code>R</code>文件中id的问题，因为id是常量，编译时候会用值直接在使用的地方代替。本文介绍了3种方法，使用软链接法，使用字符串，使用public资源。</p>
 </li>
-<li><p><strong><a href="/2014/10/28/res-safty-in-sdk/" title="android如何将资源打入jar并对资源进行保护">android如何将资源打入jar并对资源进行保护</a> ：</strong><br>一直在向外提供未编译的资源文件，做为sdk中的资源使用，没想到，其实可以有一种方法先编译资源，再向商户提供。本篇BLOG主要写了如何对资源预先编译成二进制后，再在项目中使用。也就是说，资源完全可以提供到jar中（当然这里有限制，就是values还是必须提供源文件的），同时，可以对资源进行验证，保护。同时，该方法也不失为一种对资源文件进行混淆的好办法！另外，朋友们可以和上一篇文章结合看看，说不定有新突破。</p>
+<li><p><strong><a href="/2014/10/28/res-safty-in-sdk/" title="android如何将资源打入jar并对资源进行保护">android如何将资源打入jar并对资源进行保护</a> ：</strong>一直在向外提供未编译的资源文件，做为sdk中的资源使用，没想到，其实可以有一种方法先编译资源，再向商户提供。本篇BLOG主要写了如何对资源预先编译成二进制后，再在项目中使用。也就是说，资源完全可以提供到jar中（当然这里有限制，就是values还是必须提供源文件的），同时，可以对资源进行验证，保护。同时，该方法也不失为一种对资源文件进行混淆的好办法！另外，朋友们可以和上一篇文章结合看看，说不定有新突破。</p>
 </li>
 </ol>
 <h2 id="说明">说明</h2>
