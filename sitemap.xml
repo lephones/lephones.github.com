@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.lephones.net/2014/09/29/alipay-dynamic_load/</loc>
+    <lastmod>2014-12-05T09:15:43.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.lephones.net/2014/12/02/android-ant-all/</loc>
     <lastmod>2014-12-04T04:55:23.000Z</lastmod>
   </url>
@@ -54,11 +59,6 @@
   <url>
     <loc>http://www.lephones.net/2014/03/05/android-app-safety/</loc>
     <lastmod>2014-11-26T18:46:38.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.lephones.net/2014/09/29/alipay-dynamic_load/</loc>
-    <lastmod>2014-11-26T18:46:11.000Z</lastmod>
   </url>
   
   <url>

@@ -128,6 +128,8 @@
 </ol>
 <h2 id="说明：">说明：</h2>
 <p>同是阿里系的淘宝网有一套框架叫atlas，该框架是一套重量级框架，完全突破了manifest的封锁，不同的bundle使用的不同的context。</p>
+<h2 id="后记">后记</h2>
+<p>其实支付宝也突破了manifest文件，采用的是代理的模式，注册一个CommonActivity，在各生命周期的方法中调用targetActivity的方法。再利用反射将CommonActivity中的变量赋值到插件中targetActivity中（用遍历就能满足），此方法有个缺陷就是，在插件中的activity中，要慎用this关键字，必要用的时候，得用其它方法取CommonActivity对象。</p>
 
       
     </div>

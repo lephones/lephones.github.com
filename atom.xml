@@ -4,7 +4,7 @@
   <subtitle><![CDATA[又一个android开发人员]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.lephones.net/"/>
-  <updated>2014-12-04T04:55:31.249Z</updated>
+  <updated>2014-12-05T09:16:22.349Z</updated>
   <id>http://www.lephones.net/</id>
   
   <author>
@@ -311,7 +311,7 @@
     <link href="http://www.lephones.net/2014/09/29/alipay-dynamic_load/"/>
     <id>http://www.lephones.net/2014/09/29/alipay-dynamic_load/</id>
     <published>2014-09-29T08:15:14.000Z</published>
-    <updated>2014-11-26T18:46:11.000Z</updated>
+    <updated>2014-12-05T09:15:43.000Z</updated>
     <content type="html"><![CDATA[<p>在早期的支付宝android客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
 <p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，反编译了一下支付宝的插件化。<br><a id="more"></a><br>在下资历不高，简单分享一下，大牛看到也不要喷我，在下也是在探索学习中，欢迎交流！</p>
 <h2 id="工具：">工具：</h2>
@@ -374,6 +374,8 @@
 </ol>
 <h2 id="说明：">说明：</h2>
 <p>同是阿里系的淘宝网有一套框架叫atlas，该框架是一套重量级框架，完全突破了manifest的封锁，不同的bundle使用的不同的context。</p>
+<h2 id="后记">后记</h2>
+<p>其实支付宝也突破了manifest文件，采用的是代理的模式，注册一个CommonActivity，在各生命周期的方法中调用targetActivity的方法。再利用反射将CommonActivity中的变量赋值到插件中targetActivity中（用遍历就能满足），此方法有个缺陷就是，在插件中的activity中，要慎用this关键字，必要用的时候，得用其它方法取CommonActivity对象。</p>
 ]]></content>
     <summary type="html"><![CDATA[<p>在早期的支付宝android客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
 <p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，反编译了一下支付宝的插件化。<br>]]></summary>
