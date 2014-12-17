@@ -57,28 +57,26 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-02-28T08:22:24.000Z"><a href="/2014/02/28/android-lib-res/">2月 28 2014</a></time>
+        <time datetime="2014-07-21T14:13:13.000Z"><a href="/2014/07/21/manage-bitmap-memory/">7月 21 2014</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/02/28/android-lib-res/">将android程序打包成sdk中资源的处理</a></h1>
+    <h1 class="title"><a href="/2014/07/21/manage-bitmap-memory/">android中图片内存管理-防止OOM</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h2 id="背景">背景</h2>
-<p>通常的android项目，都是以apk的形式对外发布的，但有一部分程序，是做为二次开发包提供给其它开发商的，例如，淘宝SDK，新浪微博SDK。笔者参与公司的一款支付插件的开发与维护，最终打包成<strong>jar</strong>+<strong>res</strong>的格式(与支付宝支付提供的支付不同。支付宝的交易功能，也是一个APK，商户接入后，通过AIDL调用支付)。以这款插件为例，讲解一下资源文件的处理。</p>
-<h2 id="工程设置与打包形式">工程设置与打包形式</h2>
-<h3 id="工程设置：">工程设置：</h3>
-
+        <h2 id="前言">前言</h2>
+<p>最近，公司有个新需求，需要在地图上的每一个用户头像上，加上该用户当前所行驶的速度。先大概说一下地图上的一些事：</p>
+<p>地图上单独加上的一些点（不属于地图本身的信息），我们通常称它们为<code>marker</code>，比如在地图上表示你当前的位置的小圆点，比如表示你搜索到的附近的一些点，都会通过<code>marker</code>来表示出来。而我们公司的产品，需要在地图上显示用户的头像。其实也是一个<code>marker</code>。<br>
       
     </div>
     <footer>
       
         
           <div class="alignright">
-            <a href="/2014/02/28/android-lib-res/#more" class="more-link">Read More</a>
+            <a href="/2014/07/21/manage-bitmap-memory/#more" class="more-link">Read More</a>
           </div>
         
         
@@ -97,20 +95,56 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-02-27T16:02:33.000Z"><a href="/2014/02/28/alipay-plugin-mechanism/">2月 28 2014</a></time>
+        <time datetime="2014-07-18T18:27:36.000Z"><a href="/2014/07/19/three-months/">7月 19 2014</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/02/28/alipay-plugin-mechanism/">支付宝插件机制研究</a></h1>
+    <h1 class="title"><a href="/2014/07/19/three-months/">三个月以来</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h2 id="前言">前言</h2>
-<p><strong>支付宝已不再采用该方法插件化了，请参考 <a href="http://www.lephones.net/2014/09/29/alipay-dynamic_load/" title="探究支付宝android客户端的动态加载" target="_blank" rel="external">探究支付宝android客户端的动态加载</a></strong></p>
-<p>使用过支付宝android客户端的小伙伴们都知道，支付宝android客户端可以增量更新，不仅能够随时改变内部APP的个数，还可以改变它的布局，结构等。为本人也在做移动支付，对支付宝客户端颇感兴趣，于是找时间来简单破解研究一下。</p>
-<p>支付宝的插件化，一共有两种方式，一种是通过html网页来实现布局。html技术相信coder们都清楚，不再介绍。这里只介绍native的插件化。</p>
+        <p>有三个月没有更新这个东西了。。管它叫东西，是因为我还没有彻底玩转静态BLOG，从写到发表还有些生疏。尤其是在使用了各种主题以后，觉得不管用哪一款都让人心里不舒服，更不舒服的是，我却不知道我用什么样的才舒服。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/07/19/three-months/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-12T15:45:27.000Z"><a href="/2014/03/12/linux-windows-disk/">3月 12 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/12/linux-windows-disk/">双系统回归虚拟机</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="虚拟机还是双系统">虚拟机还是双系统</h2>
+<p>我的电脑是DELL 3420，最早买回来的时候，内带的是linux系统。于是折腾成windows 7。后来发现开发中有时候用linux，而且可以学学linux知识，于是就又装了个ubuntu（最早自带的也是ubuntu）。一直用的挺好，但是，渐渐发现，linux装上去就是鸡肋，这个系统从来不进去，进去后，上个QQ都没有官方版本的，慢慢就觉得麻烦了，还不如虚拟机好用。</p>
+<p>其实在装双系统之前，我也考虑过装虚拟机，但当时想的是，虚拟机肯定没有直接装在电脑上性能上好。不过，现在我觉得，虚拟机其实足够了，而且同时运行着两个系统是相当的方便。</p>
+<p>所以，如果不是一直用linux做开发而很少用windows的话，都用虚拟机吧。毕竟QQ，游戏，都得在windows平台。</p>
 
       
     </div>
@@ -118,7 +152,90 @@
       
         
           <div class="alignright">
-            <a href="/2014/02/28/alipay-plugin-mechanism/#more" class="more-link">Read More</a>
+            <a href="/2014/03/12/linux-windows-disk/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-05T11:29:29.000Z"><a href="/2014/03/05/android-app-safety/">3月 5 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/05/android-app-safety/">android应用程序的一些安全技巧</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="介绍">介绍</h2>
+<p>做android支付，少不了android的一些安全，如果不说系统，单纯对于APP本身而言，安全性可做手脚的地方很小。简单介绍一下</p>
+<h2 id="内容的安全">内容的安全</h2>
+<p>加解密是对内容安全处理最常用的方法了，有<code>对称加密</code>和<code>非对称加密</code>。关于<code>对称加密</code>和<code>非对称加密</code>，大家去google查找资料。在开发中，我们常常把加密算法写在JNI层，更保密。</p>
+<p>联网时内容的安全，大家一定都知道https，如果不用Https，我们就可以使用非对称加密，做一个伪https。</p>
+<p>为了保证数据的完整，可加入签名机制。</p>
+<p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/03/05/android-app-safety/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-04T02:42:07.000Z"><a href="/2014/03/04/ant-src-lib-proguard/">3月 4 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/04/ant-src-lib-proguard/">ant打包中依赖工程的处理及混淆</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="概述">概述</h2>
+<p>在android开发中，ant是用的最多的打包工具。有时候，我们会经常用到一些工程来做为依赖库，也就是src library。那么加入src library project的工程，怎么使用ant的脚本打包成一个apk呢。</p>
+<p>关于ant打包，请参考 <strong><a href="http://www.lephones.net/2014/10/13/ant-apk-with-lib/" title="使用ant打包APK及依赖包最佳解决办法" target="_blank" rel="external">使用ant打包APK及依赖包最佳解决办法</a></strong></p>
+<h2 id="原理">原理</h2>
+<p>我们都知道，src lib无非就是源码和资源。将src打包成jar，这绝对没问题，但是资源文件怎么打包呢？资源文件打包，其实主要就是R文件的运用，因为R文件中保存着资源的ID。</p>
+<p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/03/04/ant-src-lib-proguard/#more" class="more-link">Read More</a>
           </div>
         
         
@@ -136,6 +253,8 @@
   
     <a href="/page/3/" class="alignleft prev">上一页</a>
   
+  
+    <a href="/page/5/" class="alignright next">下一页</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
@@ -162,7 +281,7 @@
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/android开发/">android开发</a><small>8</small></li>
+    <li><a href="/categories/android开发/">android开发</a><small>12</small></li>
   
     <li><a href="/categories/android打包/">android打包</a><small>6</small></li>
   
@@ -181,13 +300,15 @@
   
     <li><a href="/tags/amr/">amr</a><small>1</small></li>
   
-    <li><a href="/tags/android/">android</a><small>12</small></li>
+    <li><a href="/tags/android/">android</a><small>16</small></li>
   
     <li><a href="/tags/ant/">ant</a><small>5</small></li>
   
     <li><a href="/tags/dex/">dex</a><small>1</small></li>
   
     <li><a href="/tags/dexpathlist/">dexpathlist</a><small>1</small></li>
+  
+    <li><a href="/tags/hotfix/">hotfix</a><small>4</small></li>
   
     <li><a href="/tags/linux/">linux</a><small>1</small></li>
   
@@ -201,7 +322,7 @@
   
     <li><a href="/tags/内存管理/">内存管理</a><small>1</small></li>
   
-    <li><a href="/tags/动态加载/">动态加载</a><small>1</small></li>
+    <li><a href="/tags/动态加载/">动态加载</a><small>5</small></li>
   
     <li><a href="/tags/插件化/">插件化</a><small>2</small></li>
   
@@ -219,6 +340,26 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,11,33)/">利用动态加载修复已发布上线的apk的bug</a>
+      </li>
+    
+      <li>
+        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,05,32)/">利用动态加载修复已发布上线的apk的bug</a>
+      </li>
+    
+      <li>
+        <a href="/2014/12/17/android-hotfix/">利用动态加载修复已发布上线的apk的bug</a>
+      </li>
+    
+      <li>
+        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,11,36)/">利用动态加载修复已发布上线的apk的bug</a>
+      </li>
+    
+      <li>
+        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,11,29)/">利用动态加载修复已发布上线的apk的bug</a>
+      </li>
+    
+      <li>
         <a href="/2014/12/02/android-ant-all/">android打包SDK(包括资源)和APK全总结</a>
       </li>
     
@@ -228,26 +369,6 @@
     
       <li>
         <a href="/2014/11/27/multi-dex-app/">android中方法id超过65536官方解决办法</a>
-      </li>
-    
-      <li>
-        <a href="/2014/11/21/su-root-holder/">APP如何只获取一次root权限</a>
-      </li>
-    
-      <li>
-        <a href="/2014/11/10/android_pcm2amr/">android pcm转amr格式</a>
-      </li>
-    
-      <li>
-        <a href="/2014/10/28/res-safty-in-sdk/">android如何将资源打入jar并对资源进行保护</a>
-      </li>
-    
-      <li>
-        <a href="/2014/10/13/ant-apk-with-lib/">使用ant打包APK及依赖包最佳解决办法</a>
-      </li>
-    
-      <li>
-        <a href="/2014/09/29/alipay-dynamic_load/">探究支付宝android客户端的动态加载</a>
       </li>
     
   </ul>
