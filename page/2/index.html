@@ -57,161 +57,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-12-02T04:55:27.000Z"><a href="/2014/12/02/android-ant-all/">12月 2 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/12/02/android-ant-all/">android打包SDK(包括资源)和APK全总结</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="引言">引言</h2>
-<p>本篇博客将前我之前写的关于android打包的一些BLOG做一些整理总结，算是一个导读，也算是一个总结。因为之前的BLOG写的比较零散，可以按照这篇文章循序渐进的阅读。能力有限，写的不好的地方，希望也不要嘘我，悄悄留言就好。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignright">
-            <a href="/2014/12/02/android-ant-all/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-12-02T04:54:07.000Z"><a href="/2014/12/02/android-ant-sdk/">12月 2 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/12/02/android-ant-sdk/">android使用ant打包成SDK</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="前言">前言</h2>
-<p>最近看到好多朋友搜索android打包sdk进到我的BLOG，可能是因为我前些BLOG的关键字吧。但是，其实是没有一篇BLOG来讲如何打SDK的。</p>
-<p>在这里我就简单说一下打SDK的方法。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignright">
-            <a href="/2014/12/02/android-ant-sdk/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-11-26T17:55:46.000Z"><a href="/2014/11/27/multi-dex-app/">11月 27 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/11/27/multi-dex-app/">android中方法id超过65536官方解决办法</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="前言">前言</h2>
-<pre><code><span class="type">Unable</span> to execute dex: <span class="keyword">method</span> <span class="type">ID</span> <span class="keyword">not</span> <span class="keyword">in</span> [<span class="number">0</span>, <span class="number">0xffff</span>]: <span class="number">65536</span>
-</code></pre><p>安卓项目中，如果代码太多，会碰上一个叫dex文件方法数超过65536的问题。其实，google已经提供了一个标准的解决办法。使用<code>MultiDexApplication</code>。需要在项目中导入android sdk的support中的 android-support-multidex.jar</p>
-<p>阅读本文前，我希望你已经看过google api文档中对该类的介绍了。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignright">
-            <a href="/2014/11/27/multi-dex-app/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-11-21T02:55:22.000Z"><a href="/2014/11/21/su-root-holder/">11月 21 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/11/21/su-root-holder/">APP如何只获取一次root权限</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="引言">引言</h2>
-<p>最近和小伙伴们讨论到root权限，说有的App只需要请求一次root权限，便可以长期拥有root权限，可以为静默安装等一系列操作开绿灯。</p>
-<p>通常我们的手机root后，会有一款叫superuser.apk的软件来管理root权限，所谓的获取root权限，就是让superuser允许你的app。只要了解了superuser的原理和root的原理，就不在话下了。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignright">
-            <a href="/2014/11/21/su-root-holder/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2014-11-10T06:23:46.000Z"><a href="/2014/11/10/android_pcm2amr/">11月 10 2014</a></time>
       
       
@@ -231,6 +76,161 @@
         
           <div class="alignright">
             <a href="/2014/11/10/android_pcm2amr/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-10-28T00:45:58.000Z"><a href="/2014/10/28/res-safty-in-sdk/">10月 28 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/10/28/res-safty-in-sdk/">android如何将资源打入jar并对资源进行保护</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="引言">引言</h2>
+<p>有很多项目需要将Android工程打包成SDK，将java代码编译后打成一个jar包提供给二次开发商，但是，因为android工程会含有资源文件，那资源文件怎么提供给对方？怎么直接打到jar中？怎么保证资源的完全性？<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/10/28/res-safty-in-sdk/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-10-13T09:17:06.000Z"><a href="/2014/10/13/ant-apk-with-lib/">10月 13 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/10/13/ant-apk-with-lib/">使用ant打包APK及依赖包最佳解决办法</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="简介">简介</h2>
+<p>最近有小伙伴问ant打包的事，google现在又在推广它的gradle构建工具，但是，目前有许多朋友还是用的ant，而且，在SDK多次更新之后，之前写好的ant文件不适用了，典型的例子就是<code>apkbuilder</code>命令。那么，怎么办呢？？</p>
+<p>好多人在网上搜索写好的打包脚本，并费劲心机的寻找工程依赖的打包方法，其实，android的SDK已经给我们提供了该build.xml文件了，就在<code>/tools/ant/</code>下面，这个脚本引用了<code>tools/lib</code>下的<code>ant-task.jar</code>，封装了好多target，我这里就说说怎么使用该脚本。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/10/13/ant-apk-with-lib/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-09-29T08:15:14.000Z"><a href="/2014/09/29/alipay-dynamic_load/">9月 29 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/09/29/alipay-dynamic_load/">探究支付宝android客户端的动态加载</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>在早期的支付宝android客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
+<p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，反编译了一下支付宝的插件化。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/09/29/alipay-dynamic_load/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-08-22T06:01:34.000Z"><a href="/2014/08/22/camera-picture-size/">8月 22 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/08/22/camera-picture-size/">用camera类拍照指定图片大小</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="拍照">拍照</h2>
+<p>在安卓上拍照主要有两种方案:</p>
+<ol>
+<li>直接调起系统的照相机拍照片，拍完后，图片会在相册中保存一份，对于程序来说，可以拿到保存照片的路径，从而获取图片。</li>
+<li>自己写<code>SurfaceView</code>调用相机来实现拍照，用该方法会触发一个回调，回调的参数中包含一个字节数组，里面就是图片信息。</li>
+</ol>
+<p>这在网上已经有了好多的资料。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/08/22/camera-picture-size/#more" class="more-link">Read More</a>
           </div>
         
         
@@ -276,7 +276,7 @@
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/android开发/">android开发</a><small>12</small></li>
+    <li><a href="/categories/android开发/">android开发</a><small>9</small></li>
   
     <li><a href="/categories/android打包/">android打包</a><small>6</small></li>
   
@@ -295,7 +295,7 @@
   
     <li><a href="/tags/amr/">amr</a><small>1</small></li>
   
-    <li><a href="/tags/android/">android</a><small>16</small></li>
+    <li><a href="/tags/android/">android</a><small>13</small></li>
   
     <li><a href="/tags/ant/">ant</a><small>5</small></li>
   
@@ -303,7 +303,7 @@
   
     <li><a href="/tags/dexpathlist/">dexpathlist</a><small>1</small></li>
   
-    <li><a href="/tags/hotfix/">hotfix</a><small>4</small></li>
+    <li><a href="/tags/hotfix/">hotfix</a><small>1</small></li>
   
     <li><a href="/tags/linux/">linux</a><small>1</small></li>
   
@@ -317,7 +317,7 @@
   
     <li><a href="/tags/内存管理/">内存管理</a><small>1</small></li>
   
-    <li><a href="/tags/动态加载/">动态加载</a><small>5</small></li>
+    <li><a href="/tags/动态加载/">动态加载</a><small>2</small></li>
   
     <li><a href="/tags/插件化/">插件化</a><small>2</small></li>
   
@@ -335,23 +335,7 @@
   <ul class="entry">
     
       <li>
-        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,11,33)/">利用动态加载修复已发布上线的apk的bug</a>
-      </li>
-    
-      <li>
-        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,05,32)/">利用动态加载修复已发布上线的apk的bug</a>
-      </li>
-    
-      <li>
         <a href="/2014/12/17/android-hotfix/">利用动态加载修复已发布上线的apk的bug</a>
-      </li>
-    
-      <li>
-        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,11,36)/">利用动态加载修复已发布上线的apk的bug</a>
-      </li>
-    
-      <li>
-        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,11,29)/">利用动态加载修复已发布上线的apk的bug</a>
       </li>
     
       <li>
@@ -364,6 +348,22 @@
     
       <li>
         <a href="/2014/11/27/multi-dex-app/">android中方法id超过65536官方解决办法</a>
+      </li>
+    
+      <li>
+        <a href="/2014/11/21/su-root-holder/">APP如何只获取一次root权限</a>
+      </li>
+    
+      <li>
+        <a href="/2014/11/10/android_pcm2amr/">android pcm转amr格式</a>
+      </li>
+    
+      <li>
+        <a href="/2014/10/28/res-safty-in-sdk/">android如何将资源打入jar并对资源进行保护</a>
+      </li>
+    
+      <li>
+        <a href="/2014/10/13/ant-apk-with-lib/">使用ant打包APK及依赖包最佳解决办法</a>
       </li>
     
   </ul>

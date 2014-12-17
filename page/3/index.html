@@ -57,161 +57,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-10-28T00:45:58.000Z"><a href="/2014/10/28/res-safty-in-sdk/">10月 28 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/10/28/res-safty-in-sdk/">android如何将资源打入jar并对资源进行保护</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="引言">引言</h2>
-<p>有很多项目需要将Android工程打包成SDK，将java代码编译后打成一个jar包提供给二次开发商，但是，因为android工程会含有资源文件，那资源文件怎么提供给对方？怎么直接打到jar中？怎么保证资源的完全性？<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignright">
-            <a href="/2014/10/28/res-safty-in-sdk/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-10-13T09:17:06.000Z"><a href="/2014/10/13/ant-apk-with-lib/">10月 13 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/10/13/ant-apk-with-lib/">使用ant打包APK及依赖包最佳解决办法</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="简介">简介</h2>
-<p>最近有小伙伴问ant打包的事，google现在又在推广它的gradle构建工具，但是，目前有许多朋友还是用的ant，而且，在SDK多次更新之后，之前写好的ant文件不适用了，典型的例子就是<code>apkbuilder</code>命令。那么，怎么办呢？？</p>
-<p>好多人在网上搜索写好的打包脚本，并费劲心机的寻找工程依赖的打包方法，其实，android的SDK已经给我们提供了该build.xml文件了，就在<code>/tools/ant/</code>下面，这个脚本引用了<code>tools/lib</code>下的<code>ant-task.jar</code>，封装了好多target，我这里就说说怎么使用该脚本。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignright">
-            <a href="/2014/10/13/ant-apk-with-lib/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-09-29T08:15:14.000Z"><a href="/2014/09/29/alipay-dynamic_load/">9月 29 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/09/29/alipay-dynamic_load/">探究支付宝android客户端的动态加载</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>在早期的支付宝android客户端中，也有插件化的功能。大概的做法就是，自定义所有的UI控件，再通过XML文件，仿安卓原生XML的布局文件来搭建布局，再通过自定义的表达式解析器，利用JAVA的反射特性来给具体的控件添加不同的功能。这样也达到了插件化。</p>
-<p>之前写过一篇文章，说的是支付宝的插件化。其实这篇文章很老了，现在的支付宝早已不是这种做法。最近几天忙里偷闲，反编译了一下支付宝的插件化。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignright">
-            <a href="/2014/09/29/alipay-dynamic_load/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-08-22T06:01:34.000Z"><a href="/2014/08/22/camera-picture-size/">8月 22 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/08/22/camera-picture-size/">用camera类拍照指定图片大小</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="拍照">拍照</h2>
-<p>在安卓上拍照主要有两种方案:</p>
-<ol>
-<li>直接调起系统的照相机拍照片，拍完后，图片会在相册中保存一份，对于程序来说，可以拿到保存照片的路径，从而获取图片。</li>
-<li>自己写<code>SurfaceView</code>调用相机来实现拍照，用该方法会触发一个回调，回调的参数中包含一个字节数组，里面就是图片信息。</li>
-</ol>
-<p>这在网上已经有了好多的资料。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignright">
-            <a href="/2014/08/22/camera-picture-size/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2014-08-20T08:50:17.000Z"><a href="/2014/08/20/baidu-interview/">8月 20 2014</a></time>
       
       
@@ -233,6 +78,162 @@
     </div>
     <footer>
       
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-07-21T14:13:13.000Z"><a href="/2014/07/21/manage-bitmap-memory/">7月 21 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/07/21/manage-bitmap-memory/">android中图片内存管理-防止OOM</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="前言">前言</h2>
+<p>最近，公司有个新需求，需要在地图上的每一个用户头像上，加上该用户当前所行驶的速度。先大概说一下地图上的一些事：</p>
+<p>地图上单独加上的一些点（不属于地图本身的信息），我们通常称它们为<code>marker</code>，比如在地图上表示你当前的位置的小圆点，比如表示你搜索到的附近的一些点，都会通过<code>marker</code>来表示出来。而我们公司的产品，需要在地图上显示用户的头像。其实也是一个<code>marker</code>。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/07/21/manage-bitmap-memory/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-07-18T18:27:36.000Z"><a href="/2014/07/19/three-months/">7月 19 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/07/19/three-months/">三个月以来</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>有三个月没有更新这个东西了。。管它叫东西，是因为我还没有彻底玩转静态BLOG，从写到发表还有些生疏。尤其是在使用了各种主题以后，觉得不管用哪一款都让人心里不舒服，更不舒服的是，我却不知道我用什么样的才舒服。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/07/19/three-months/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-12T15:45:27.000Z"><a href="/2014/03/12/linux-windows-disk/">3月 12 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/12/linux-windows-disk/">双系统回归虚拟机</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="虚拟机还是双系统">虚拟机还是双系统</h2>
+<p>我的电脑是DELL 3420，最早买回来的时候，内带的是linux系统。于是折腾成windows 7。后来发现开发中有时候用linux，而且可以学学linux知识，于是就又装了个ubuntu（最早自带的也是ubuntu）。一直用的挺好，但是，渐渐发现，linux装上去就是鸡肋，这个系统从来不进去，进去后，上个QQ都没有官方版本的，慢慢就觉得麻烦了，还不如虚拟机好用。</p>
+<p>其实在装双系统之前，我也考虑过装虚拟机，但当时想的是，虚拟机肯定没有直接装在电脑上性能上好。不过，现在我觉得，虚拟机其实足够了，而且同时运行着两个系统是相当的方便。</p>
+<p>所以，如果不是一直用linux做开发而很少用windows的话，都用虚拟机吧。毕竟QQ，游戏，都得在windows平台。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/03/12/linux-windows-disk/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-05T11:29:29.000Z"><a href="/2014/03/05/android-app-safety/">3月 5 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/03/05/android-app-safety/">android应用程序的一些安全技巧</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="介绍">介绍</h2>
+<p>做android支付，少不了android的一些安全，如果不说系统，单纯对于APP本身而言，安全性可做手脚的地方很小。简单介绍一下</p>
+<h2 id="内容的安全">内容的安全</h2>
+<p>加解密是对内容安全处理最常用的方法了，有<code>对称加密</code>和<code>非对称加密</code>。关于<code>对称加密</code>和<code>非对称加密</code>，大家去google查找资料。在开发中，我们常常把加密算法写在JNI层，更保密。</p>
+<p>联网时内容的安全，大家一定都知道https，如果不用Https，我们就可以使用非对称加密，做一个伪https。</p>
+<p>为了保证数据的完整，可加入签名机制。</p>
+<p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignright">
+            <a href="/2014/03/05/android-app-safety/#more" class="more-link">Read More</a>
+          </div>
         
         
       
@@ -277,7 +278,7 @@
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/android开发/">android开发</a><small>12</small></li>
+    <li><a href="/categories/android开发/">android开发</a><small>9</small></li>
   
     <li><a href="/categories/android打包/">android打包</a><small>6</small></li>
   
@@ -296,7 +297,7 @@
   
     <li><a href="/tags/amr/">amr</a><small>1</small></li>
   
-    <li><a href="/tags/android/">android</a><small>16</small></li>
+    <li><a href="/tags/android/">android</a><small>13</small></li>
   
     <li><a href="/tags/ant/">ant</a><small>5</small></li>
   
@@ -304,7 +305,7 @@
   
     <li><a href="/tags/dexpathlist/">dexpathlist</a><small>1</small></li>
   
-    <li><a href="/tags/hotfix/">hotfix</a><small>4</small></li>
+    <li><a href="/tags/hotfix/">hotfix</a><small>1</small></li>
   
     <li><a href="/tags/linux/">linux</a><small>1</small></li>
   
@@ -318,7 +319,7 @@
   
     <li><a href="/tags/内存管理/">内存管理</a><small>1</small></li>
   
-    <li><a href="/tags/动态加载/">动态加载</a><small>5</small></li>
+    <li><a href="/tags/动态加载/">动态加载</a><small>2</small></li>
   
     <li><a href="/tags/插件化/">插件化</a><small>2</small></li>
   
@@ -336,23 +337,7 @@
   <ul class="entry">
     
       <li>
-        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,11,33)/">利用动态加载修复已发布上线的apk的bug</a>
-      </li>
-    
-      <li>
-        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,05,32)/">利用动态加载修复已发布上线的apk的bug</a>
-      </li>
-    
-      <li>
         <a href="/2014/12/17/android-hotfix/">利用动态加载修复已发布上线的apk的bug</a>
-      </li>
-    
-      <li>
-        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,11,36)/">利用动态加载修复已发布上线的apk的bug</a>
-      </li>
-    
-      <li>
-        <a href="/2014/12/17/android-hotfix(LEFENG-PC--lephone.zh--2014-12-17-16,11,29)/">利用动态加载修复已发布上线的apk的bug</a>
       </li>
     
       <li>
@@ -365,6 +350,22 @@
     
       <li>
         <a href="/2014/11/27/multi-dex-app/">android中方法id超过65536官方解决办法</a>
+      </li>
+    
+      <li>
+        <a href="/2014/11/21/su-root-holder/">APP如何只获取一次root权限</a>
+      </li>
+    
+      <li>
+        <a href="/2014/11/10/android_pcm2amr/">android pcm转amr格式</a>
+      </li>
+    
+      <li>
+        <a href="/2014/10/28/res-safty-in-sdk/">android如何将资源打入jar并对资源进行保护</a>
+      </li>
+    
+      <li>
+        <a href="/2014/10/13/ant-apk-with-lib/">使用ant打包APK及依赖包最佳解决办法</a>
       </li>
     
   </ul>
