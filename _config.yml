@@ -85,6 +85,5 @@ theme: light
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: 
-    github: https://github.com/lephones/lephones.github.io.git
-    branch: master
+  repo: https://github.com/lephones/lephones.github.io.git
+  branch: master
