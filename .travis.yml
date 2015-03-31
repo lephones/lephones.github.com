@@ -8,6 +8,7 @@ node_js:
 - '0.10'
 
 before_install:
+- openssl aes-256-cbc -K $encrypted_bf7ae6d2ed82_key -iv $encrypted_bf7ae6d2ed82_iv -in id_rsa__.enc -out id_rsa__ -d
 - git config --global user.name 'lephones'
 - git config --global user.email 'lephones@lephones.net'
 
