@@ -18,8 +18,8 @@ before_install:
 
 install:
 - npm install hexo@2.8.3 -g
-- npm install hexo-generator-feed --save
-- npm install hexo-generator-sitemap --save
+- npm install hexo-generator-feed
+- npm install hexo-generator-sitemap
 
 
 script:
