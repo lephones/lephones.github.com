@@ -86,4 +86,5 @@ theme: light
 deploy:
   type: git
   repo: 
-    github: git@github.com:lephoneso/lephones.github.io.git,master
+    github: https://github.com/lephones/lephones.github.io.git
+    branch: master
