@@ -14,8 +14,14 @@ node_js:
 - '0.10'
 
 before_install:
-- git config --global user.name "lephones"
-- git config --global user.email "lephones@lephones.net"
+# 如果你要用这个，把这里换成你的，生成方法百度找
+- openssl aes-256-cbc -K $encrypted_bf7ae6d2ed82_key -iv $encrypted_bf7ae6d2ed82_iv -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d
+- chmod 600 ~/.ssh/id_rsa
+- eval $(ssh-agent)
+- ssh-add ~/.ssh/id_rsa
+- cp .travis/ssh_config ~/.ssh/config
+- git config --global user.name 'lephones'
+- git config --global user.email 'lephones@lephones.net'
 
 install:
 - npm install hexo-cli -g
@@ -35,4 +41,5 @@ script:
 - hexo clean
 - hexo g
 - hexo d
+
 ```
