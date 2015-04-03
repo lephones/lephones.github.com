@@ -11,13 +11,14 @@
       <%- partial('post/title') %>
     </header>
     <div class="entry">
-	  <%- partial('google_adsense') %>
       <% if (item.excerpt && index){ %>
         <%- item.excerpt %>
       <% } else { %>
+		<%- partial('google_adsense') %>
         <%- item.content %>
+		 <%- partial('google_adsense') %>
       <% } %>
-	  <%- partial('google_adsense') %>
+	  
     </div>
     <footer>
       <% if (index){ %>
