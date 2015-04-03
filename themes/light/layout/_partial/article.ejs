@@ -14,9 +14,13 @@
       <% if (item.excerpt && index){ %>
         <%- item.excerpt %>
       <% } else { %>
+	  <% if (!index){ %>
 		<%- partial('google_adsense') %>
+      <% }
         <%- item.content %>
-		 <%- partial('google_adsense') %>
+	  <% if (!index){ %>
+		<%- partial('google_adsense') %>
+      <% }
       <% } %>
 	  
     </div>
