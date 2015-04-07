@@ -3,6 +3,13 @@ date: 2015-03-31 18：41:36
 tags: [travis,hexo]
 category: 个人随笔
 ---
+
+搭建了一个自动发布BLOG的平台  
+下面是代码，做一下备份
+
+<!-- more -- >
+
+
 ```
 branches:
   only:
