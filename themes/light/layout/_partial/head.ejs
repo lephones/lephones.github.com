@@ -14,7 +14,7 @@
   }
   title.push(config.title);
   %>
-  <title><%= title.join(' | ') %></title>
+  <title><%= title.join('_') %></title>
   <% if (config.author){ %><meta name="author" content="<%= config.author %>"><% } %>
   <% if (page.description){ %>
   <meta name="description" content="<%= page.description %>">
