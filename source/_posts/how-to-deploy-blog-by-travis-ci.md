@@ -12,7 +12,7 @@ category: 个人随笔
 - travis ci，自己百度一下补脑，可以理解为就是一个node.js的虚拟机环境。[https://travis-ci.org/](https://travis-ci.org/ "https://travis-ci.org/")提供了travis-ci的服务，可以指定构建github上的代码。
 - 本地有hexo环境
 - linux或者MAC工作环境
-
+<!-- more -->
 ## 用法： ##
 
 - 申请travis ci账户，将你的blog的repo绑定到travis-ci上。
@@ -32,10 +32,6 @@ hexo
 ```
 
 要使用travis，还需要一个travis的脚本配置文件，就是告诉travis当构建的时候，执行这个脚本。在分支的根目录新建一个文本文件，重命名为.travis.yml，在里面加入下面的代码，注意：将第3行的blog改成你的分支的名字。
-
-
-
-<!-- more -->
 
 ```
 branches:
