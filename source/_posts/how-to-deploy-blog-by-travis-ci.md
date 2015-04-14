@@ -1,5 +1,5 @@
 title: 如何通过travis ci自动发布blog
-date: 2015-04-10 18：41:36
+date: 2015-04-10 18:41:36
 tags: [travis,hexo]
 category: 个人随笔
 ---
