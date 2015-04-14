@@ -1,5 +1,5 @@
 title: 测试一下travis自动发布
-date: 2015-03-31 18：41:36
+date: 2015-03-31 18:41:36
 tags: [travis,hexo]
 category: 个人随笔
 ---
