@@ -128,5 +128,5 @@ Host github.com
 push到github，travis就会自动构建，并生成到master下面。
 成品可参考前一篇BLOG
 
-##注意##
+## 注意
 - 最新版本的hexo，是3.x，如果你用的是2.x，需要从github上clone对应的版本使用，不能直接npm install。否则，你的_config.yml可能不适用。

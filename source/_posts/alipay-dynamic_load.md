@@ -10,7 +10,7 @@ category: android开发
 在下资历不高，简单分享一下，大牛看到也不要喷我，在下也是在探索学习中，欢迎交流！
 
 
-##工具：
+## 工具：
 工欲善其事，必先利其器。因为平时拆包少，对某些好工具也了解不多，基本用了手工的方法来处理的。大家可以用什么APK改之理之类的工具。
 
 - `apktool`：这个大家都知道，反编译利器，我下的是apktool_2.0.0b9版本
@@ -20,7 +20,7 @@ category: android开发
 - `notepad++`：如果你用记事本也可以
 - `android环境`：这个必须，你看完它的代码了，你起码得自己写的试试吧
 
-##简单拆包分析
+## 简单拆包分析
 先copy一份apk出来，改后缀名为zip，直接解压，先瞧瞧里面的内容，发现在/lib/armeabi/下的so文件相当的多，有蹊跷！
 
 ![](/image/alipay/so_list.jpg)
@@ -45,7 +45,7 @@ category: android开发
 
 通过对smali代码的注入log日志的跟踪，JAVA文件和smali文件相互对照（因为不是所有的class都能反编译回来），我大概整理了一些逻辑与类的结构。
 
-##安卓动态加载原理
+## 安卓动态加载原理
 
 支付宝把一个一个插件称为bundle，在`application`的onCreate方法中，反射`mPackageInfo`中的`mClassloader`字段，该属性是一个pathClassloade，将其替换成自己的PathClassloader（这段代码在dex2jar后的代码中看不到，我是直接读的smali代码）。
 
@@ -56,7 +56,7 @@ category: android开发
 - `BootstrapClassloader`：继承自`PathClassloader`，该类中包含一个map集合，保存着一个一个的`BundleClassloader`，同时包含一个HostClasloader，该类就是自定义的pathClassloader，通过反射将原来的mClassloader替换成该类。
 - `OriginClassLoader`：继承自classloader，也就是上图中new的c，ClassLoader.class的`parent`成了该对象。重写了findClass方法，调用了对android原生的类和APK中的类加载做了分发处理，APK中的类调用`BootstrapClassloader`的`loadClass`方法返回。
 
-##关于资源
+## 关于资源
 使用反射创建一个AssetManager对象， 使用`getDeclaredMethod`后调用`addAssetPath`方法，先用`getApplicationInfo().sourceDir`做参数调用该方法，再用bundle的路径调用该方法，这样就能整合到一起。
 ```
 //先反射创建一个AssetManager对象 
@@ -70,7 +70,7 @@ new Resources(assetManager , rs.getDisplayMetrics(), rs.getConfiguration())
 ```
 使用反射替换掉 `mPackageInfo` 的`mResources`字段
 
-##代码
+## 代码
 
 我只写了一下动态加载activity的代码，具体的资源我没有加载，小伙伴们可以自己试试。
 
@@ -152,7 +152,7 @@ public class MyPathClassLoader extends PathClassLoader {
 
 ```
 
-##其它
+## 其它
 
 支付宝之前的做法利用自定义表达式解析器，对JAVA程序员的学习成本相当高，后来支付宝就换成了该方法。
 
@@ -168,7 +168,7 @@ public class MyPathClassLoader extends PathClassLoader {
 2. 使用了反射私有API，尽管反射使用的不多。
 3. 资源文件处理，如果bundle中的id和主工程下的id冲突了就悲剧了。支付宝自己修改了aapt的源码，把资源`0x7f010001`前面的7f改了。所有应用的生成id都是7f打头的，该方法不修改aapt办不到，会给你自动改回来。一般我们也可以通过public.xml下指定id
 
-##说明：
+## 说明：
 同是阿里系的淘宝网有一套框架叫atlas，该框架是一套重量级框架，完全突破了manifest的封锁，不同的bundle使用的不同的context。
-##后记
+## 后记
 其实支付宝也突破了manifest文件，采用的是代理的模式，注册一个CommonActivity，在各生命周期的方法中调用targetActivity的方法。再利用反射将CommonActivity中的变量赋值到插件中targetActivity中（用遍历就能满足），此方法有个缺陷就是，在插件中的activity中，要慎用this关键字，必要用的时候，得用其它方法取CommonActivity对象。

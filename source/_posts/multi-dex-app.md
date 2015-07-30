@@ -3,13 +3,13 @@ date: 2014-11-27 01:55:46
 tags: [android,dex,dexpathlist]
 category: android开发
 ---
-##前言
+## 前言
 	Unable to execute dex: method ID not in [0, 0xffff]: 65536
 安卓项目中，如果代码太多，会碰上一个叫dex文件方法数超过65536的问题。其实，google已经提供了一个标准的解决办法。使用`MultiDexApplication`。需要在项目中导入android sdk的support中的 android-support-multidex.jar
 
 阅读本文前，我希望你已经看过google api文档中对该类的介绍了。
 <!-- more -->
-##使用方法
+## 使用方法
 
 1. 先让自己的`Application`类继承`MultiDexApplication `，或者，可以覆写方法attachBaseContext为以下的代码。
 ```
@@ -23,7 +23,7 @@ protected void attachBaseContext(Context base) {
 
 OK，搞定。
 
-##eclipse中如何使用run as
+## eclipse中如何使用run as
 我在网上找了一些资料，基本都是说如何使用gradle打包。而我们开发中，习惯用eclipse的run as怎么用呢？
 
 我不知道ADT是不是支持通过配置来解决，我只能写写我目前想到的办法。
@@ -37,5 +37,5 @@ OK，搞定。
 
 
 
-##原理
+## 原理
 原理相对比较简单些，可以参考源dexpathlist代码，apk在运行的时候，有一个dexpathlist，而Multidex的代码中，会根据你的系统版本号对dexpathlist做修改，将所有的dex都添加到dexpathlist中。
