@@ -49,7 +49,7 @@ http://127.0.0.1:8804/xxx
 
 对于应用没有安装的问题，也有解决办法，就是在网页嵌入一个`<iframe>`标签来打开这个连接。这需要编写JS脚本，具体操作如下 :
 
-1. 使用JS代码为网页创建一个```<iframe src="yourscheme://yourhost/xxx" style="disable:none"/>```
+1. 使用JS代码为网页创建一个`<iframe src="yourscheme://yourhost/xxx" style="disable:none"/>`
 2. 在后面加入一句setTimeout方法，超时时间设置为1000，去打开下载地址
 3. 该方法同样适合IOS
 
@@ -62,6 +62,7 @@ intent:
       scheme=zxing; 
    end; 
 ```
+
 ```
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
