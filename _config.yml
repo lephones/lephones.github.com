@@ -87,6 +87,3 @@ deploy:
   type: git
   repo: git@github.com:lephones/lephones.github.io.git
   branch: master
-  type: git
-  repo: git@gitcafe.com:lephones/lephones.git
-  branch: master
