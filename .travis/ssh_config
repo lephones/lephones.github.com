@@ -1,11 +1,5 @@
-Host github.com
+Host github.com gitcafe.com www.gitcafe.com
   User git
   StrictHostKeyChecking no
   IdentityFile ~/.ssh/id_rsa
   IdentitiesOnly yes
-  
-Host gitcafe.com
-  User git
-  StrictHostKeyChecking no
-  IdentityFile ~/.ssh/id_rsa
-  IdentitiesOnly yes  
