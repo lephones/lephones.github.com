@@ -1,6 +1,6 @@
 title: android开发中如何调试webview中的网页
 date: 2015-11-19 16:56:36
-tags: webview
+tags: android
 category: android开发
 ---
 在浏览器中，如果我们想要看到一个网页的代码，只要按f12就可以轻松进行调试，但是在手机中，直接在手机浏览器上调试是肯定不行的。
