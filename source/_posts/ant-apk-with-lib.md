@@ -39,6 +39,11 @@ key.alias.password=password
         <isset property="ant.contrib"/>
     </and>
 </condition>
+<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	<classpath>
+		<pathelement location="${ant.contrib}"/>
+	</classpath>
+</taskdef>
 <target name="deploy">
     <if condition="${has.contrib}">
         <then>
