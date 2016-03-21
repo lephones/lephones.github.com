@@ -34,7 +34,6 @@ category: android开发
 
     对项目改动有些大，所有的activity需要继承自proxy avtivity。
 
-    资源id需要特殊处理
 
 * [DroidPlugin](https://github.com/Qihoo360/DroidPlugin)
 
