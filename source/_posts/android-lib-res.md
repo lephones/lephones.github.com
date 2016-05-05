@@ -61,4 +61,22 @@ class ResLink{
 
 以上3种方法中，我使用的是方法二，而且我发现很多家都是使用的该方法，尽管它对管理资源名称比较麻烦，但它是唯一的一种不以来R文件的办法。
 
-**不想把资源直接发给商户？**请浏览这里**[android如何将资源打入jar并对资源进行保护](http://www.lephones.net/2014/10/28/res-safty-in-sdk/ "android如何将资源打入jar并对资源进行保护")**
+**不想把资源直接发给商户？**请浏览这里**[android如何将资源打入jar并对资源进行保护](http://www.lephones.net/2014/10/28/res-safty-in-sdk/ "android如何将资源打入jar并对资源进行保护")**，下面补充的方法在这个里面也讲了。
+
+## 补充 ##
+### 方法四 （未试）###
+该方法思想来源插件化框架，有兴趣的朋友可以尝试一下，原理就是动态创建资源对象，替换掉资源的来源
+1. 首先所有的组件都得继承base类。如activity继承BaseActivity。
+2. 重写3个方法getResources() getTheme() getAssets()，返回值参考下面代码块对应的变量来return（没有贴完整的实现，大家也不要光找现成的吃，多动手），注意里面的PATH，另，拆分后，部分字段需要用调用getAssets()getResources()方法替代
+```
+AssetManager assets = AssetManager.class.newInstance();
+Method addAssetPathMethod = AssetManager.class.getDeclaredMethod("addAssetPath", String.class);
+addAssetPathMethod.setAccessible(true);
+addAssetPathMethod.invoke(assets, PATH);
+Resources resources = new Resources(assets, onrignResources.getDisplayMetrics(), onrignResources.getConfiguration());
+Resources.Theme theme = resources.newTheme();
+theme.setTo(super.getTheme());
+```
+3. 打包成APK，删除掉dex，只保留资源；再把源码打成jar，和只有资源的APK一并提供给商户。
+4. PATH，是资源APK的路径，可以选择让商户放到asset下，就是file:///android_asset/文件名，也可以是/data/data/packagename下面，这就需要在调用SDK的组件之前，手动复制了。
+
