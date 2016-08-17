@@ -78,5 +78,4 @@ Resources.Theme theme = resources.newTheme();
 theme.setTo(super.getTheme());
 ```
 3. 打包成APK，删除掉dex，只保留资源；再把源码打成jar，和只有资源的APK一并提供给商户。
-4. PATH，是资源APK的路径，可以选择让商户放到asset下，就是file:///android_asset/文件名，也可以是/data/data/packagename下面，这就需要在调用SDK的组件之前，手动复制了。
-
+4. PATH，是资源APK的路径，可以选择让商户放到asset下，运行时可以复制/data/data/packagename下面，这就需要在调用SDK的组件之前，手动复制了。
