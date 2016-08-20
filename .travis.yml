@@ -13,7 +13,7 @@ before_install:
 - eval $(ssh-agent)
 - ssh-add ~/.ssh/id_rsa
 - cp .travis/ssh_config ~/.ssh/config
-- cp .travis/know_hosts ~/.ssh/know_host
+- cp .travis/know_hosts ~/.ssh/know_hosts
 - git config --global user.name 'lephones'
 - git config --global user.email 'lephones#lephones.net'
 
