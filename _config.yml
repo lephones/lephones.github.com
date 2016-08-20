@@ -88,6 +88,6 @@ deploy:
   repo: git@github.com:lephones/lephones.github.io.git
   branch: master 
 - type: git
-  repo: git@gitcafe.com:lephones/lephones.git
-  branch: gitcafe-pages
+  repo: git@git.coding.net:lephones/lephones.git
+  branch: coding-pages
 
