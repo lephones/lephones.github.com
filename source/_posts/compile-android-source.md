@@ -3,15 +3,15 @@ date: 2016-07-26 19:00:46
 tags: [android,source]
 category: android开发
 ---
-## 前言
+# 前言
 因为项目需要，有部分代码调用了Hide api，需要没有被阉割的android.jar。对于5.0以前的系统，这个jar可以从手机的framework.apk中提取，利用dex2jar变成jar，再覆盖SDK中的jar包中相同类名（sdk中有些类不是framework下的，framework只是一个模块，需要覆盖合并）。从5.0以上开始后，这个方法就不行了，必须自己生成jar包来使用。
 
-## 官方说明
+# 官方说明
 [https://source.android.com/source/index.html](https://source.android.com/source/index.html)
 [https://mirrors.tuna.tsinghua.edu.cn/help/AOSP/](https://mirrors.tuna.tsinghua.edu.cn/help/AOSP/)
 <!-- more -->
 
-## 环境搭建
+# 环境搭建
 ```
 # fetch source
 sudo yum install git
@@ -38,7 +38,7 @@ yum whatprovides ld-linux.so.2
 libz.so.1 zlib-1.2.7-13.el7.i686
 
 
-## 过程
+# 过程
 下载repo
 ```
 mkdir ~/bin
@@ -89,7 +89,7 @@ lunch sdk_sdk-eng
 make sdk
 ```
 
-## 使用hide api和internal api
+# 使用hide api和internal api
 
 之前我想一步到位直接编译出android.jar，将源码中带有@hide标记的代码进行处理，使其在`make sdk`的时候，不要删除这些代码。修改方法 ：去掉代码中的`@hide`比较不现实，太多了。经整理发现，进行hide api处理，其实是在生成api doc的时候，关键的代码在./external/doclava/目录下。我们修改`Stub`类，可以达到目的。
 
