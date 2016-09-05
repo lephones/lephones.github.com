@@ -3,11 +3,12 @@ date: 2016-09-05 20：01:50
 tags: [android,状态栏]
 category: android开发
 ---
-从API 19开始，也就是android 4.4 kitcat，android开始支持沉浸式状态栏。可以使状态栏看起来和我们的程序浑然一体，不再像之前那样突兀。几个月前，刚好做了个这方面的需求，记录一下踩了的坑。
-<!-- more -->
-# 需求概述
-一共两种类型的沉浸式，一种是将view直接伸到statusbar里去，另一种是直接给statusbar设置一个背景色。其中，有些需要将伸到statusbar里的页面，顶部还有一个类似titlebar的view，有交互，必须保证操作区域没有进入到状态栏中。设置背景色的需求则比较简单，直接换个纯色的背景色。
 
+# 需求
+从API 19开始，也就是android 4.4 kitcat，android开始支持沉浸式状态栏。可以使状态栏看起来和我们的程序浑然一体，不再像之前那样突兀。几个月前，刚好做了个这方面的需求，记录一下踩了的坑。
+
+一共两种类型的沉浸式，一种是将view直接伸到statusbar里去，另一种是直接给statusbar设置一个背景色。其中，有些需要将伸到statusbar里的页面，顶部还有一个类似titlebar的view，有交互，必须保证操作区域没有进入到状态栏中。设置背景色的需求则比较简单，直接换个纯色的背景色。
+<!-- more -->
 # 实现
 一顿的搜索前辈们的各种技术文章之后发现，一切效果都是：不理想。可以参考知乎上的一个问答[Android 5.0 如何实现将布局的内容延伸到状态栏](https://www.zhihu.com/question/31468556)，网上也找了一些开源类，大多修改状态栏颜色的和布局伸入状态栏的是分开的，没有在一起介绍的。而且发现有些方法中介绍的fitsSystemWindows属性的办法，对我来说简直就是噩梦，布局太复杂，试了好多遍都没成功。
 
@@ -40,9 +41,9 @@ window.addFlags(Window.FLAG_TRANSLUCENT_STATUS);
 window.setStatusBarColor(Color.TRANSPARENT);
 ```
 
-实践发现```addFlag(FLAG_TRANSLUCENT_STATUS)```就能让状态栏隐藏，在4.4中，有一层由深变浅的渐变遮罩（这个貌似没办法），不会覆盖整个状态栏；在5.x的手机上，会有一个半透明的黑色遮罩，这个是覆盖的整个状态栏位置的。
+实践发现`addFlag(FLAG_TRANSLUCENT_STATUS)`就能让状态栏隐藏，在4.4中，有一层由深变浅的渐变遮罩（这个貌似没办法），不会覆盖整个状态栏；在5.x的手机上，会有一个半透明的黑色遮罩，这个是覆盖的整个状态栏位置的。
 
-为了解决5.0的黑色遮罩的问题，就需要调用```window.setStatusBarColor(Color.TRANSPARENT)```，将状态栏完全设置成全透明的。
+为了解决5.0的黑色遮罩的问题，就需要调用`window.setStatusBarColor(Color.TRANSPARENT)`，将状态栏完全设置成全透明的。
 
 ## 布局复杂
 
@@ -61,7 +62,7 @@ StatusBarManager statusBarManager = new StatusBarManager(activity);
 //如果不指定，则调用setStatusBarView();会自动加一个view
 statusBarManager.setStatusBarView(view);
 ```
-另外，有些布局，在伸入到状态栏以后，给用户展示的区域就会变小，这个没办法，需要手动调整，只要调用```statusBarManager.getStatusBarHeight()```，此方法（注意这里不是静态方法，静态方法有参数，是获取系统状态栏的高度的）会返回view的高度，如果没有就是0，所以调用时不用做是否api 19+的版本判断。
+另外，有些布局，在伸入到状态栏以后，给用户展示的区域就会变小，这个没办法，需要手动调整，只要调用`statusBarManager.getStatusBarHeight()`，此方法（注意这里不是静态方法，静态方法有参数，是获取系统状态栏的高度的）会返回view的高度，如果没有就是0，所以调用时不用做是否api 19+的版本判断。
 
 ```
 public class StatusBarManager {
