@@ -34,7 +34,7 @@ window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREE
 window.addFlags(Window.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 window.setStatusBarColor(Color.TRANSPARENT);
 ```
-结果，测试发现在华为EMUI 3.x的5.x系统上，沉浸式状态栏的效果失效了，在5.0的系统上，在调用`setStatusBarColor`之前，调用`addFlags(Window.FLAG_TRANSLUCENT_STATUS)`，没有使用上面的代码。
+结果，测试发现在华为EMUI 3.x的5.x系统上，沉浸式状态栏的效果失效了。于是在5.0的系统上，改成了在调用`setStatusBarColor`之前，调用`addFlags(Window.FLAG_TRANSLUCENT_STATUS)`，没有使用上面的代码。
 
 ```
 window.addFlags(Window.FLAG_TRANSLUCENT_STATUS);
