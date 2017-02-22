@@ -1,4 +1,4 @@
-title: android中方法id超过65536官方解决办法
+title: android中方法id超过65536官方解决办法在eclipse中使用
 date: 2014-11-27 01:55:46
 tags: [android,dex,dexpathlist]
 category: android开发
