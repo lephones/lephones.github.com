@@ -12,7 +12,7 @@ category: 个人随笔
 - travis ci，自己百度一下补脑，可以理解为就是一个node.js的虚拟机环境。[https://travis-ci.org/](https://travis-ci.org/ "https://travis-ci.org/")提供了travis-ci的服务，可以指定构建github上的代码。
 - 本地有hexo环境
 - linux或者MAC工作环境
-<!-- more -->
+
 ## 用法： ##
 
 - 申请travis ci账户，将你的blog的repo绑定到travis-ci上。

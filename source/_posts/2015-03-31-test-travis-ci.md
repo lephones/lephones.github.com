@@ -4,10 +4,10 @@ tags: [travis,hexo]
 category: 个人随笔
 ---
 
-搭建了一个自动发布BLOG的平台  
+搭建了一个自动发布BLOG的平台
+
 下面是代码，做一下备份，关于详细教程，以后的BLOG更新一下
 
-<!-- more -->
 
 ```
 branches:

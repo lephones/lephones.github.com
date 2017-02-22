@@ -8,7 +8,6 @@ category: android开发
 
 通常我们的手机root后，会有一款叫superuser.apk的软件来管理root权限，所谓的获取root权限，就是让superuser允许你的app。只要了解了superuser的原理和root的原理，就不在话下了。
 
-<!-- more -->
 
 ## 参考项目
 SuperUser是开源项目，点击这里：[http://superuser.googlecode.com/svn/trunk/](http://superuser.googlecode.com/svn/trunk/)

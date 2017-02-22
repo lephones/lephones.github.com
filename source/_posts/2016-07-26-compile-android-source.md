@@ -9,7 +9,7 @@ category: android开发
 # 官方说明
 [https://source.android.com/source/index.html](https://source.android.com/source/index.html)
 [https://mirrors.tuna.tsinghua.edu.cn/help/AOSP/](https://mirrors.tuna.tsinghua.edu.cn/help/AOSP/)
-<!-- more -->
+
 
 # 环境搭建
 ```

@@ -7,7 +7,7 @@ category: android打包
 最近有小伙伴问ant打包的事，google现在又在推广它的gradle构建工具，但是，目前有许多朋友还是用的ant，而且，在SDK多次更新之后，之前写好的ant文件不适用了，典型的例子就是`apkbuilder`命令。那么，怎么办呢？？
 
 好多人在网上搜索写好的打包脚本，并费劲心机的寻找工程依赖的打包方法，其实，android的SDK已经给我们提供了该build.xml文件了，就在`/tools/ant/`下面，这个脚本引用了`tools/lib`下的`ant-task.jar`，封装了好多target，我这里就说说怎么使用该脚本。
-<!-- more -->
+
 ## 生成ant脚本
 - 在sdk/tools目录下执行下面的命令，注意将命令里面的目录改成你的工程的目录
 ```bash

@@ -10,7 +10,6 @@ categories: linux
 
 所以，如果不是一直用linux做开发而很少用windows的话，都用虚拟机吧。毕竟QQ，游戏，都得在windows平台。
 
-<!-- more -->
 
 ## 删除双系统 回归虚拟机 ##
 因为电脑装过双系统了，所以，得删除啊，要不就造成资源浪费了。因为linux在mbr里写入了grub引导菜单，首先得还原mbr。

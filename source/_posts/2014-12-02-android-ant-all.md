@@ -6,7 +6,6 @@ category: android打包
 ## 引言
 本篇博客将前我之前写的关于android打包的一些BLOG做一些整理总结，算是一个导读，也算是一个总结。因为之前的BLOG写的比较零散，可以按照这篇文章循序渐进的阅读。能力有限，写的不好的地方，希望也不要嘘我，悄悄留言就好。
 
-<!-- more -->
 
 1. [使用ant打包APK及依赖包最佳解决办法](/2014/10/13/ant-apk-with-lib/ "使用ant打包APK及依赖包最佳解决办法") ：主要说了一下如何使用android sdk中的ant脚本来打包，使用android命令在工程下生成build.xml文件，然后再执行`ant "target"`就OK了。其中的target请参考`ant help`命令执行后的介绍。如果有依赖库工程，只要在每个库工程目录下都生成build.xml，然后在主工程下执行ant target就行。如果需要自定义脚本，可以在工程目录下生成的build.xml中编写。
 

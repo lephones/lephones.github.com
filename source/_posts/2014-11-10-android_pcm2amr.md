@@ -5,7 +5,7 @@ category: android开发
 ---
 ## 引言
 项目中需要将科大讯飞生成的录音传递到服务器上，因为amr格式的文件大小最小，而讯飞生成的文件是pcm格式的，所以需要将pcm转换成amr格式。在网上找了半天资料，发现android系统的源码中包含有一个`android.media.AmrInputStream`类，其内部分装了将pcm转换为amr的方法。
-<!-- more -->
+
 ## 用法
 首先将`AmrInputStream`复制到工程下，注意包名也不要改动，因为该类调用的是libmedia.so的native方法。
 

@@ -7,7 +7,6 @@ category: android开发
 
 这篇文章没有实质性内容，开源可参考的框架很多，算是做了一点点收录。反正也好久没写博客了，顺带随便写点啥。
 
-<!-- more -->
 
 ## 常用的动态加载的方法
 * 代理方式，声明一个空壳activity，空壳activity中包含一个proxy activity对象，回调着proxy activity的生命周期。

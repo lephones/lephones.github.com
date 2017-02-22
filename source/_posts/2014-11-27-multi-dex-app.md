@@ -8,7 +8,7 @@ category: android开发
 安卓项目中，如果代码太多，会碰上一个叫dex文件方法数超过65536的问题。其实，google已经提供了一个标准的解决办法。使用`MultiDexApplication`。需要在项目中导入android sdk的support中的 android-support-multidex.jar
 
 阅读本文前，我希望你已经看过google api文档中对该类的介绍了。
-<!-- more -->
+
 ## 使用方法
 
 1. 先让自己的`Application`类继承`MultiDexApplication `，或者，可以覆写方法attachBaseContext为以下的代码。
