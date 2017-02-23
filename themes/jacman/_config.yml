@@ -12,8 +12,11 @@ menu:
 
 #### Widgets
 widgets: 
+- ads
 - github-card
 - category
+- recent_comment
+- recent_posts
 #- tag
 - links
 - douban
