@@ -3,16 +3,16 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: lephone's blog
+title: lefo's blog
 subtitle: 又一个android开发人员
 description: android java 开发 编程
-author: lephone.zh
+author: lefo
 email: lephones#lephones.net(#换成@你懂得)
 language: zh-CN
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://www.lephones.net
+url: http://www.lefo.me
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
