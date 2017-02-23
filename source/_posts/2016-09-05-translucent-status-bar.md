@@ -1,5 +1,5 @@
 title: Android沉浸式状态栏的实现
-date: 2016-09-05 20：01:50
+date: 2016-09-05 20:01:50
 tags: [android,状态栏]
 category: android开发
 ---
