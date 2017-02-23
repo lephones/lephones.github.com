@@ -1,6 +1,6 @@
 <% if (site.posts.length){ %>
 <div class="categorieslist">
-  <h3 class="title"><%= __('recent_posts') %></h3>
+  <h3 class="asidetitle"><%= __('recent_posts') %></h3>
   <ul class="entry">
     <% site.posts.sort('date', -1).limit(8).each(function(post){ %>
       <li>
