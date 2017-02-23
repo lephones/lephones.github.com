@@ -15,10 +15,9 @@ widgets:
 - ads
 - github-card
 - category
-- recent_comment
-- recent_posts
-#- tag
 - links
+- recent_posts
+- recent_comment
 - douban
 - rss
 #- weibo
