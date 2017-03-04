@@ -46,13 +46,13 @@ Android的ROM太多了，通知栏的颜色、样式都不尽相同。有的是�
 
 怎么使用我就不细说了，在layout的textview使用style属性应该都会。
 
-# 点了通知栏不跳转
+## 点了通知栏不跳转
 
 有一次测试，发现在4.4的手机上，明明配置了正确的PendingIntent，而且，不管怎么点，都不能跳转到Activity，非常郁闷。最后，终于找到了资料。原来，是因为在创建PendingIntent的时候，我们使用了FLAG_UPDATE_CURRENT，在4.4的系统上，用FLAG_UPDATE_CURRENT的时候，Activity必须得是exported=true的才可以。
 
 解决办法：改为FLAG_CANCEL_CURRENT 或者，在清单文件将落地Activity改为exported=true。
 
-# 根布局
+## 根布局
 我提一个建议就是，根布局使用LinearLayout，为什么呢？因为在有的coolpad的手机上，弹出一个通知后，会在你的通知布局上加一个View，然后让用户选择是否允许弹出，如果我们的布局是RelativeLayout或者FrameLayout，那它加上的两个按钮就会把咱们的控件覆盖掉。
 
 # 7.0的新特性
