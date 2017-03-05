@@ -48,7 +48,7 @@ Android的ROM太多了，通知栏的颜色、样式都不尽相同。有的是�
 
 ## 点了通知栏不跳转
 
-有一次测试，发现在4.4的手机上，明明配置了正确的PendingIntent，而且，不管怎么点，都不能跳转到Activity，非常郁闷。最后，终于找到了资料。原来，是因为在创建PendingIntent的时候，我们使用了FLAG_UPDATE_CURRENT，在4.4的系统上，用FLAG_UPDATE_CURRENT的时候，Activity必须得是exported=true的才可以。
+有一次测试，发现在4.4的手机上，明明配置了正确的PendingIntent，然而，不管怎么点，都不能跳转到Activity，非常郁闷。最后，终于找到了资料。原来，是因为在创建PendingIntent的时候，我们使用了FLAG_UPDATE_CURRENT，在4.4的系统上，用FLAG_UPDATE_CURRENT的时候，Activity必须得是exported=true的才可以。
 
 解决办法：改为FLAG_CANCEL_CURRENT 或者，在清单文件将落地Activity改为exported=true。
 
