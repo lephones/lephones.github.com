@@ -46,6 +46,8 @@ Android的ROM太多了，通知栏的颜色、样式都不尽相同。有的是�
 
 怎么使用我就不细说了，在layout的textview使用style属性应该都会。
 
+	在EMUI和MIUI上，测试没有通过，发现还是用的v9的值，看来还是需要在代码里判断view的颜色值
+
 ## 点了通知栏不跳转
 
 有一次测试，发现在4.4的手机上，明明配置了正确的PendingIntent，然而，不管怎么点，都不能跳转到Activity，非常郁闷。最后，终于找到了资料。原来，是因为在创建PendingIntent的时候，我们使用了FLAG_UPDATE_CURRENT，在4.4的系统上，用FLAG_UPDATE_CURRENT的时候，Activity必须得是exported=true的才可以。
