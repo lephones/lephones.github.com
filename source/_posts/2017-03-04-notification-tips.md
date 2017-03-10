@@ -38,6 +38,8 @@ Android的ROM太多了，通知栏的颜色、样式都不尽相同。有的是�
 
 白色的倒是变了，但是之前黑色底的文字是白色的，现在成了白色底，却还是白色的文字。不墨迹，直接翻开Notification的源码，找到了默认的layout，终于发现，原来在5.0系统上，默认通知栏文本颜色值又重新定义了。我们需要在v21再加入以下代码
 
+*在EMUI和MIUI上，测试没有通过，发现还是用的v9的值，看来还是需要在代码里判断view的颜色值*
+
 /res/values-v21/styles.xml
 ```
 <style name="NotificationText" parent="android:TextAppearance.Material.Notification" />
@@ -46,7 +48,7 @@ Android的ROM太多了，通知栏的颜色、样式都不尽相同。有的是�
 
 怎么使用我就不细说了，在layout的textview使用style属性应该都会。
 
-==在EMUI和MIUI上，测试没有通过，发现还是用的v9的值，看来还是需要在代码里判断view的颜色值==
+*在EMUI和MIUI上，测试没有通过，发现还是用的v9的值，看来还是需要在代码里判断view的颜色值*
 
 ## 点了通知栏不跳转
 
