@@ -5,6 +5,7 @@
 	<article itemprop="articleBody"> 
 		<%- partial('header') %>
 	<div class="article-content">
+		<%- partial('google_adsense') %>
 		<% if( table&&(item.toc !== false) && theme.toc.article){ %>
 		<div id="toc" class="toc-article">
 			<strong class="toc-title"><%= __('contents') %></strong>
@@ -16,7 +17,6 @@
 		</div>
 		<% } %>
 		<%- item.content %>  
-		<%- partial('google_adsense') %>
 	</div>
 		<%- partial('footer') %>   	       
 	</article>
