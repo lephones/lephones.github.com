@@ -29,6 +29,9 @@ category: android开发
 
 图片中，可以看出它调用了一个`HwSystemManager.canSendBroadcast(Context context,Intent intent)`
 
+最终定位到
+`com.huawei.hsm.permission.PermissionManager.canSendBroadcast(Context context,Intent intent)`
+
 利用反射，发现该方法返回了boolean类型，允许就是可以true，禁止就是false。而且，如果是询问，该方法会弹出权限询问弹窗，阻塞你的APP的主线程，用户点了禁止或者允许，再接着往下执行，相当好用。
 
 
