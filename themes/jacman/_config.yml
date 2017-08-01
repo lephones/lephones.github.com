@@ -12,9 +12,9 @@ menu:
 
 #### Widgets
 widgets: 
+- ads
 - github-card
 - category
-- ads
 - links
 - recent_posts
 - recent_comment
