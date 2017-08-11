@@ -69,8 +69,8 @@ repo sync
 
 设置代理，我没有使用清华的repo_url，因为公司的电脑默认可以翻墙（虚机不允许），就直接改了个代理搞定了
 ```
-export HTTP_PROXY=http://your proxy ip//:8888
-export HTTPS_PROXY=http://your proxy ip//:8888
+export HTTP_PROXY=http://your proxy ip:8888
+export HTTPS_PROXY=http://your proxy ip:8888
 #取消代理
 export -n HTTP_PROXY
 ```
