@@ -171,4 +171,8 @@ public class MyPathClassLoader extends PathClassLoader {
 ## 说明：
 同是阿里系的淘宝网有一套框架叫atlas，该框架是一套重量级框架，完全突破了manifest的封锁，不同的bundle使用的不同的context。
 ## 后记
-其实支付宝也突破了manifest文件，采用的是代理的模式，注册一个CommonActivity，在各生命周期的方法中调用targetActivity的方法。再利用反射将CommonActivity中的变量赋值到插件中targetActivity中（用遍历就能满足），此方法有个缺陷就是，在插件中的activity中，要慎用this关键字，必要用的时候，得用其它方法取CommonActivity对象。
+其实支付宝也突破了manifest文件，采用的是代理的模式。代理有两种实现方式，
+
+一：注册一个CommonActivity，在各生命周期的方法中调用targetActivity的方法。再利用反射将CommonActivity中的变量赋值到插件中targetActivity中（用遍历就能满足），此方法有个缺陷就是，在插件中的activity中，要慎用this关键字，必要用的时候，得用其它方法取CommonActivity对象。
+
+另一种就是提前占坑，用classloader替换加载的字节码，方法同我上面讲的类似，需要做的就是每当启动一个插件的activity，就必须得自己维护一个清单文件和插件class的对应关系，而且，各种启动模式，不同的参数，都要有不同的坑位接着。
