@@ -1,4 +1,4 @@
-title: ListView实现仿知乎广告Item
+title: Mac系统的TM快照占了空间导致iTunes不能备份手机
 date: 2018-10-13 21:57:00
 category: apple
 ---
