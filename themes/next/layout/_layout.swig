@@ -20,6 +20,7 @@
   {% include '_partials/head/head-unique.swig' %}
   <title>{% block title %}{% endblock %}</title>
   {% include '_third-party/analytics/index.swig' %}
+  {% include '_custom/google-auto.swig' %}
   {{ partial('_scripts/noscript.swig', {}, {cache: theme.cache.enable}) }}
 </head>
 
