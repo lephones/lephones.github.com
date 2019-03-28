@@ -752,12 +752,12 @@ needmoreshare2:
 #growingio_analytics: #your projectId
 
 # Google Analytics
-#google_analytics:
-#  tracking_id:
-#  localhost_ignored: true
+google_analytics:
+  tracking_id: UA-65991901-1
+  localhost_ignored: true
 
 # CNZZ count
-#cnzz_siteid:
+cnzz_siteid: 3223008
 
 # Application Insights
 # See: https://azure.microsoft.com/en-us/services/application-insights
