@@ -14,12 +14,12 @@ category: android打包,jenkins
 
 选择`新建任务`,填一个名字，选择自由风格的项目，点下方OK
 
-![](image/20190326/create-jenkins.jpg)
+![创建项目](/image/20190326/create-jenkins.jpg)
 
 
 进入配置页，源码管理里选择你们所用的源码管理工具，填入地址，用户名认证信息等。
 注意，这里可能没有git和svn，那么需要你去系统管理，管理插件模块，搜索git或者svn插件并安装。后续还有其它功能需要安装插件。
-![](image/20190326/source.jpg)
+![代码库](/image/20190326/source.jpg)
 
 构建步骤 选择 Execute shell，Command里填入`./gradlew assembleRelease`就好了。
 
@@ -72,7 +72,7 @@ sed -i 's/applicationId \"com.old.pkgname\"/'"$toReplace"'/g' build.gradle
 
 如：`${VERSION_CODE}_${VERSION_NAME}_${BUILD_ID}`
 
-![](image/20190326/formatted-version-number.jpg)
+![构建名称](/image/20190326/formatted-version-number.jpg)
 
 #后续
 
