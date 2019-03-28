@@ -10,6 +10,8 @@ category: android打包,jenkins
 
 实践中，发现/home/jenkins目录也要处理一下，我就碰上了/home/jenkins目录占满了根分区，打开发现都是gradle打包时生成的一些缓存，就将/home/jenkins使用`ln`命令做了个软连接到另一个分区目录下。
 
+<!-- more -->
+
 # 新建jenkins项目
 
 

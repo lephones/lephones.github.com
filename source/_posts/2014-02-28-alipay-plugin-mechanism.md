@@ -15,7 +15,7 @@ category: android开发
 
 ## 插件的下载 ##
 通过对文件监控对比发现，支付宝的插件更新，是下载一个后缀名为.amr的文件，此文件实质是一个压缩包，修改后缀为zip可直接解压。
-
+<!-- more -->
 ## 提取插件内容 ##
 支付宝所有插件用到的文件都解压到了`/data/data/com.eg.android.AlipayGphone/files/apps/`目录下面，可直接提取。
 
