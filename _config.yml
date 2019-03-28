@@ -1,5 +1,5 @@
 # Hexo Configuration
-## Docs: http://hexo.io/docs/configuration.html
+## Docs: https://hexo.io/docs/configuration.html
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
@@ -9,6 +9,7 @@ description: android java 开发 编程
 author: lefo
 email: lephones#lephones.net(#换成@你懂得)
 language: zh-CN
+timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -28,8 +29,7 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
-#new_post_name: :title.md # File name of new posts
-new_post_name: :year-:month-:day-:title.md
+new_post_name: :year-:month-:day-:title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link: true # Open external links in new tab
@@ -41,29 +41,22 @@ future: true
 highlight:
   enable: true
   line_number: true
+  auto_detect: false
   tab_replace:
-
+  
+# Home page setting
+# path: Root path for your blogs index page. (default = '')
+# per_page: Posts displayed per page. (0 = disable pagination)
+# order_by: Posts order. (Order by date descending by default)
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date
+  
 # Category & Tag
 default_category: uncategorized
 category_map:
 tag_map:
-
-# Archives
-## 2: Enable pagination
-## 1: Disable pagination
-## 0: Fully Disable
-archive: 1
-category: 1
-tag: 1
-
-# Server
-## Hexo uses Connect as a server
-## You can customize the logger format as defined in
-## http://www.senchalabs.org/connect/logger.html
-port: 4000
-server_ip: 127.0.0.1
-logger: false
-logger_format:
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
@@ -78,9 +71,9 @@ per_page: 10
 pagination_dir: page
 
 # Extensions
-## Plugins: http://hexo.io/plugins/
-## Themes: http://hexo.io/themes/
-theme: jacman
+## Plugins: https://hexo.io/plugins/
+## Themes: https://hexo.io/themes/
+theme: next
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
@@ -91,4 +84,3 @@ deploy:
 - type: git
   repo: git@git.coding.net:lephones/lephones.git
   branch: coding-pages
-

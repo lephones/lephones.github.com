@@ -17,7 +17,6 @@ widgets:
 - category
 - links
 - recent_posts
-- recent_comment
 - douban
 - rss
 #- weibo
