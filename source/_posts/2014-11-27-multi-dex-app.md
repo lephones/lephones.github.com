@@ -21,7 +21,9 @@ protected void attachBaseContext(Context base) {
 
 2. 将你的程序打成多个dex，命名分别为，classes.dex，classes2.dex，classes3.dex，。。。这里的名字已经被限制必须是这样。
 
-OK，搞定。
+OK，搞定，AS中可以用gradle支持，接下来说说在eclipse怎么办。
+
+<!-- more -->
 
 ## eclipse中如何使用run as
 我在网上找了一些资料，基本都是说如何使用gradle打包。而我们开发中，习惯用eclipse的run as怎么用呢？

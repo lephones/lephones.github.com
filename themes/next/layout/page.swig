@@ -25,6 +25,9 @@
     {##################}
     <div class="post-block page">
       {% include '_partials/page/page-header.swig' %}
+      {% if not is_index %}
+        {% include '_custom/ggads-page.swig' %}
+      {% endif %}
       {#################}
       {### PAGE BODY ###}
       {#################}

@@ -13,6 +13,8 @@ Android的ROM太多了，通知栏的颜色、样式都不尽相同。有的是�
 
 怎么办？
 
+<!-- more -->
+
 /res/values/styles.xml
 ```
 <style name="NotificationText">

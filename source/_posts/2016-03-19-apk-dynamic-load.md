@@ -19,6 +19,8 @@ category: android开发
 
 * 初始化的代码要写在Application类的attachBaseContext方法中，不要写在onCreate里，ContentProvider:onCreate()调用优先于Application:onCreate()，所以我关于支付宝的那篇文章，介绍是有点错误的。
 
+<!-- more -->
+
 ## 部分框架介绍：
 
 * [DynamicLoadApk](https://github.com/singwhatiwanna/dynamic-load-apk)

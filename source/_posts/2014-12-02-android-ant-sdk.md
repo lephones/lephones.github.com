@@ -12,7 +12,9 @@ category: android打包
 
 对于SDK，其实我们只需要执行到打成jar这一步就OK了。
 
-#打包jar
+<!-- more -->
+
+# 打包jar
 ## 方法一
 
 使用eclipse导出jar包：我们知道一个java项目是可以用eclipse导出jar包的，安卓工程也一样，只要按普通的方法export就可以了。不过，export出来的包是没有混淆过的，如果你要混淆，还需要单独对你的jar包执行一次proguard程序，可参考proguard使用指南。

@@ -20,6 +20,8 @@ category: android开发
 - `notepad++`：如果你用记事本也可以
 - `android环境`：这个必须，你看完它的代码了，你起码得自己写的试试吧
 
+<!-- more -->
+
 ## 简单拆包分析
 先copy一份apk出来，改后缀名为zip，直接解压，先瞧瞧里面的内容，发现在/lib/armeabi/下的so文件相当的多，有蹊跷！
 

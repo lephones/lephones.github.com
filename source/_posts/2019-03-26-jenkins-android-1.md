@@ -1,6 +1,7 @@
 title: 使用jenkins为android工程打包，支持多包名，改资源（1）
 date: 2019-03-26 14:44:00
-category: android打包,jenkins
+category: [android打包,jenkins]
+tag: [android,jenkins]
 ---
 
 # 下载安装jenkins
@@ -13,8 +14,6 @@ category: android打包,jenkins
 <!-- more -->
 
 # 新建jenkins项目
-
-
 
 ![创建项目](/image/20190326/create-jenkins.jpg)
 ![代码库](/image/20190326/source.jpg)
@@ -76,7 +75,7 @@ sed -i 's/applicationId \"com.old.pkgname\"/'"$toReplace"'/g' build.gradle
 
 ![构建名称](/image/20190326/formatted-version-number.jpg)
 
-#后续
+# 后续
 
 以上讲的就是基本打包流程，但是实际应用中，还存在一些问题，比如，改了包名后，一些第三方的client key也要修改。再加上产品的对资源、功能定制需求也越来越复杂，上面的情况是绝对也满足他们定制化的要求。
 

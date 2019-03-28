@@ -261,6 +261,9 @@
     {% endif %}
 
     {#################}
+    {% if not is_index %}
+      {% include '../_custom/ggads-page.swig' %}
+    {% endif %}
     {### POST BODY ###}
     {#################}
     <div class="post-body{% if theme.han %} han-init-context{% endif %}{% if post.direction && post.direction.toLowerCase() === 'rtl' %} rtl{% endif %}" itemprop="articleBody">

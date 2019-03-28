@@ -21,6 +21,8 @@ ListView也有onScroll()方法，不它该方法的回调时给的参数是item�
 onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
 ```
 
+<!-- more -->
+
 # 实现
 整个item的布局比较简单，使用的是指定高度的FrameLayout，其内部再嵌套一个和ListView高度一样的LinearLayout（这里可以在adapter的getView中拿到ListView的高度），在onScroll方法中，对visibleItem进行遍历，凡是碰到是这种item的。
 

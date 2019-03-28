@@ -15,6 +15,8 @@ category: android开发
 
 各种google，百度，终于找到了原因，原来这个只能转内容，而amr文件还需要一个`文件头`。其文件头为六个字节,分别是`0x23` `0x21` `0x41` `0x4D` `0x52` `0x0A`，下面是我写的一个工具类
 
+<!-- more -->
+
 ```
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

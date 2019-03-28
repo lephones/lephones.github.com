@@ -16,7 +16,7 @@ category: android开发
 按照需求我们采用的是第2种方案，基本的流程就是：拍照--压缩--保存--上传
 
 本来一切挺顺利，但当我遇上小米。。
-
+<!-- more -->
 
 小米手机在用第2种方式拍照后，默认返回一个`176x144`分辨率的照片。经查资料发现，原来`camera`有一个参数叫`picture-size`，于是给`Camera`对象加了该参数，代码：
 
@@ -47,7 +47,7 @@ parameters.setPictureSize(960, 720);
 	camera.setParameters(parameters);
 ```
 
-##说明
+## 说明
 
 `getSupportedPictureSizes()`返回的集合是排好序的，但升序还是降序，也是根据手机来返回的，所以在处理的时候，不能盲目取第一个元素。
 

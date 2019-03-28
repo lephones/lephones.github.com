@@ -24,6 +24,8 @@ key.alias.password=password
 ```
 - 打包，在工程下使用命令`ant release`，或者在eclipse中用ant运行
 
+<!-- more -->
+
 ## 项目依赖怎么办
 在eclipse中配置好依赖关系，在每个工程下面都执行
 ```bash

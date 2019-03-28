@@ -13,6 +13,8 @@ category: 个人随笔
 - 本地有hexo环境
 - linux或者MAC工作环境
 
+<!-- more -->
+
 ## 用法： ##
 
 - 申请travis ci账户，将你的blog的repo绑定到travis-ci上。
