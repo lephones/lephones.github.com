@@ -70,7 +70,7 @@ do
 done
 
 ```
-那么，脚本中，`client_id`这些，是如今一次性加入到环境变量中的？这里要用到另一款插件，**Environment Injector Plugin**。这款插件可以在执行时往执行环境中注入变量。关于变量的配置信息，我在工程目录下新建了一个文件夹保存的配置文件。就是key=value的格式，就是你熟悉的java properties file。这里的`PACKAGE_NAME`，在jenkins参数化构建时，给产品提供的是一个选项列表，固定好包名列表给产品选择选，毕竟涉及到client_key的修改，不能随便填。
+那么，脚本中，`client_id`这些，是如何一次性加入到环境变量中的？这里要用到另一款插件，**Environment Injector Plugin**。这款插件可以在执行时往执行环境中注入变量。关于变量的配置信息，我在工程目录下新建了一个文件夹保存的配置文件。就是key=value的格式，就是你熟悉的java properties file。这里的`PACKAGE_NAME`，在jenkins参数化构建时，给产品提供的是一个选项列表，固定好包名列表给产品选择选，毕竟涉及到client_key的修改，不能随便填。
 ![](/image/20190329/key-config.jpg)
 
 # 改资源该怎么改
