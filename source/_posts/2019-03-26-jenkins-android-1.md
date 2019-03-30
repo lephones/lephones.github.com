@@ -1,6 +1,6 @@
 title: 使用jenkins为android工程打包，支持多包名，改资源（简单上手）
 date: 2019-03-26 14:44:00
-category: [android打包,jenkins]
+category: android打包
 tag: [android,jenkins]
 ---
 
