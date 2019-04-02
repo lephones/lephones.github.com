@@ -94,7 +94,7 @@ make sdk
 
 之前我想一步到位直接编译出android.jar，将源码中带有@hide标记的代码进行处理，使其在`make sdk`的时候，不要删除这些代码。修改方法 ：去掉代码中的`@hide`比较不现实，太多了。经整理发现，进行hide api处理，其实是在生成api doc的时候，关键的代码在./external/doclava/目录下。我们修改`Stub`类，可以达到目的。
 
-后来发现，在编译android.jar的时候，是有一个类的映射，有一个文件保存需要将哪些类打入到android.jar。上面的方法不能只处理了hide api，而还有`internal`的代码还是没能打入jar。
+后来发现，在编译android.jar的时候，是有一个类的映射，有一个文件保存需要将哪些类打入到android.jar。上面的方法只处理了android.jar中的hide api，而还有`internal`的代码还是没能打入jar。
 
 于是，只好使用`make -j32`命令，直接都编译了一圈，然后标准sdk中的jar进行合并，生成了包含`internal`的jar包.
 

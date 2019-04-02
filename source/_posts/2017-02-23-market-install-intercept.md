@@ -71,6 +71,6 @@ actIntent.putExtra("android.intent.extra.INTENT", intent);
 # 写在最后
 慢慢的也有一些人问我vpn怎么实现，有一些伸手党，当前华为上失效了，也有来探讨说有没有什么新方法。目前还没有，从EMUI的现象上看，是在startActivity的时候，通过ActivityManagerService里面纠正了caller_package传的值，估计是华为已经发现了该方法。
 
-VPN也失效了，具体就不说了。
+VPN也失效了，华为在检测应用时，如果发现网络失败，就会立即清空所有的VPN服务，导致VPN当时就失效了，具体就不说了。
 
 无解了
