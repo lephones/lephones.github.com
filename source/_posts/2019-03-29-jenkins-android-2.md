@@ -1,7 +1,3 @@
----
-typora-root-url: ../../source
----
-
 title: 使用jenkins为android工程打包，支持多包名，改资源（踩坑指南）
 date: 2019-03-29 13:30:00
 category: android打包

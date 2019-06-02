@@ -1,7 +1,3 @@
----
-typora-root-url: ../../source
----
-
 title: 垂直滚动的ViewPager存在滑动不灵敏的问题
 date: 2019-06-02 17:49:00
 category: android开发
