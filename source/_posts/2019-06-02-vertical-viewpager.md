@@ -67,5 +67,7 @@ MotionEvent有一个方法，叫setLocation，交换xy坐标的方法，正是�
 
 复制ViewPager.java的时候，PagerAdapter有一个方法是setViewPagerObserver，因为这个方法是不允许访问的，这里可以改成registerDataSetObserver和unregisterDataSetObserver
 
+google已经出了viewpager2了
+
 
 
