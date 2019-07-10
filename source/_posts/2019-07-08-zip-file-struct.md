@@ -26,7 +26,12 @@ tag: [android]
 核心目录是关键内容，结构为重复n个\[文件头]，也就是，所有在zip中重复的文件，都有会在核心目录区保存一些关键信息(文件信息，不含文件内容)。其中，包含了每个文件在zip中起始偏移、压缩后的大小，所以，只要我们拿到核心目录的内容，就可以定位到AndroidManifest.xml的位置。
 
 附上两张图：
+
+manifest文件实体头
+
 ![manifest文件实体头](/image/20190708/zip-header.jpg)
+
+manifest核心目录
 
 ![manifest核心目录](/image/20190708/zip-dir.jpg)
 
