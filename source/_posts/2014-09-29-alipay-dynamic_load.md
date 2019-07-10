@@ -167,8 +167,9 @@ public class MyPathClassLoader extends PathClassLoader {
 另外，该方法的缺点：
 
 1. 用到的组件**必须在manifest.xml中声明**，我们并没有突破manifest的验证
-2. 使用了反射私有API，尽管反射使用的不多。
-3. 资源文件处理，如果bundle中的id和主工程下的id冲突了就悲剧了。支付宝自己修改了aapt的源码，把资源`0x7f010001`前面的7f改了。所有应用的生成id都是7f打头的，该方法不修改aapt办不到，会给你自动改回来。一般我们也可以通过public.xml下指定id
+2. 可以通过加载类时，替换掉实际类达到了突破manifest的效果，但是这要求提前占坑，而且各种launchMode必须提前定义好，可以参考360的开源框架，一样的原理
+3. 使用了反射私有API，尽管反射使用的不多。
+4. 资源文件处理，如果bundle中的id和主工程下的id冲突了就悲剧了。支付宝自己修改了aapt的源码，把资源`0x7f010001`前面的7f改了。所有应用的生成id都是7f打头的，该方法不修改aapt办不到，会给你自动改回来。一般我们也可以通过public.xml下指定id
 
 ## 说明：
 同是阿里系的淘宝网有一套框架叫atlas，该框架是一套重量级框架，完全突破了manifest的封锁，不同的bundle使用的不同的context。
