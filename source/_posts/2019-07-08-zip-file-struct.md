@@ -5,7 +5,7 @@ category: android开发
 tag: [android]
 ---
 
-# 前言
+# 现有采集
 
 都知道APK就是一个zip包，目前，收集别人家的APK信息，原理都一样，一般都是先将APK文件下载，再提取AndroidManifest.xml，通过`AXmlPrint2.jar`打开，得到反编译后的xml，解析xml得到包信息。
 
