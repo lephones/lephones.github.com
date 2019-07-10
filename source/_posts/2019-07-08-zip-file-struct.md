@@ -5,7 +5,7 @@ category: android开发
 tag: [android]
 ---
 
-#前言
+# 前言
 
 都知道APK就是一个zip包，目前，收集别人家的APK信息，原理都一样，一般都是先将APK文件下载，再提取AndroidManifest.xml，通过`AXmlPrint2.jar`打开，得到反编译后的xml，解析xml得到包信息。
 
@@ -25,9 +25,10 @@ tag: [android]
 
 核心目录是关键内容，结构为重复n个\[文件头]，也就是，所有在zip中重复的文件，都有会在核心目录区保存一些关键信息(文件信息，不含文件内容)。其中，包含了每个文件在zip中起始偏移、压缩后的大小，所以，只要我们拿到核心目录的内容，就可以定位到AndroidManifest.xml的位置。
 
-![](/image/20190708/zip-header.jpg)
+附上两张图：
+![manifest文件实体头](/image/20190708/zip-header.jpg)
 
-![](/image/20190708/zip-dir.jpg)
+![manifest核心目录](/image/20190708/zip-dir.jpg)
 
 # 关键头
 
