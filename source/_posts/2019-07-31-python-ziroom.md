@@ -1,6 +1,6 @@
 title: python入门：使用python刷自如的房子
 date: 2019-07-31 16:43:48
-category: android开发
+category: python
 
 tag: [python]
 ---
