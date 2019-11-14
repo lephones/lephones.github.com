@@ -36,5 +36,39 @@ category: android开发
 
 利用反射，发现该方法返回了boolean类型，允许就是可以true，禁止就是false。而且，如果是询问，该方法会弹出权限询问弹窗，阻塞你的APP的主线程，用户点了禁止或者允许，再接着往下执行，相当好用。
 
-
 代码我就不上了，该写的点都写了，实在需要的可以走点 关于 找到我。
+
+
+
+## OPPO
+
+oppo是另一个哥们自己找到的方法，我这里就直接贴出来，感谢大哥。反馈说android 10上也可以使用。具体返回的内容，还请自己测试一下哦。
+
+```
+public static int b(Context context, String pkg) {
+        ContentResolver contentResolver = context.getContentResolver();
+        if (contentResolver == null) return 2;
+        try {
+            Uri parse = Uri.parse("content:/settings/secure/launcher_shortcut_permission_settings");
+            Cursor query = contentResolver.query(parse, null, null, null, null);
+            if (query == null) return 2;
+            while (query.moveToNext()) {
+                String string = query.getString(query.getColumnIndex("value"));
+                if (!TextUtils.isEmpty(string)) {
+                    if (string.contains(pkg + ", 1")) {
+                        return 1;
+                    }
+                    if (string.contains(pkg + ", 0")) {
+                        return 0;
+                    }
+                }
+            }
+            query.close();
+            return 2;
+        } catch (Throwable th) {
+            th.printStackTrace();
+            return 2;
+        }
+    }
+```
+
