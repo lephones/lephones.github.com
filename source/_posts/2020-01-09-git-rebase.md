@@ -1,4 +1,4 @@
-title: git中A分支到B分支代码合并
+title: Git中rebase的常规使用
 date: 2020-01-09 20:21:39
 category: git
 
@@ -13,6 +13,8 @@ tag: [git]
 https://git-scm.com/docs/git-rebase
 ## 一个不错的操作模拟
 https://learngitbranching.js.org/
+
+<!-- more -->
 
 # git rebase的常用操作
 本文不另辟捷径，官方文档讲的很详细，就挑几个官方的例子翻译一下。
