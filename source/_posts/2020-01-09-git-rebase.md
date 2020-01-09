@@ -117,3 +117,7 @@ https://www.jetbrains.com/help/idea/edit-project-history.html
 > where IntelliJ's "Onto" field corresponds to --onto newbase, IntelliJ's "From" field corresponds to "upstream" and IntelliJ's "Branch" field corresponds to "branch".
 >
 > https://stackoverflow.com/questions/14608812/how-to-do-interactive-rebase-with-intellij-idea
+
+
+
+如果是只有一条提交记录，通常用cherry-pick很方便，rebase可以用来处理多条commits的时候。当然，你也可以把commit先执行squash，再执行cherry-pick。
