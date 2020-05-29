@@ -57,14 +57,14 @@ cd WORKING_DIRECTORY
 
 初始化仓库，这里需要连接google，我走了代理，没有修改REPO，不清楚修改repo行不行
 ```
-repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest
+repo init -u https://mirrors.tuna.tsinghua.edu.cn/git/AOSP/platform/manifest
 ## 如果提示无法连接到 gerrit.googlesource.com，可以编辑 ~/bin/repo，把 REPO_URL 一行替换成下面的：
-REPO_URL = 'https://gerrit-google.tuna.tsinghua.edu.cn/git-repo'
+REPO_URL = 'https://mirrors.tuna.tsinghua.edu.cn/git/git-repo'
 ```
 
 下载，同步源码
 ```
-repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest -b android-6.0.1_r1
+repo init -u https://mirrors.tuna.tsinghua.edu.cn/git/AOSP/platform/manifest -b android-6.0.1_r1
 repo sync
 ```
 

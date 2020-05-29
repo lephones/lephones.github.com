@@ -32,7 +32,7 @@ git rebase master
 git rebase master topic
 ```
 
-上面两条命令，执行其中的一条就可以，执行以后。
+上面两条命令，执行其中的一条就可以，执行以后。其实就是git rebase upstream branch
 
 ```
                   A'--B'--C' topic
@@ -107,7 +107,7 @@ AS内置的插件可以满足大部分功能，按command + 9可以唤出来log 
 附上操作指南：
 https://www.jetbrains.com/help/idea/edit-project-history.html
 
-我试了试，最终在as里没有找到 --onto 复制一段commits的方式，因为第三个参数必须得选branch，在stackoverflow里，找到一处资料
+我试了试，最终在as里没有找到 --onto 复制一段commits的方式，因为第三个参数必须得选branch，在stackoverflow里，找到一处资料。对比可以看到，如果和上述一段commits，是缺少参数的，所以这里得用命令行了。实际中，也劝大家尽量不要用这种方式。
 
 > The rebase dialog in IntelliJ 12.1 uses the most general version of the rebase command:
 >
@@ -118,6 +118,6 @@ https://www.jetbrains.com/help/idea/edit-project-history.html
 >
 > https://stackoverflow.com/questions/14608812/how-to-do-interactive-rebase-with-intellij-idea
 
-
+注意AS中，也可以勾选-i参数
 
 如果是只有一条提交记录，通常用cherry-pick很方便，rebase可以用来处理多条commits的时候。当然，你也可以把commit先执行squash，再执行cherry-pick。
