@@ -82,6 +82,6 @@ deploy:
 - type: git
   repo: git@github.com:lephones/lephones.github.io.git
   branch: master 
-- type: git
-  repo: git@e.coding.net:lephones/lephones/lephones.git
-  branch: coding-pages
+#- type: git
+#  repo: git@e.coding.net:lephones/lephones/lephones.git
+#  branch: coding-pages
