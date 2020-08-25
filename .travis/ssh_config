@@ -1,4 +1,4 @@
-Host github.com coding.net git.coding.net
+Host github.com coding.net e.coding.net
   User git
   StrictHostKeyChecking no
   IdentityFile ~/.ssh/id_rsa
