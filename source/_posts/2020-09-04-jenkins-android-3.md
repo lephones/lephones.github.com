@@ -13,13 +13,9 @@ tag: [android,jenkins]
 
 # 分析
 
-gradle其实支持自定义参数，关于自定义参数的介绍，参考官方文档：
+gradle其实支持自定义参数，关于自定义参数的介绍，参考官方文档：https://docs.gradle.org/current/userguide/build_environment.html，简单说一下用到的：[Gradle properties](https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_configuration_properties)：
 
-https://docs.gradle.org/current/userguide/build_environment.html
-
-简单说一下用到的：[Gradle properties](https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_configuration_properties)
-
-有两种方式传给gradle，一种是-P，比如gradlew clean -Pname=zhangsan
+有两种方式传给gradle，一种是-P。
 
 ```
 gradlew clean -Pname=zhangsan
@@ -64,9 +60,11 @@ wx_id=1002
 
 通常用jenkins在构建的时候，都会自定义一些参数，比如上文的VERSION_NAME，VERSION_CODE。当然，我们还有个奇葩的需求，改包名。
 
-jenkins在搭建的时候，构建那一步一定要选`invoke gradle script`，点开下面的高级选项，勾选`Pass all job parameters as Project properties`，勾选这一项会将jenkins参数化构建时的参数写到gradle中，还会替换掉gradle.properties中的默认值。
+jenkins在搭建的时候，构建那一步一定要选`invoke gradle script`，点开下面的高级选项，勾选`Pass all job parameters as Project properties`，勾选这一项会将jenkins参数化构建时的参数写到gradle中，还会替换掉gradle.properties中的默认值。其实就是通过-P把参数传到了gradle，-P传入的优先级高于properties文件。
 
-其实就是通过-P把参数传到了gradle，-P传入的优先级高于properties文件。
+**一定要保证参数名和gradle.properties文件中的名字一样！！！**
+
+**一定要保证参数名和gradle.properties文件中的名字一样！！！**
 
 **一定要保证参数名和gradle.properties文件中的名字一样！！！**
 
@@ -97,9 +95,7 @@ defaultConfig {
 
 # 改应用名
 
-我们有两个需求，一个是改用户界面显示的应用名，另一个是改APP内部显示的应用名，这两个有可能不一样。
-
-这里当然是通过sed改的，貌似也没有别的办法，上一段中的label也是用于这个功能的。我们的做法是把包含应用名关键字的strings.xml单独提取到一个value资源文件，然后通过sed统一修改。
+我们有两个需求，一个是改用户界面显示的应用名，另一个是改APP内部显示的应用名，这两个有可能不一样。这里当然是通过sed改的，貌似也没有别的办法，上一段中的label也是用于这个功能的。我们的做法是把包含应用名关键字的strings.xml单独提取到一个value资源文件，然后通过sed统一修改。
 
 ```
 sed -i 's/默认应用名/'"$APP_NAME"'/g' sogou/res/values/stringfile.xml
@@ -109,8 +105,7 @@ sed -i 's/默认应用名/'"$APP_NAME"'/g' sogou/res/values/stringfile.xml
 
 # 完成
 
-通过这波修改，之前的一坨sh文件中，就只剩下修改应用名的脚本了，其它的都通过gradle的环境变量来支持了。
-后续如果要加配置项，只需要在gradle.properties中加个默认项，如果是跟包名的，就放在包名.properties中，如果是jenkins配置的，就按对应的名称配在jenkins就OK。
+通过这波修改，之前的一坨sh文件中，就只剩下修改应用名的脚本了，其它的都通过gradle的环境变量来支持了。后续如果要加配置项，只需要在gradle.properties中加个默认项，如果是跟包名的，就放在包名.properties中，如果是jenkins配置的，就按对应的名称配在jenkins就OK。
 
 
 
