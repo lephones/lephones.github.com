@@ -84,7 +84,7 @@ manifest文件中，也会配置一些值，可以通过placeHolder传进去。�
 
 ```
 defaultConfig {
-				manifestPlaceholders = [label:"@string/app_name",
+	manifestPlaceholders = [label:"@string/app_name",
                                 channel:"$CHANNEL"]
  }
 ```
