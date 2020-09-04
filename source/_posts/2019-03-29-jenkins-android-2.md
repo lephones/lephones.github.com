@@ -32,8 +32,13 @@ tag: [android,jenkins]
 
 # 应用场景
 
+**因为这里的脚本过于繁琐，从这里开始，请大家放弃看这一篇，直接去这里[[使用jenkins为android工程打包，支持多包名，改资源（优化方案）](2020/09/04/jenkins-android-3/)**
+
+
+
 部分shell脚本的源码，这里只是修改build.gradle的脚本，要打包还要再加入`./gradlew assembleRelease`等其它个性化脚本
 将完整的shell脚本保存成sh文件，放到工程目录下，在jenkins中执行该sh文件`sh ./jenkinsbuild.sh`
+
 ```
 field_name=('BOOL_FIELD1' )
 value=($BOOL_FIELD1 )
@@ -95,3 +100,5 @@ productFlavors{
 
 # 续
 产品经理用的很嗨，暂时没有续，为了不涉及隐私，整篇加上前一篇都是一些片段，想直接copy进去使用的可能要失望了。不过，拼凑一起还是可以的，实在不懂的来找我。
+
+**写了一篇最新的介绍，打包脚本更简洁，大家可以结合着看[[使用jenkins为android工程打包，支持多包名，改资源（优化方案）](2020/09/04/jenkins-android-3/)**
