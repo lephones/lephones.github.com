@@ -34,7 +34,7 @@ name=zhangsan
 比如如下的gradle配置，其中包含了int型，String型，boolean型，基本能满足需求了。
 
 ```
-        buildConfigField "boolean", "SOGOU_INFO", "$SOGOU_INFO"
+        buildConfigField "boolean", "SHOW_INFO", "$SHOW_INFO"
         applicationId "$PACKAGE_NAME"
 
         versionCode Integer.valueOf(VERSION_CODE)
@@ -50,6 +50,7 @@ name=zhangsan
 VERSION_NAME=1.2
 VERSION_CODE=1110
 PACKAGE_NAME=me.lefo.jenkins
+SHOW_INFO=true
 qq_id=1001
 wx_id=1002
 ```
@@ -98,7 +99,7 @@ defaultConfig {
 我们有两个需求，一个是改用户界面显示的应用名，另一个是改APP内部显示的应用名，这两个有可能不一样。这里当然是通过sed改的，貌似也没有别的办法，上一段中的label也是用于这个功能的。我们的做法是把包含应用名关键字的strings.xml单独提取到一个value资源文件，然后通过sed统一修改。
 
 ```
-sed -i 's/默认应用名/'"$APP_NAME"'/g' sogou/res/values/stringfile.xml
+sed -i 's/默认应用名/'"$APP_NAME"'/g' myflavor/res/values/stringfile.xml
 ```
 
 
