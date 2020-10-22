@@ -26,8 +26,13 @@ B发现A死了后，赶紧把A拉活，然后再把自己杀死，这样达到�
 方案二：使用app_process命令启动一个java进程。https://blog.csdn.net/u010651541/article/details/53163542
 
 ```
-app_process dir --application --nice-name=nice_name
+app_process <dir> <class name> <parameters> --application --nice-name=nice_name
+app_process -Djava.class.path=Helloworld.dex  dir classname
 ```
+
+当然了，要想启动java进程，classpath得设置，如执行export CLASSPATH，也可以使用-D来指定路径。如果有so要调用，还要将共享库加到环境变量中。export LD_LIBRARY_PATH 或者export _LD_LIBRARY_PATH
+
+
 
 
 
